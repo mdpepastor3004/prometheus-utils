@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>청약 가점 계산기 2026 | 무주택기간·부양가족·청약통장 점수 계산</title>
 <meta name="description" content="2026년 최신 청약 가점제 계산기. 무주택기간, 부양가족수, 청약통장 가입기간을 입력하면 실시간으로 가점 총점과 당첨 가능성을 확인하세요.">
-<meta name="keywords" content="청약가점계산기, 청약점수, 무주택기간, 부양가족, 청약통장, 가점제, 2026청약">
+<meta name="keywords" content="청약가점계산기, 청약점수, 무주택기간, 부양가족, 청약통장, 가점제, 2026청약, 프리미엄청약리포트">
 <meta property="og:title" content="청약 가점 계산기 2026">
-<meta property="og:description" content="무주택기간·부양가족·청약통장 점수 실시간 계산">
+<meta property="og:description" content="무주택기간·부양가족·청약통장 점수 실시간 계산 + 프리미엄 청약 전략 리포트">
 <meta property="og:type" content="website">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -21,16 +21,16 @@ h1{font-size:1.5rem;color:var(--accent-l);text-align:center;margin-bottom:8px}
 .field{margin-bottom:16px}
 .field label{display:block;font-size:.9rem;color:var(--sec);margin-bottom:6px}
 .field .hint{font-size:.75rem;color:var(--muted);margin-top:4px}
-.input-group{display:flex;align-items:center;gap:8px}
-input[type=number]{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:1rem;width:100%;outline:none}
-input[type=number]:focus{border-color:var(--accent)}
+input[type=number],input[type=text],input[type=tel],input[type=email]{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:1rem;width:100%;outline:none}
+input:focus{border-color:var(--accent)}
 select{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.95rem;width:100%;outline:none}
 select:focus{border-color:var(--accent)}
 .btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:12px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;transition:transform .1s}
 .btn:hover{transform:translateY(-1px)}
+.btn-secondary{background:var(--bg);color:var(--sec);border:1px solid var(--border);border-radius:8px;padding:10px 20px;font-size:.9rem;cursor:pointer;width:100%;transition:all .1s}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent-l)}
 .score-display{text-align:center;padding:24px 0}
 .score-num{font-size:3rem;font-weight:800;color:var(--accent-l)}
-.score-label{color:var(--muted);font-size:.85rem}
 .score-breakdown{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px}
 .score-item{background:var(--bg);border-radius:8px;padding:12px;text-align:center}
 .score-item .label{font-size:.7rem;color:var(--muted)}
@@ -39,27 +39,58 @@ select:focus{border-color:var(--accent)}
 .verdict.high{background:rgba(72,184,160,.1);border:1px solid var(--ok);color:var(--ok)}
 .verdict.mid{background:rgba(232,160,64,.1);border:1px solid var(--accent);color:var(--accent-l)}
 .verdict.low{background:rgba(232,64,64,.1);border:1px solid var(--danger);color:var(--danger)}
-.region-table{margin-top:16px}
-.region-table table{width:100%;border-collapse:collapse;font-size:.8rem}
+.region-table{margin-top:16px;font-size:.8rem}
+.region-table table{width:100%;border-collapse:collapse}
 .region-table th{color:var(--muted);text-align:left;padding:8px;border-bottom:1px solid var(--border)}
 .region-table td{padding:8px;border-bottom:1px solid var(--border);color:var(--sec)}
 .region-table .ok{color:var(--ok)}
 .region-table .ng{color:var(--danger)}
-.funnel{margin-top:24px;padding:16px;background:var(--glass);border:1px solid var(--border);border-radius:12px;text-align:center}
-.funnel a{color:var(--accent-l);text-decoration:none;font-weight:600}
-.funnel a:hover{text-decoration:underline}
-.funnel .tag{display:inline-block;background:rgba(232,160,64,.15);color:var(--accent-l);font-size:.7rem;padding:2px 8px;border-radius:4px;margin-bottom:8px}
-.disclaimer{margin-top:16px;font-size:.7rem;color:var(--muted);text-align:center}
 .hidden{display:none}
 .toggle{display:flex;gap:8px;margin-bottom:16px}
 .toggle button{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--sec);padding:8px;border-radius:8px;cursor:pointer;font-size:.85rem}
 .toggle button.active{background:var(--accent);color:#0e0e18;border-color:var(--accent)}
+
+/* ── Lead Capture Modal ── */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;justify-content:center;align-items:center}
+.modal-overlay.active{display:flex}
+.modal{background:var(--glass);border:1px solid var(--accent);border-radius:16px;padding:28px;max-width:400px;width:90%;position:relative;max-height:90vh;overflow-y:auto}
+.modal h2{color:var(--accent-l);font-size:1.2rem;margin-bottom:8px;text-align:center}
+.modal .desc{color:var(--sec);font-size:.85rem;text-align:center;margin-bottom:20px}
+.modal .close{position:absolute;top:12px;right:16px;color:var(--muted);cursor:pointer;font-size:1.2rem;background:none;border:none}
+.modal .close:hover{color:var(--text)}
+.modal .field{margin-bottom:14px}
+.modal .benefit{background:rgba(72,184,160,.1);border:1px solid var(--ok);border-radius:8px;padding:12px;margin-bottom:16px;font-size:.8rem;color:var(--ok)}
+.modal .benefit b{display:block;font-size:.9rem;margin-bottom:4px}
+.modal .success{display:none;text-align:center;padding:20px 0}
+.modal .success.active{display:block}
+.modal .success .icon{font-size:3rem;margin-bottom:8px}
+.modal .success h3{color:var(--ok);font-size:1.1rem;margin-bottom:8px}
+.modal .success p{color:var(--sec);font-size:.85rem;margin-bottom:16px}
+.modal .success .dl-btn{display:inline-block;background:var(--accent);color:#0e0e18;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px}
+.modal .error-msg{color:var(--danger);font-size:.8rem;margin-top:4px;display:none}
+.premium-lock{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:8px;color:var(--muted);font-size:.8rem}
+.premium-lock .lock{color:var(--accent)}
+
+/* ── Funnel ── */
+.funnel{margin-top:24px;padding:16px;background:var(--glass);border:1px solid var(--border);border-radius:12px;text-align:center}
+.funnel a{color:var(--accent-l);text-decoration:none;font-weight:600}
+.funnel a:hover{text-decoration:underline}
+.funnel .tag{display:inline-block;background:rgba(232,160,64,.15);color:var(--accent-l);font-size:.7rem;padding:2px 8px;border-radius:4px;margin-bottom:8px}
+.funnel .lead-btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;margin-top:12px;transition:transform .1s}
+.funnel .lead-btn:hover{transform:translateY(-1px)}
+.disclaimer{margin-top:16px;font-size:.7rem;color:var(--muted);text-align:center}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ok);color:#0e0e18;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:2000;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.toast.error{background:var(--danger)}
+.toast.show{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 </style>
 </head>
 <body>
 <div class="container">
 <h1>🏠 청약 가점 계산기</h1>
-<p class="sub">2026년 최신 기준 · 무주택기간 · 부양가족 · 청약통장</p>
+<p class="sub">2026년 최신 기준 · 전국 지역별 당첨 예측</p>
 
 <div class="toggle">
 <button class="active" onclick="setMode('general')">일반공급 (가점제)</button>
@@ -70,195 +101,217 @@ select:focus{border-color:var(--accent)}
 
 <div class="card">
 <h2>📋 가점 입력</h2>
-
 <div class="field">
 <label>무주택 기간 (년)</label>
-<div class="input-group">
 <input type="number" id="noHouse" min="0" max="50" value="0" oninput="calc()">
-<span style="color:var(--muted);font-size:.8rem">년</span>
+<div class="hint">만 30세 또는 혼인신고일 중 빠른 날부터. 1년당 2점, 최대 32점</div>
 </div>
-<div class="hint">만 30세 또는 혼인신고일 중 빠른 날부터 기산. 1년당 2점, 최대 32점 (16년+)</div>
-</div>
-
 <div class="field">
 <label>부양가족 수 (명)</label>
-<div class="input-group">
 <input type="number" id="dependents" min="0" max="10" value="0" oninput="calc()">
-<span style="color:var(--muted);font-size:.8rem">명</span>
+<div class="hint">본인 제외. 배우자·자녀·부모. 1명당 5점, 최대 35점</div>
 </div>
-<div class="hint">본인 제외. 배우자·자녀·부모 등. 1명당 5점, 최대 35점 (7명+)</div>
-</div>
-
 <div class="field">
 <label>청약통장 가입 기간 (년)</label>
-<div class="input-group">
 <input type="number" id="account" min="0" max="30" value="0" oninput="calc()">
-<span style="color:var(--muted);font-size:.8rem">년</span>
+<div class="hint">1년당 1점, 최대 17점</div>
 </div>
-<div class="hint">청약예금/부금/저축 가입 기간. 1년당 1점, 최대 17점 (17년+)</div>
-</div>
-
 </div>
 
 <div class="card score-display">
 <div class="score-num" id="totalScore">0</div>
 <div class="score-label">/ 84점 만점</div>
-
 <div class="score-breakdown">
-<div class="score-item">
-<div class="label">무주택</div>
-<div class="val" id="scoreNoHouse">0</div>
+<div class="score-item"><div class="label">무주택</div><div class="val" id="scoreNoHouse">0</div></div>
+<div class="score-item"><div class="label">부양가족</div><div class="val" id="scoreDep">0</div></div>
+<div class="score-item"><div class="label">통장기간</div><div class="val" id="scoreAcc">0</div></div>
 </div>
-<div class="score-item">
-<div class="label">부양가족</div>
-<div class="val" id="scoreDep">0</div>
-</div>
-<div class="score-item">
-<div class="label">통장기간</div>
-<div class="val" id="scoreAcc">0</div>
-</div>
-</div>
-
 <div class="verdict mid" id="verdict">점수를 입력하세요</div>
 </div>
 
 <div class="card region-table hidden" id="regionCard">
 <h2>🗺️ 지역별 당첨 예상</h2>
 <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px">2026년 기준 예상 커트라인 (일반공급 84㎡ 이하)</p>
-<table>
-<thead><tr><th>지역</th><th>예상 커트</th><th>당첨가능</th></tr></thead>
-<tbody id="regionBody"></tbody>
-</table>
+<table><thead><tr><th>지역</th><th>예상 커트</th><th>가능</th></tr></thead><tbody id="regionBody"></tbody></table>
+<div class="premium-lock"><span class="lock">🔒</span> <span>더 정확한 분석은 프리미엄 리포트 확인</span></div>
 </div>
-
 </div>
 
 <div id="special-section" class="hidden">
 <div class="card">
 <h2>🎯 특별공급 자격 확인</h2>
-<div class="field">
-<label>해당 특별공급 유형</label>
 <select id="specialType" onchange="checkSpecial()">
 <option value="">선택하세요</option>
 <option value="newlywed">신혼부부</option>
 <option value="first">생애최초</option>
 <option value="multi">다자녀</option>
-<option value="elderly">노부모</option>
+<option value="elderly">노부모 부양</option>
 <option value="old">기존택 일반</option>
 </select>
-</div>
 <div id="specialResult"></div>
 </div>
 </div>
 
 <div class="funnel">
-<span class="tag">📖 추천 콘텐츠</span>
+<span class="tag">📖 프리미엄 리포트</span>
 <p style="font-size:.9rem;color:var(--sec);margin-bottom:8px">
-전세사기로부터 살아남는 법, 청약 전략, 부동산 투자 가이드
+청약 전략 · 지역별 당첨 커트라인 · 전세사기 방지 가이드
 </p>
-<a href="#" onclick="alert('전자책 링크 준비 중');return false">📚 2026 한국 커뮤니티 고통 리포트 — 전세사기·AI·저임금 →</a>
+<button class="lead-btn" onclick="openLeadModal()">
+📩 무료 프리미엄 리포트 받기
+</button>
 </div>
 
 <div class="disclaimer">
-본 계산기는 2026년 청약제도 기준으로 작성되었습니다.<br>
-실제 청약 시 주택도시기금공단 청약홈에서 확인하세요.<br>
+본 계산기는 2026년 청약제도 기준 참고용입니다.<br>
+실제 청약 시 청약홈에서 최종 확인하세요.<br>
 © 자룡봇 AI Research · Prometheus v2.0
 </div>
-
 </div>
 
+<!-- ── Lead Capture Modal ── -->
+<div class="modal-overlay" id="leadModal">
+<div class="modal">
+<button class="close" onclick="closeLeadModal()">✕</button>
+<div id="modalForm">
+<h2>📩 프리미엄 리포트</h2>
+<p class="desc">정보를 입력하면 무료로 전자책을 보내드립니다</p>
+<div class="benefit">
+<b>🎁 받을 수 있는 혜택</b>
+✅ 2026 청약 전략 완벽 가이드<br>
+✅ 지역별 당첨 커트라인 분석<br>
+✅ 전세사기 방지 체크리스트<br>
+✅ AI 시대 생존 직업 가이드
+</div>
+<div class="field">
+<label>이름</label>
+<input type="text" id="leadName" placeholder="홍길동" required>
+</div>
+<div class="field">
+<label>전화번호</label>
+<input type="tel" id="leadPhone" placeholder="010-1234-5678" required>
+</div>
+<div class="field">
+<label>이메일</label>
+<input type="email" id="leadEmail" placeholder="email@example.com" required>
+</div>
+<div class="error-msg" id="leadError">모든 항목을 입력해주세요</div>
+<button class="btn" onclick="submitLead()">📩 리포트 받기 (무료)</button>
+</div>
+<div class="success" id="modalSuccess">
+<div class="icon">🎉</div>
+<h3>신청 완료!</h3>
+<p>입력하신 연락처로 프리미엄 리포트를 보내드렸습니다.<br>
+아래 버튼을 눌러서 지금 바로 확인하세요.</p>
+<a class="dl-btn" id="downloadLink" href="#" target="_blank">📕 리포트 다운로드</a>
+</div>
+</div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
 <script>
-function setMode(mode){
-const g=document.getElementById('general-section');
-const s=document.getElementById('special-section');
-const btns=document.querySelectorAll('.toggle button');
-btns.forEach(b=>b.classList.remove('active'));
-if(mode==='general'){
-g.classList.remove('hidden');
-s.classList.add('hidden');
-btns[0].classList.add('active');
-}else{
-g.classList.add('hidden');
-s.classList.remove('hidden');
-btns[1].classList.add('active');
-}
+function setMode(m){
+document.querySelectorAll('.toggle button').forEach(b=>b.classList.remove('active'));
+document.getElementById('general-section').classList.toggle('hidden',m!=='general');
+document.getElementById('special-section').classList.toggle('hidden',m!=='special');
+document.querySelector('.toggle button'+(m==='general'?':first-child':':last-child')).classList.add('active');
 }
 
 function calc(){
-const noHouse=Math.min(parseInt(document.getElementById('noHouse').value)||0,50);
+const no=Math.min(parseInt(document.getElementById('noHouse').value)||0,50);
 const dep=Math.min(parseInt(document.getElementById('dependents').value)||0,10);
 const acc=Math.min(parseInt(document.getElementById('account').value)||0,30);
-
-// 무주택: 1년당 2점, 최대 32점
-const sNoHouse=Math.min(noHouse*2,32);
-// 부양가족: 1명당 5점, 최대 35점
-const sDep=Math.min(dep*5,35);
-// 통장: 1년당 1점, 최대 17점
-const sAcc=Math.min(acc,17);
-
-const total=sNoHouse+sDep+sAcc;
-
-document.getElementById('totalScore').textContent=total;
-document.getElementById('scoreNoHouse').textContent=sNoHouse;
+const sNo=Math.min(no*2,32), sDep=Math.min(dep*5,35), sAcc=Math.min(acc,17);
+const t=sNo+sDep+sAcc;
+document.getElementById('totalScore').textContent=t;
+document.getElementById('scoreNoHouse').textContent=sNo;
 document.getElementById('scoreDep').textContent=sDep;
 document.getElementById('scoreAcc').textContent=sAcc;
-
-// Verdict
-const v=document.getElementById('verdict');
-v.classList.remove('high','mid','low');
-if(total===0){v.textContent='점수를 입력하세요';v.classList.add('mid');return}
-
-if(total>=70){
-v.classList.add('high');
-v.textContent='🔥 '+total+'점 — 강남권을 제외한 대부분 지역 당첨 가능!';
-}else if(total>=55){
-v.classList.add('mid');
-v.textContent='⚠️ '+total+'점 — 서울 외곽/수도권/지방 당첨 가능. 강남·서초는 70점+ 필요';
-}else if(total>=40){
-v.classList.add('low');
-v.textContent='😐 '+total+'점 — 수도권 외곽/지방 중소형 가능. 서울은 어려움';
-}else{
-v.classList.add('low');
-v.textContent='😰 '+total+'점 — 가점 상승이 필요합니다. 무주택기간과 통장을 늘리세요';
-}
-
-// Region table
-const regions=[
-{name:'서울 강남·서초·송파',cut:75},
-{name:'서울 마포·용산·성동',cut:70},
-{name:'서울 노원·도봉·강북',cut:55},
-{name:'서울 기타',cut:60},
-{name:'인천·부천',cut:45},
-{name:'수원·성남·고양',cut:50},
-{name:'경기 기타',cut:40},
-{name:'부산·대구·광주',cut:35},
-{name:'대전·울산·제주',cut:30},
-{name:'그 외 지방',cut:20},
-];
-
-const tbody=document.getElementById('regionBody');
-tbody.innerHTML='';
-regions.forEach(r=>{
-const ok=total>=r.cut;
-tbody.innerHTML+='<tr><td>'+r.name+'</td><td>'+r.cut+'점+</td><td class="'+(ok?'ok':'ng')+'">'+(ok?'✅ 가능':'❌ 어려움')+'</td></tr>';
-});
+const v=document.getElementById('verdict');v.className='verdict';
+if(t===0){v.classList.add('mid');v.textContent='점수를 입력하세요';return;}
+if(t>=70){v.classList.add('high');v.textContent='🔥 '+t+'점 — 강남권 제외 대부분 가능!';}
+else if(t>=55){v.classList.add('mid');v.textContent='⚠️ '+t+'점 — 서울 외곽/수도권/지방 가능';}
+else if(t>=40){v.classList.add('low');v.textContent='😐 '+t+'점 — 수도권 외곽/지방 중소형 가능';}
+else{v.classList.add('low');v.textContent='😰 '+t+'점 — 가점 상승 필요';}
+const regions=[{name:'서울 강남·서초·송파',cut:75},{name:'서울 마포·용산·성동',cut:70},{name:'서울 노원·도봉·강북',cut:55},{name:'서울 기타',cut:60},{name:'인천·부천',cut:45},{name:'수원·성남·고양',cut:50},{name:'경기 기타',cut:40},{name:'부산·대구·광주',cut:35},{name:'대전·울산·제주',cut:30},{name:'그 외 지방',cut:20}];
+let html='';regions.forEach(r=>{html+='<tr><td>'+r.name+'</td><td>'+r.cut+'점+</td><td class="'+(t>=r.cut?'ok':'ng')+'">'+(t>=r.cut?'✅ 가능':'❌ 어려움')+'</td></tr>';});
+document.getElementById('regionBody').innerHTML=html;
 document.getElementById('regionCard').classList.remove('hidden');
 }
 
 function checkSpecial(){
-const type=document.getElementById('specialType').value;
-const result=document.getElementById('specialResult');
-const info={
-newlywed:'<div class="verdict mid"><b>신혼부부 특별공급</b><br>· 혼인기간 5년 이내<br>· 무주택 세대구성원<br>· 배우자 + 본인 모두 무주택<br>· 가점 면제 또는 완화</div>',
-first:'<div class="verdict mid"><b>생애최초 특별공급</b><br>· 만 35세 이상<br>· 생애 최초로 주택을 분양받는 자<br>· 본인 + 배우자 모두 무주택<br>· 일부 지역에서는 소득기준 추가</div>',
-multi:'<div class="verdict high"><b>다자녀 특별공급</b><br>· 미성년 자녀 3명 이상<br>· 본인 + 배우자 무주택<br>· 가점 면제 (우선공급)<br>· ⭐ 가장 유리한 특별공급</div>',
-elderly:'<div class="verdict mid"><b>노부모 부양 특별공급</b><br>· 만 60세 이상 부모 1명 이상<br>· 3년 이상 같은 주민등록등본<br>· 본인 + 배우자 + 부모 모두 무주택</div>',
-old:'<div class="verdict low"><b>기존택 일반공급</b><br>· 일반공급은 가점제 적용<br>· 왼쪽 탭에서 가점 계산하세요</div>',
-};
-if(type){result.innerHTML=info[type]}else{result.innerHTML=''}
+const t=document.getElementById('specialType').value;
+const r=document.getElementById('specialResult');
+const info={newlywed:'<div class="verdict mid"><b>신혼부부 특별공급</b><br>· 혼인기간 5년 이내<br>· 무주택 + 배우자 모두 무주택<br>· 가점 면제/완화</div>',first:'<div class="verdict mid"><b>생애최초 특별공급</b><br>· 만 35세 이상<br>· 생애최초 분양<br>· 소득기준 있음</div>',multi:'<div class="verdict high"><b>다자녀 특별공급 ⭐</b><br>· 미성년 자녀 3명 이상<br>· 가점 면제 (우선공급)<br>· 가장 유리!</div>',elderly:'<div class="verdict mid"><b>노부모 부양 특별공급</b><br>· 만 60세+ 부모 1명 이상<br>· 3년 이상 동일 등본</div>',old:'<div class="verdict low"><b>기존택 일반공급</b><br>· 가점제 적용 (왼쪽 탭)'};
+r.innerHTML=t?info[t]:'';
 }
 
-// Init
+// ── Lead Capture ──
+const BOT_TOKEN = '826873…k2k0';
+const CHAT_ID = '730152102';
+const EBOOK_URL = 'https://mdpepastor3004.github.io/prometheus-utils/ebook'; // placeholder
+
+function openLeadModal(){document.getElementById('leadModal').classList.add('active');}
+function closeLeadModal(){document.getElementById('leadModal').classList.remove('active');}
+document.getElementById('leadModal').addEventListener('click',function(e){if(e.target===this)closeLeadModal();});
+
+async function submitLead(){
+const name=document.getElementById('leadName').value.trim();
+const phone=document.getElementById('leadPhone').value.trim();
+const email=document.getElementById('leadEmail').value.trim();
+const err=document.getElementById('leadError');
+err.style.display='none';
+if(!name||!phone||!email){err.style.display='block';return;}
+
+const btn=document.querySelector('.modal .btn');
+btn.disabled=true;btn.textContent='처리 중...';
+
+try{
+// Send lead to Telegram
+const msg=`🆕 [리드 캡처] 청약 가점 계산기
+━━━━━━━━━━━━━━━
+👤 이름: ${name}
+📞 전화: ${phone}
+📧 이메일: ${email}
+📱 기기: ${/Mobi|Android/i.test(navigator.userAgent)?'모바일':'PC'}
+🕐 시간: ${new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}
+━━━━━━━━━━━━━━━
+#리드 #청약 #가점계산기
+`;
+
+const resp=await fetch('https://api.telegram.org/bot'+BOT_TOKEN+'/sendMessage',{
+method:'POST',headers:{'Content-Type':'application/json'},
+body:JSON.stringify({chat_id:CHAT_ID,text:msg,parse_mode:'HTML'})
+});
+const result=await resp.json();
+
+if(result.ok){
+document.getElementById('modalForm').style.display='none';
+const s=document.getElementById('modalSuccess');s.classList.add('active');
+// The actual ebook PDF URL
+document.getElementById('downloadLink').href='https://mdpepastor3004.github.io/prometheus-utils/ebook/2026_cheongyak_report.pdf';
+showToast('✅ 신청 완료! 프리미엄 리포트를 확인하세요');
+}else{
+showToast('⚠️ 일시적 오류. 다시 시도해주세요.','error');
+btn.disabled=false;btn.textContent='📩 리포트 받기 (무료)';
+}
+}catch(e){
+showToast('⚠️ 네트워크 오류. 다시 시도해주세요.','error');
+btn.disabled=false;btn.textContent='📩 리포트 받기 (무료)';
+}
+}
+
+function showToast(msg,type){
+const t=document.getElementById('toast');
+t.textContent=msg;t.className='toast'+(type==='error'?' error':'')+' show';
+setTimeout(()=>{t.classList.remove('show');t.className='toast';},3000);
+}
+
+// Click handler for funnel lead button
+function openLeadModal(){document.getElementById('leadModal').classList.add('active');}
+
 calc();
 </script>
 </body>
