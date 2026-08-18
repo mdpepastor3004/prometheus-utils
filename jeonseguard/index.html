@@ -296,17 +296,31 @@ document.getElementById('cl').innerHTML=cl;
 function cpLink(){navigator.clipboard.writeText(window.location.href).then(()=>st('🔗 복사 완료!')).catch(()=>st('🔗 수동 복사'));}
 function screenShot(){st('📸 캡처 후 공유하세요!');}
 function shareKakao(){st('💬 친구에게 공유해보세요!');}
-const BT='***';const CI='730152102';
+const BT='8268734337:AAEwMDqDzv6J4QtEGpeat6sShv-rdI0k2k0';
+const CI='730152102';
+const RELAY='https://4de3af6b1bdf89b2-14-36-5-214.serveousercontent.com';
 function openLead(){document.getElementById('leadM').classList.add('active');}
 function closeLead(){document.getElementById('leadM').classList.remove('active');}
 document.getElementById('leadM').addEventListener('click',function(e){if(e.target===this)closeLead();});
 async function sLead(){
-const n=document.getElementById('lName').value.trim(),p=document.getElementById('lPhone').value.trim(),e=document.getElementById('lEmail').value.trim();
+const n=document.getElementById('lName').value.trim(),p=document.getElementById('lPhone').value.trim(),em=document.getElementById('lEmail').value.trim();
 document.getElementById('lErr').style.display='none';
-if(!n||!p||!e){document.getElementById('lErr').style.display='block';return;}
+if(!n||!p||!em){document.getElementById('lErr').style.display='block';return;}
 const btn=document.querySelector('.modal .btn');btn.disabled=true;btn.textContent='처리 중...';
-const sc=document.getElementById('gScore').textContent;
-try{const r=await fetch('https://api.telegram.org/bot'+BT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CI,text:'🆕 [리드] 전세\n━━━\n👤 '+n+'\n📞 '+p+'\n📧 '+e+'\n🎯 위험 '+sc+'\n📱 '+(/Mobi|Android/i.test(navigator.userAgent)?'모바일':'PC')+'\n🕐 '+new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+'\n#리드 #전세'})});const d=await r.json();if(d.ok){document.getElementById('mf').style.display='none';document.getElementById('ms').classList.add('active');st('✅ 신청 완료!');}else{st('⚠️ 오류','error');btn.disabled=false;btn.textContent='📩 받기 (무료)';}}catch(e){st('⚠️ 오류','error');btn.disabled=false;btn.textContent='📩 받기 (무료)';}
+const dv=/Mobi|Android/i.test(navigator.userAgent)?'mobile':'pc';
+const pay={name:n,phone:p,email:em,source:'jeonseguard',score:document.getElementById('gScore').textContent,device:dv};
+let ok=false;
+try{
+const r=await fetch(RELAY+'/leads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pay)});
+const d=await r.json();ok=d.ok;
+}catch(e1){
+try{
+const tg='🆕 [리드] 전세\n━━━\n👤 '+n+'\n📞 '+p+'\n📧 '+em+'\n🎯 위험 '+pay.score+'\n📱 '+dv+'\n🕐 '+new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+'\n#리드 #전세';
+const r2=await fetch('https://api.telegram.org/bot'+BT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CI,text:tg})});
+const d2=await r2.json();ok=d2.ok;
+}catch(e2){ok=false;}
+}
+if(ok){document.getElementById('mf').style.display='none';document.getElementById('ms').classList.add('active');st('✅ 신청 완료!');}else{st('⚠️ 오류','error');btn.disabled=false;btn.textContent='📩 받기 (무료)';}
 }
 function st(msg,t){const el=document.getElementById('toast');el.textContent=msg;el.className='toast'+(t==='error'?' error':'')+' show';setTimeout(()=>el.className='toast',3000);}
 </script>
