@@ -310,10 +310,13 @@ const btn=document.querySelector('.modal .btn');btn.disabled=true;btn.textConten
 const dv=/Mobi|Android/i.test(navigator.userAgent)?'mobile':'pc';
 const pay={name:n,phone:p,email:em,source:'jeonseguard',score:document.getElementById('gScore').textContent,device:dv};
 let ok=false;
+// 1차: Supabase 저장
 try{
-const r=await fetch(RELAY+'/leads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pay)});
-const d=await r.json();ok=d.ok;
-}catch(e1){
+const r=await fetch('https://delughjxtvjvdjxwjzwe.supabase.co/rest/v1/leads',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Authorization':'Bearer sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Prefer':'return=minimal'},body:JSON.stringify(pay)});
+ok=r.ok||r.status===201;
+}catch(e1){ok=false;}
+// 2차 fallback: Telegram
+if(!ok){
 try{
 const tg='🆕 [리드] 전세\n━━━\n👤 '+n+'\n📞 '+p+'\n📧 '+em+'\n🎯 위험 '+pay.score+'\n📱 '+dv+'\n🕐 '+new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+'\n#리드 #전세';
 const r2=await fetch('https://api.telegram.org/bot'+BT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CI,text:tg})});
