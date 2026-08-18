@@ -266,8 +266,21 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 try{const d=JSON.parse(localStorage.getItem('cc'));if(d){document.getElementById('noHouse').value=d.n;document.getElementById('noHouseNum').value=d.n;document.getElementById('dependents').value=d.d;document.getElementById('depNum').value=d.d;document.getElementById('account').value=d.a;document.getElementById('accNum').value=d.a;}}catch(e){}
 calc();
 
-function syncSld(id,max){const s=document.getElementById(id);const n=document.getElementById(id.slice(0,2)+'Num');if(id==='noHouse')n=document.getElementById('noHouseNum');else if(id==='dependents')n=document.getElementById('depNum');n.value=s.value;fl(id,max);calc();sv();}
-function syncNum(id,max){let v=parseInt(document.getElementById(id.slice(0,2)+'Num').value)||0;if(id==='noHouse')v=parseInt(document.getElementById('noHouseNum').value)||0;else if(id==='dependents')v=parseInt(document.getElementById('depNum').value)||0;const s=document.getElementById(id);v=Math.max(0,Math.min(v,max));document.getElementById(id.slice(0,2)+'Num').value=v;if(id==='noHouse')document.getElementById('noHouseNum').value=v;else if(id==='dependents')document.getElementById('depNum').value=v;s.value=v;fl(id,max);calc();sv();}
+function gId(id){return document.getElementById(id);}
+function syncSld(id,max){
+  const s=gId(id);let n;
+  if(id==='noHouse')n=gId('noHouseNum');else if(id==='dependents')n=gId('depNum');else n=gId(id.slice(0,2)+'Num');
+  n.value=s.value;fl(id,max);calc();sv();
+}
+function syncNum(id,max){
+  let v=0;
+  if(id==='noHouse')v=parseInt(gId('noHouseNum').value)||0;
+  else if(id==='dependents')v=parseInt(gId('depNum').value)||0;
+  else v=parseInt(gId(id.slice(0,2)+'Num').value)||0;
+  const s=gId(id);v=Math.max(0,Math.min(v,max));
+  if(id==='noHouse')gId('noHouseNum').value=v;else if(id==='dependents')gId('depNum').value=v;else gId(id.slice(0,2)+'Num').value=v;
+  s.value=v;fl(id,max);calc();sv();
+}
 function fl(id,max){const s=document.getElementById(id);const p=(s.value/max)*100;const map={noHouse:'fillNo',dependents:'fillDep',account:'fillAcc'};document.getElementById(map[id]).style.width=p+'%';}
 function sv(){try{localStorage.setItem('cc',JSON.stringify({n:parseInt(document.getElementById('noHouse').value),d:parseInt(document.getElementById('dependents').value),a:parseInt(document.getElementById('account').value)}));}catch(e){}}
 
