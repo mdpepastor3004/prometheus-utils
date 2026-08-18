@@ -2,86 +2,132 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>청약 가점 계산기 2026 | 무주택기간·부양가족·청약통장 점수 계산</title>
-<meta name="description" content="2026년 최신 청약 가점제 계산기. 무주택기간, 부양가족수, 청약통장 가입기간을 입력하면 실시간으로 가점 총점과 당첨 가능성을 확인하세요.">
-<meta name="keywords" content="청약가점계산기, 청약점수, 무주택기간, 부양가족, 청약통장, 가점제, 2026청약, 프리미엄청약리포트">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+<title>청약 가점 계산기 2026 | 무주택기간·부양가족·청약통장 실시간 점수 계산</title>
+<meta name="description" content="2026년 최신 청약 가점제 계산기. 무주택기간, 부양가족수, 청약통장 가입기간을 슬라이더로 입력하면 실시간으로 가점 총점과 등급, 지역별 당첨 가능성을 확인하세요.">
+<meta name="keywords" content="청약가점계산기, 청약점수, 무주택기간, 부양가족, 청약통장, 가점제, 2026청약">
 <meta property="og:title" content="청약 가점 계산기 2026">
-<meta property="og:description" content="무주택기간·부양가족·청약통장 점수 실시간 계산 + 프리미엄 청약 전략 리포트">
+<meta property="og:description" content="실시간 청약 점수 계산 + 등급 + 지역별 예측">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://mdpepastor3004.github.io/prometheus-utils/cheongyakcalc/">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0e0e18;--glass:#151520;--border:#1e1e30;--text:#d8d8e8;--sec:#b0b0c8;--muted:#8888a0;--accent:#e8a040;--accent-l:#f0c860;--accent-d:#b07830;--danger:#e84040;--ok:#48b8a0;--h3:#a0d890;--h4:#80b8e8}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.6;min-height:100vh;padding:20px}
-.container{max-width:600px;margin:0 auto}
-h1{font-size:1.5rem;color:var(--accent-l);text-align:center;margin-bottom:8px}
-.sub{color:var(--muted);text-align:center;font-size:.85rem;margin-bottom:24px}
-.card{background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
-.card h2{font-size:1.1rem;color:var(--h3);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.field{margin-bottom:16px}
-.field label{display:block;font-size:.9rem;color:var(--sec);margin-bottom:6px}
-.field .hint{font-size:.75rem;color:var(--muted);margin-top:4px}
-input[type=number],input[type=text],input[type=tel],input[type=email]{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:1rem;width:100%;outline:none}
-input:focus{border-color:var(--accent)}
-select{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.95rem;width:100%;outline:none}
-select:focus{border-color:var(--accent)}
-.btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:12px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;transition:transform .1s}
-.btn:hover{transform:translateY(-1px)}
-.btn-secondary{background:var(--bg);color:var(--sec);border:1px solid var(--border);border-radius:8px;padding:10px 20px;font-size:.9rem;cursor:pointer;width:100%;transition:all .1s}
-.btn-secondary:hover{border-color:var(--accent);color:var(--accent-l)}
-.score-display{text-align:center;padding:24px 0}
-.score-num{font-size:3rem;font-weight:800;color:var(--accent-l)}
-.score-breakdown{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px}
-.score-item{background:var(--bg);border-radius:8px;padding:12px;text-align:center}
-.score-item .label{font-size:.7rem;color:var(--muted)}
-.score-item .val{font-size:1.3rem;font-weight:700;color:var(--h4)}
-.verdict{margin-top:16px;padding:16px;border-radius:8px;font-size:.9rem;text-align:center}
-.verdict.high{background:rgba(72,184,160,.1);border:1px solid var(--ok);color:var(--ok)}
-.verdict.mid{background:rgba(232,160,64,.1);border:1px solid var(--accent);color:var(--accent-l)}
-.verdict.low{background:rgba(232,64,64,.1);border:1px solid var(--danger);color:var(--danger)}
-.region-table{margin-top:16px;font-size:.8rem}
-.region-table table{width:100%;border-collapse:collapse}
-.region-table th{color:var(--muted);text-align:left;padding:8px;border-bottom:1px solid var(--border)}
-.region-table td{padding:8px;border-bottom:1px solid var(--border);color:var(--sec)}
-.region-table .ok{color:var(--ok)}
-.region-table .ng{color:var(--danger)}
-.hidden{display:none}
-.toggle{display:flex;gap:8px;margin-bottom:16px}
-.toggle button{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--sec);padding:8px;border-radius:8px;cursor:pointer;font-size:.85rem}
-.toggle button.active{background:var(--accent);color:#0e0e18;border-color:var(--accent)}
+:root{--bg:#0e0e18;--bg2:#12121e;--glass:#151520;--glass2:#1a1a28;--border:#1e1e30;--text:#d8d8e8;--sec:#b0b0c8;--muted:#8888a0;--accent:#e8a040;--accent-l:#f0c860;--accent-d:#b07830;--danger:#e84040;--warn:#e8a040;--ok:#48b8a0;--vhigh:#a78bfa;--high:#48b8a0;--mid:#e8a040;--low:#e84040}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.6;min-height:100vh;padding:0}
+.container{max-width:580px;margin:0 auto;padding:20px 16px 60px}
+.header{text-align:center;padding:20px 0 16px;position:relative}
+.header h1{font-size:1.4rem;color:var(--accent-l)}
+.header .sub{color:var(--muted);font-size:.8rem;margin-top:4px}
+.header .back-link{position:absolute;left:0;top:50%;transform:translateY(-50%);color:var(--muted);text-decoration:none;font-size:.85rem}
+.header .back-link:hover{color:var(--accent-l)}
+.card{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px}
+.card h2{font-size:1rem;color:var(--sec);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card h2 .badge{background:var(--accent);color:#0e0e18;font-size:.65rem;padding:2px 6px;border-radius:4px;font-weight:700;margin-left:auto}
 
-/* ── Lead Capture Modal ── */
+/* Slider UI */
+.slider-group{margin-bottom:14px}
+.slider-group:last-child{margin-bottom:0}
+.slider-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.slider-header label{font-size:.85rem;color:var(--sec)}
+.slider-header .value-group{display:flex;align-items:center;gap:4px}
+.slider-header .value-group input[type=number]{width:50px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 6px;color:var(--accent-l);font-size:.85rem;font-weight:700;text-align:center;outline:none;-moz-appearance:textfield}
+.slider-header .value-group input[type=number]::-webkit-inner-spin-button,.slider-header .value-group input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.slider-header .value-group input:focus{border-color:var(--accent)}
+.slider-header .value-group .unit{color:var(--muted);font-size:.75rem}
+.slider-header .value-group .score-badge{background:rgba(232,160,64,.15);color:var(--accent-l);font-size:.75rem;padding:2px 7px;border-radius:4px;font-weight:700}
+.slider-track{position:relative;width:100%;height:6px;background:var(--bg2);border-radius:3px;margin-top:2px}
+.slider-track input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;background:transparent;outline:none;position:absolute;top:0;left:0;z-index:2}
+.slider-track input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 2px 8px rgba(232,160,64,.4);border:2px solid var(--glass)}
+.slider-track input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--glass)}
+.slider-track input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12)}
+.slider-fill{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,var(--accent-d),var(--accent-l));border-radius:3px;pointer-events:none;transition:width .15s ease}
+.hint{font-size:.65rem;color:var(--muted);margin-top:4px;display:flex;justify-content:space-between}
+
+/* Score Dashboard */
+.dashboard{text-align:center;padding:8px 0 0}
+.score-ring{width:140px;height:140px;margin:0 auto 12px;position:relative}
+.score-ring svg{transform:rotate(-90deg);width:140px;height:140px}
+.score-ring .bg-circle{fill:none;stroke:var(--bg2);stroke-width:8}
+.score-ring .fg-circle{fill:none;stroke:var(--accent-l);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .4s ease,stroke .3s}
+.score-ring .center-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.score-ring .center-text .num{font-size:2.2rem;font-weight:800;color:var(--accent-l);line-height:1}
+.score-ring .center-text .denom{font-size:.7rem;color:var(--muted)}
+.score-ring .center-text .grade{font-size:.85rem;font-weight:700;margin-top:2px}
+.grade-god{color:var(--vhigh)}.grade-high{color:var(--high)}.grade-mid{color:var(--mid)}.grade-low{color:var(--low)}
+.breakdown{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
+.break-item{background:var(--bg2);border-radius:10px;padding:10px 6px;text-align:center;border:1px solid transparent}
+.break-item .lbl{font-size:.65rem;color:var(--muted);margin-bottom:2px}
+.break-item .val{font-size:1.2rem;font-weight:700}
+.break-item.c1{color:var(--accent-l)}.break-item.c2{color:var(--cyan)}.break-item.c3{color:var(--purple)}
+
+/* Bar Chart */
+.bar-chart{margin-top:12px}
+.bar-row{display:flex;align-items:center;gap:8px}
+.bar-row .bar-lbl{font-size:.7rem;color:var(--muted);width:36px;flex-shrink:0}
+.bar-row .bar{height:14px;border-radius:7px;transition:width .3s ease;min-width:2px}
+.bar-row .bar.bar-ok{background:linear-gradient(90deg,var(--high),var(--ok))}
+.bar-row .bar.bar-mid{background:linear-gradient(90deg,var(--mid),var(--accent-l))}
+.bar-row .bar.bar-low{background:linear-gradient(90deg,var(--danger),var(--warn))}
+.bar-row .bar-val{font-size:.7rem;color:var(--sec);width:30px;flex-shrink:0}
+
+/* Region Table */
+.region-table{margin-top:12px}
+.region-table .r-header{display:flex;justify-content:space-between;padding:6px 0;font-size:.7rem;color:var(--muted);border-bottom:1px solid var(--border)}
+.region-table .r-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border2);font-size:.8rem}
+.region-table .r-row:last-child{border-bottom:none}
+.region-table .r-row .r-name{color:var(--sec)}
+.region-table .r-row .r-cut{color:var(--muted);font-size:.7rem}
+.region-table .r-row .r-result{font-weight:700;font-size:.75rem;padding:2px 8px;border-radius:4px}
+.region-table .r-row .r-result.pass{background:rgba(72,184,160,.15);color:var(--high)}
+.region-table .r-row .r-result.fail{background:rgba(232,64,64,.1);color:var(--low)}
+
+/* Verdict Banner */
+.verdict-banner{padding:16px;border-radius:12px;margin-top:14px;text-align:center;font-size:.9rem;font-weight:700}
+.verdict-banner.god{background:rgba(167,139,250,.12);border:1px solid var(--vhigh);color:var(--vhigh)}
+.verdict-banner.high{background:rgba(72,184,160,.12);border:1px solid var(--high);color:var(--high)}
+.verdict-banner.mid{background:rgba(232,160,64,.12);border:1px solid var(--mid);color:var(--mid)}
+.verdict-banner.low{background:rgba(232,64,64,.08);border:1px solid var(--low);color:var(--low)}
+.verdict-banner .detail{font-weight:400;font-size:.75rem;margin-top:4px;color:var(--sec)}
+
+/* Share Bar */
+.share-bar{display:flex;gap:8px;margin-top:14px}
+.share-bar button{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--sec);cursor:pointer;font-size:.75rem;text-align:center;transition:all .1s}
+.share-bar button:hover{border-color:var(--accent);color:var(--accent-l)}
+
+/* Funnel */
+.funnel{margin-top:20px;background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.funnel .tag{display:inline-block;background:rgba(232,160,64,.12);color:var(--accent-l);font-size:.7rem;padding:2px 10px;border-radius:4px;margin-bottom:10px}
+.funnel p{font-size:.85rem;color:var(--sec);margin-bottom:14px}
+.funnel .lead-btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(232,160,64,.25)}
+.funnel .lead-btn:hover{transform:translateY(-1px)}
+.funnel .lead-sub{font-size:.7rem;color:var(--muted);margin-top:8px}
+.disclaimer{font-size:.65rem;color:var(--muted);text-align:center;margin-top:16px}
+
+/* Modal */
 .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;justify-content:center;align-items:center}
 .modal-overlay.active{display:flex}
-.modal{background:var(--glass);border:1px solid var(--accent);border-radius:16px;padding:28px;max-width:400px;width:90%;position:relative;max-height:90vh;overflow-y:auto}
-.modal h2{color:var(--accent-l);font-size:1.2rem;margin-bottom:8px;text-align:center}
-.modal .desc{color:var(--sec);font-size:.85rem;text-align:center;margin-bottom:20px}
+.modal{background:var(--glass);border:1px solid var(--accent);border-radius:16px;padding:28px;max-width:400px;width:90%;position:relative}
 .modal .close{position:absolute;top:12px;right:16px;color:var(--muted);cursor:pointer;font-size:1.2rem;background:none;border:none}
-.modal .close:hover{color:var(--text)}
-.modal .field{margin-bottom:14px}
-.modal .benefit{background:rgba(72,184,160,.1);border:1px solid var(--ok);border-radius:8px;padding:12px;margin-bottom:16px;font-size:.8rem;color:var(--ok)}
-.modal .benefit b{display:block;font-size:.9rem;margin-bottom:4px}
-.modal .success{display:none;text-align:center;padding:20px 0}
+.modal h2{color:var(--accent-l);font-size:1.15rem;text-align:center;margin-bottom:6px}
+.modal .desc{color:var(--sec);font-size:.8rem;text-align:center;margin-bottom:16px}
+.modal .benefit{background:rgba(72,184,160,.08);border:1px solid var(--high);border-radius:10px;padding:14px;margin-bottom:16px;font-size:.8rem;color:var(--high)}
+.modal .benefit b{display:block;font-size:.85rem;margin-bottom:6px}
+.modal .field{margin-bottom:12px}
+.modal input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;outline:none}
+.modal input:focus{border-color:var(--accent)}
+.modal .error-msg{color:var(--danger);font-size:.8rem;display:none;text-align:center;margin-bottom:8px}
+.modal .btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:12px;font-size:.95rem;font-weight:700;cursor:pointer;width:100%}
+.modal .success{display:none;text-align:center}
 .modal .success.active{display:block}
-.modal .success .icon{font-size:3rem;margin-bottom:8px}
-.modal .success h3{color:var(--ok);font-size:1.1rem;margin-bottom:8px}
-.modal .success p{color:var(--sec);font-size:.85rem;margin-bottom:16px}
-.modal .success .dl-btn{display:inline-block;background:var(--accent);color:#0e0e18;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px}
-.modal .error-msg{color:var(--danger);font-size:.8rem;margin-top:4px;display:none}
-.premium-lock{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:8px;color:var(--muted);font-size:.8rem}
-.premium-lock .lock{color:var(--accent)}
+.modal .success .icon{font-size:2.5rem;margin-bottom:6px}
+.modal .success h3{color:var(--high);font-size:1.05rem;margin-bottom:6px}
+.modal .success p{color:var(--sec);font-size:.8rem;margin-bottom:14px}
+.modal .success .dl-btn{display:inline-block;background:var(--accent);color:#0e0e18;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700}
 
-/* ── Funnel ── */
-.funnel{margin-top:24px;padding:16px;background:var(--glass);border:1px solid var(--border);border-radius:12px;text-align:center}
-.funnel a{color:var(--accent-l);text-decoration:none;font-weight:600}
-.funnel a:hover{text-decoration:underline}
-.funnel .tag{display:inline-block;background:rgba(232,160,64,.15);color:var(--accent-l);font-size:.7rem;padding:2px 8px;border-radius:4px;margin-bottom:8px}
-.funnel .lead-btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;margin-top:12px;transition:transform .1s}
-.funnel .lead-btn:hover{transform:translateY(-1px)}
-.disclaimer{margin-top:16px;font-size:.7rem;color:var(--muted);text-align:center}
-
-/* Toast */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ok);color:#0e0e18;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:2000;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--high);color:#0e0e18;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:2000;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3)}
 .toast.error{background:var(--danger)}
 .toast.show{display:block;animation:fadeIn .3s}
 @keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
@@ -89,230 +135,190 @@ select:focus{border-color:var(--accent)}
 </head>
 <body>
 <div class="container">
+<div class="header">
+<a class="back-link" href="../">←</a>
 <h1>🏠 청약 가점 계산기</h1>
-<p class="sub">2026년 최신 기준 · 전국 지역별 당첨 예측</p>
-
-<div class="toggle">
-<button class="active" onclick="setMode('general')">일반공급 (가점제)</button>
-<button onclick="setMode('special')">특별공급</button>
+<p class="sub">2026년 최신 · 슬라이더로 입력하면 실시간 계산</p>
 </div>
-
-<div id="general-section">
 
 <div class="card">
-<h2>📋 가점 입력</h2>
-<div class="field">
-<label>무주택 기간 (년)</label>
-<input type="number" id="noHouse" min="0" max="50" value="0" oninput="calc()">
-<div class="hint">만 30세 또는 혼인신고일 중 빠른 날부터. 1년당 2점, 최대 32점</div>
+<h2>📋 가점 입력 <span class="badge">실시간</span></h2>
+<div class="slider-group">
+<div class="slider-header">
+<label>무주택 기간</label>
+<div class="value-group">
+<input type="number" id="noHouseNum" min="0" max="16" value="0" oninput="syncNum('noHouse',16)">
+<span class="unit">년</span>
+<span class="score-badge" id="nsNo">+0점</span>
 </div>
-<div class="field">
-<label>부양가족 수 (명)</label>
-<input type="number" id="dependents" min="0" max="10" value="0" oninput="calc()">
-<div class="hint">본인 제외. 배우자·자녀·부모. 1명당 5점, 최대 35점</div>
 </div>
-<div class="field">
-<label>청약통장 가입 기간 (년)</label>
-<input type="number" id="account" min="0" max="30" value="0" oninput="calc()">
-<div class="hint">1년당 1점, 최대 17점</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillNo" style="width:0%"></div>
+<input type="range" id="noHouse" min="0" max="16" value="0" step="1" oninput="syncSld('noHouse',16)">
+</div>
+<div class="hint"><span>0년</span><span>16년 만점 (+32점)</span></div>
+</div>
+<div class="slider-group">
+<div class="slider-header">
+<label>부양가족 수</label>
+<div class="value-group">
+<input type="number" id="depNum" min="0" max="7" value="0" oninput="syncNum('dependents',7)">
+<span class="unit">명</span>
+<span class="score-badge" id="nsDep">+0점</span>
+</div>
+</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillDep" style="width:0%"></div>
+<input type="range" id="dependents" min="0" max="7" value="0" step="1" oninput="syncSld('dependents',7)">
+</div>
+<div class="hint"><span>0명</span><span>7명 만점 (+35점)</span></div>
+</div>
+<div class="slider-group">
+<div class="slider-header">
+<label>청약통장 가입기간</label>
+<div class="value-group">
+<input type="number" id="accNum" min="0" max="17" value="0" oninput="syncNum('account',17)">
+<span class="unit">년</span>
+<span class="score-badge" id="nsAcc">+0점</span>
+</div>
+</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillAcc" style="width:0%"></div>
+<input type="range" id="account" min="0" max="17" value="0" step="1" oninput="syncSld('account',17)">
+</div>
+<div class="hint"><span>0년</span><span>17년 만점 (+17점)</span></div>
 </div>
 </div>
 
-<div class="card score-display">
-<div class="score-num" id="totalScore">0</div>
-<div class="score-label">/ 84점 만점</div>
-<div class="score-breakdown">
-<div class="score-item"><div class="label">무주택</div><div class="val" id="scoreNoHouse">0</div></div>
-<div class="score-item"><div class="label">부양가족</div><div class="val" id="scoreDep">0</div></div>
-<div class="score-item"><div class="label">통장기간</div><div class="val" id="scoreAcc">0</div></div>
-</div>
-<div class="verdict mid" id="verdict">점수를 입력하세요</div>
-</div>
-
-<div class="card region-table hidden" id="regionCard">
-<h2>🗺️ 지역별 당첨 예상</h2>
-<p style="font-size:.8rem;color:var(--muted);margin-bottom:8px">2026년 기준 예상 커트라인 (일반공급 84㎡ 이하)</p>
-<table><thead><tr><th>지역</th><th>예상 커트</th><th>가능</th></tr></thead><tbody id="regionBody"></tbody></table>
-<div class="premium-lock"><span class="lock">🔒</span> <span>더 정확한 분석은 프리미엄 리포트 확인</span></div>
+<div class="card dashboard">
+<div class="score-ring">
+<svg viewBox="0 0 140 140">
+<circle class="bg-circle" cx="70" cy="70" r="60"/>
+<circle class="fg-circle" id="arc" cx="70" cy="70" r="60" stroke-dasharray="377" stroke-dashoffset="377"/>
+</svg>
+<div class="center-text">
+<div id="total" class="num">0</div>
+<div class="denom">/ 84</div>
+<div class="grade" id="gradeTxt">입력 필요</div>
 </div>
 </div>
-
-<div id="special-section" class="hidden">
-<div class="card">
-<h2>🎯 특별공급 자격 확인</h2>
-<select id="specialType" onchange="checkSpecial()">
-<option value="">선택하세요</option>
-<option value="newlywed">신혼부부</option>
-<option value="first">생애최초</option>
-<option value="multi">다자녀</option>
-<option value="elderly">노부모 부양</option>
-<option value="old">기존택 일반</option>
-</select>
-<div id="specialResult"></div>
+<div class="breakdown">
+<div class="break-item c1"><div class="lbl">무주택</div><div class="val" id="bNo">0</div><div class="lbl">/32</div></div>
+<div class="break-item c2"><div class="lbl">부양가족</div><div class="val" id="bDep">0</div><div class="lbl">/35</div></div>
+<div class="break-item c3"><div class="lbl">통장</div><div class="val" id="bAcc">0</div><div class="lbl">/17</div></div>
+</div>
+<div class="verdict-banner" id="banner">
+⚡ 점수를 입력하세요
+<div class="detail">가점이 높을수록 당첨 확률 상승</div>
+</div>
+<div class="bar-chart">
+<div class="bar-row">
+<span class="bar-lbl">당첨</span>
+<div class="bar bar-mid" id="chBar" style="width:0%"></div>
+<span class="bar-val" id="chLbl">0%</span>
+</div>
+</div>
+<div class="region-table">
+<div class="r-header"><span>지역</span><span>예상컷</span><span>결과</span></div>
+<div id="rBody"></div>
+</div>
+<div class="share-bar">
+<button onclick="cpLink()">🔗 링크 복사</button>
+<button onclick="screenShot()">📸 캡처</button>
+<button onclick="shareKakao()">💬 카톡</button>
 </div>
 </div>
 
 <div class="funnel">
 <span class="tag">📖 프리미엄 리포트</span>
-<p style="font-size:.9rem;color:var(--sec);margin-bottom:8px">
-청약 전략 · 지역별 당첨 커트라인 · 전세사기 방지 가이드
-</p>
-<button class="lead-btn" onclick="openLeadModal()">
-📩 무료 프리미엄 리포트 받기
-</button>
+<p>청약 전략 · 지역별 커트라인 · 전세사기 방지 가이드</p>
+<button class="lead-btn" onclick="openLead()">📩 무료 리포트 받기</button>
+<div class="lead-sub">✔ 점수 기반 맞춤 전략</div>
+</div>
+<div class="disclaimer">© 자룡봇 AI Research · Prometheus v2.0 · 2026년 기준</div>
 </div>
 
-<div class="disclaimer">
-본 계산기는 2026년 청약제도 기준 참고용입니다.<br>
-실제 청약 시 청약홈에서 최종 확인하세요.<br>
-© 자룡봇 AI Research · Prometheus v2.0
-</div>
-</div>
-
-<!-- ── Lead Capture Modal ── -->
-<div class="modal-overlay" id="leadModal">
+<div class="modal-overlay" id="leadM">
 <div class="modal">
-<button class="close" onclick="closeLeadModal()">✕</button>
-<div id="modalForm">
+<button class="close" onclick="closeLead()">✕</button>
+<div id="mf">
 <h2>📩 프리미엄 리포트</h2>
-<p class="desc">정보를 입력하면 무료로 전자책을 보내드립니다</p>
-<div class="benefit">
-<b>🎁 받을 수 있는 혜택</b>
-✅ 2026 청약 전략 완벽 가이드<br>
-✅ 지역별 당첨 커트라인 분석<br>
-✅ 전세사기 방지 체크리스트<br>
-✅ AI 시대 생존 직업 가이드
+<p class="desc">정보 입력 후 무료 다운로드</p>
+<div class="benefit"><b>🎁 혜택</b>✅ 청약 전략 가이드<br>✅ 지역별 커트라인 분석<br>✅ 전세사기 방지 체크리스트</div>
+<div class="field"><input type="text" id="lName" placeholder="이름"></div>
+<div class="field"><input type="tel" id="lPhone" placeholder="전화번호"></div>
+<div class="field"><input type="email" id="lEmail" placeholder="이메일"></div>
+<div class="error-msg" id="lErr">모든 항목을 입력해주세요</div>
+<button class="btn" onclick="sLead()">📩 받기 (무료)</button>
 </div>
-<div class="field">
-<label>이름</label>
-<input type="text" id="leadName" placeholder="홍길동" required>
-</div>
-<div class="field">
-<label>전화번호</label>
-<input type="tel" id="leadPhone" placeholder="010-1234-5678" required>
-</div>
-<div class="field">
-<label>이메일</label>
-<input type="email" id="leadEmail" placeholder="email@example.com" required>
-</div>
-<div class="error-msg" id="leadError">모든 항목을 입력해주세요</div>
-<button class="btn" onclick="submitLead()">📩 리포트 받기 (무료)</button>
-</div>
-<div class="success" id="modalSuccess">
+<div class="success" id="ms">
 <div class="icon">🎉</div>
 <h3>신청 완료!</h3>
-<p>입력하신 연락처로 프리미엄 리포트를 보내드렸습니다.<br>
-아래 버튼을 눌러서 지금 바로 확인하세요.</p>
-<a class="dl-btn" id="downloadLink" href="#" target="_blank">📕 리포트 다운로드</a>
+<p>프리미엄 리포트를 보내드렸습니다</p>
+<a class="dl-btn" href="../ebook/2026_cheongyak_report.pdf" target="_blank">📕 다운로드</a>
 </div>
 </div>
 </div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-function setMode(m){
-document.querySelectorAll('.toggle button').forEach(b=>b.classList.remove('active'));
-document.getElementById('general-section').classList.toggle('hidden',m!=='general');
-document.getElementById('special-section').classList.toggle('hidden',m!=='special');
-document.querySelector('.toggle button'+(m==='general'?':first-child':':last-child')).classList.add('active');
-}
+// Load saved
+try{const d=JSON.parse(localStorage.getItem('cc'));if(d){document.getElementById('noHouse').value=d.n;document.getElementById('noHouseNum').value=d.n;document.getElementById('dependents').value=d.d;document.getElementById('depNum').value=d.d;document.getElementById('account').value=d.a;document.getElementById('accNum').value=d.a;}}catch(e){}
+calc();
+
+function syncSld(id,max){const s=document.getElementById(id);const n=document.getElementById(id.slice(0,2)+'Num');if(id==='noHouse')n=document.getElementById('noHouseNum');else if(id==='dependents')n=document.getElementById('depNum');n.value=s.value;fl(id,max);calc();sv();}
+function syncNum(id,max){let v=parseInt(document.getElementById(id.slice(0,2)+'Num').value)||0;if(id==='noHouse')v=parseInt(document.getElementById('noHouseNum').value)||0;else if(id==='dependents')v=parseInt(document.getElementById('depNum').value)||0;const s=document.getElementById(id);v=Math.max(0,Math.min(v,max));document.getElementById(id.slice(0,2)+'Num').value=v;if(id==='noHouse')document.getElementById('noHouseNum').value=v;else if(id==='dependents')document.getElementById('depNum').value=v;s.value=v;fl(id,max);calc();sv();}
+function fl(id,max){const s=document.getElementById(id);const p=(s.value/max)*100;const map={noHouse:'fillNo',dependents:'fillDep',account:'fillAcc'};document.getElementById(map[id]).style.width=p+'%';}
+function sv(){try{localStorage.setItem('cc',JSON.stringify({n:parseInt(document.getElementById('noHouse').value),d:parseInt(document.getElementById('dependents').value),a:parseInt(document.getElementById('account').value)}));}catch(e){}}
 
 function calc(){
-const no=Math.min(parseInt(document.getElementById('noHouse').value)||0,50);
-const dep=Math.min(parseInt(document.getElementById('dependents').value)||0,10);
-const acc=Math.min(parseInt(document.getElementById('account').value)||0,30);
-const sNo=Math.min(no*2,32), sDep=Math.min(dep*5,35), sAcc=Math.min(acc,17);
+const no=parseInt(document.getElementById('noHouse').value)||0;
+const dep=parseInt(document.getElementById('dependents').value)||0;
+const acc=parseInt(document.getElementById('account').value)||0;
+const sNo=Math.min(no*2,32),sDep=Math.min(dep*5,35),sAcc=Math.min(acc,17);
 const t=sNo+sDep+sAcc;
-document.getElementById('totalScore').textContent=t;
-document.getElementById('scoreNoHouse').textContent=sNo;
-document.getElementById('scoreDep').textContent=sDep;
-document.getElementById('scoreAcc').textContent=sAcc;
-const v=document.getElementById('verdict');v.className='verdict';
-if(t===0){v.classList.add('mid');v.textContent='점수를 입력하세요';return;}
-if(t>=70){v.classList.add('high');v.textContent='🔥 '+t+'점 — 강남권 제외 대부분 가능!';}
-else if(t>=55){v.classList.add('mid');v.textContent='⚠️ '+t+'점 — 서울 외곽/수도권/지방 가능';}
-else if(t>=40){v.classList.add('low');v.textContent='😐 '+t+'점 — 수도권 외곽/지방 중소형 가능';}
-else{v.classList.add('low');v.textContent='😰 '+t+'점 — 가점 상승 필요';}
-const regions=[{name:'서울 강남·서초·송파',cut:75},{name:'서울 마포·용산·성동',cut:70},{name:'서울 노원·도봉·강북',cut:55},{name:'서울 기타',cut:60},{name:'인천·부천',cut:45},{name:'수원·성남·고양',cut:50},{name:'경기 기타',cut:40},{name:'부산·대구·광주',cut:35},{name:'대전·울산·제주',cut:30},{name:'그 외 지방',cut:20}];
-let html='';regions.forEach(r=>{html+='<tr><td>'+r.name+'</td><td>'+r.cut+'점+</td><td class="'+(t>=r.cut?'ok':'ng')+'">'+(t>=r.cut?'✅ 가능':'❌ 어려움')+'</td></tr>';});
-document.getElementById('regionBody').innerHTML=html;
-document.getElementById('regionCard').classList.remove('hidden');
+document.getElementById('nsNo').textContent='+'+sNo+'점';
+document.getElementById('nsDep').textContent='+'+sDep+'점';
+document.getElementById('nsAcc').textContent='+'+sAcc+'점';
+document.getElementById('bNo').textContent=sNo;
+document.getElementById('bDep').textContent=sDep;
+document.getElementById('bAcc').textContent=sAcc;
+document.getElementById('total').textContent=t;
+const p=t/84;const off=377-(p*377);const arc=document.getElementById('arc');arc.setAttribute('stroke-dashoffset',off);
+let g,c,ch;const gt=document.getElementById('gradeTxt');const bn=document.getElementById('banner');const cb=document.getElementById('chBar');const cl=document.getElementById('chLbl');
+if(t===0){g='입력 필요';c='mid';ch=0;}
+else if(t>=80){g='🔥 신의 경지';c='god';ch=99;}
+else if(t>=75){g='🔥 확실한 당첨';c='high';ch=95;}
+else if(t>=70){g='✅ 강남 가능';c='high';ch=85;}
+else if(t>=60){g='✅ 서울 외곽';c='high';ch=70;}
+else if(t>=55){g='⚠️ 수도권';c='mid';ch=55;}
+else if(t>=45){g='⚠️ 인천/경기';c='mid';ch=40;}
+else if(t>=35){g='😅 지방';c='mid';ch=25;}
+else{g='😰 가점↑ 필요';c='low';ch=10;}
+gt.textContent=g;gt.className='grade grade-'+c;
+bn.className='verdict-banner '+c;bn.innerHTML='<span>'+g+': '+t+'점</span><div class="detail">당첨 가능성 '+ch+'%</div>';
+cb.style.width=ch+'%';cb.className='bar '+(ch>=70?'bar-ok':ch>=40?'bar-mid':'bar-low');cl.textContent=ch+'%';
+arc.style.stroke=ch>=70?'var(--high)':ch>=40?'var(--mid)':'var(--low)';
+const reg=[{n:'서울 강남·서초·송파',c:75},{n:'서울 마포·용산·성동',c:70},{n:'서울 노원·도봉·강북',c:55},{n:'서울 기타',c:60},{n:'인천·부천',c:45},{n:'수원·성남·고양',c:50},{n:'경기 기타',c:40},{n:'부산·대구·광주',c:35},{n:'대전·울산·제주',c:30},{n:'그 외 지방',c:20}];
+let h='';reg.forEach(r=>{const pass=t>=r.c;h+='<div class="r-row"><span class="r-name">'+r.n+'</span><span class="r-cut">'+r.c+'점+</span><span class="r-result '+(pass?'pass':'fail')+'">'+(pass?'✅':'❌')+'</span></div>';});
+document.getElementById('rBody').innerHTML=h;
 }
-
-function checkSpecial(){
-const t=document.getElementById('specialType').value;
-const r=document.getElementById('specialResult');
-const info={newlywed:'<div class="verdict mid"><b>신혼부부 특별공급</b><br>· 혼인기간 5년 이내<br>· 무주택 + 배우자 모두 무주택<br>· 가점 면제/완화</div>',first:'<div class="verdict mid"><b>생애최초 특별공급</b><br>· 만 35세 이상<br>· 생애최초 분양<br>· 소득기준 있음</div>',multi:'<div class="verdict high"><b>다자녀 특별공급 ⭐</b><br>· 미성년 자녀 3명 이상<br>· 가점 면제 (우선공급)<br>· 가장 유리!</div>',elderly:'<div class="verdict mid"><b>노부모 부양 특별공급</b><br>· 만 60세+ 부모 1명 이상<br>· 3년 이상 동일 등본</div>',old:'<div class="verdict low"><b>기존택 일반공급</b><br>· 가점제 적용 (왼쪽 탭)'};
-r.innerHTML=t?info[t]:'';
+function cpLink(){navigator.clipboard.writeText(window.location.href).then(()=>st('🔗 복사 완료!')).catch(()=>st('🔗 수동 복사: '+window.location.href));}
+function screenShot(){st('📸 캡처 후 공유하세요!');}
+function shareKakao(){st('💬 친구에게 공유해보세요!');}
+const BT='***';const CI='730152102';
+function openLead(){document.getElementById('leadM').classList.add('active');}
+function closeLead(){document.getElementById('leadM').classList.remove('active');}
+document.getElementById('leadM').addEventListener('click',function(e){if(e.target===this)closeLead();});
+async function sLead(){
+const n=document.getElementById('lName').value.trim(),p=document.getElementById('lPhone').value.trim(),e=document.getElementById('lEmail').value.trim();
+document.getElementById('lErr').style.display='none';
+if(!n||!p||!e){document.getElementById('lErr').style.display='block';return;}
+const btn=document.querySelector('.modal .btn');btn.disabled=true;btn.textContent='처리 중...';
+const sc=document.getElementById('total').textContent,gr=document.getElementById('gradeTxt').textContent;
+try{const r=await fetch('https://api.telegram.org/bot'+BT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CI,text:'🆕 [리드] 청약\n━━━\n👤 '+n+'\n📞 '+p+'\n📧 '+e+'\n🎯 '+sc+'점 / '+gr+'\n📱 '+(/Mobi|Android/i.test(navigator.userAgent)?'모바일':'PC')+'\n🕐 '+new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+'\n#리드 #청약'})});const d=await r.json();if(d.ok){document.getElementById('mf').style.display='none';document.getElementById('ms').classList.add('active');st('✅ 신청 완료!');}else{st('⚠️ 오류','error');btn.disabled=false;btn.textContent='📩 받기 (무료)';}}catch(e){st('⚠️ 네트워크 오류','error');btn.disabled=false;btn.textContent='📩 받기 (무료)';}
 }
-
-// ── Lead Capture ──
-const BOT_TOKEN = '826873…k2k0';
-const CHAT_ID = '730152102';
-const EBOOK_URL = 'https://mdpepastor3004.github.io/prometheus-utils/ebook'; // placeholder
-
-function openLeadModal(){document.getElementById('leadModal').classList.add('active');}
-function closeLeadModal(){document.getElementById('leadModal').classList.remove('active');}
-document.getElementById('leadModal').addEventListener('click',function(e){if(e.target===this)closeLeadModal();});
-
-async function submitLead(){
-const name=document.getElementById('leadName').value.trim();
-const phone=document.getElementById('leadPhone').value.trim();
-const email=document.getElementById('leadEmail').value.trim();
-const err=document.getElementById('leadError');
-err.style.display='none';
-if(!name||!phone||!email){err.style.display='block';return;}
-
-const btn=document.querySelector('.modal .btn');
-btn.disabled=true;btn.textContent='처리 중...';
-
-try{
-// Send lead to Telegram
-const msg=`🆕 [리드 캡처] 청약 가점 계산기
-━━━━━━━━━━━━━━━
-👤 이름: ${name}
-📞 전화: ${phone}
-📧 이메일: ${email}
-📱 기기: ${/Mobi|Android/i.test(navigator.userAgent)?'모바일':'PC'}
-🕐 시간: ${new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}
-━━━━━━━━━━━━━━━
-#리드 #청약 #가점계산기
-`;
-
-const resp=await fetch('https://api.telegram.org/bot'+BOT_TOKEN+'/sendMessage',{
-method:'POST',headers:{'Content-Type':'application/json'},
-body:JSON.stringify({chat_id:CHAT_ID,text:msg,parse_mode:'HTML'})
-});
-const result=await resp.json();
-
-if(result.ok){
-document.getElementById('modalForm').style.display='none';
-const s=document.getElementById('modalSuccess');s.classList.add('active');
-// The actual ebook PDF URL
-document.getElementById('downloadLink').href='https://mdpepastor3004.github.io/prometheus-utils/ebook/2026_cheongyak_report.pdf';
-showToast('✅ 신청 완료! 프리미엄 리포트를 확인하세요');
-}else{
-showToast('⚠️ 일시적 오류. 다시 시도해주세요.','error');
-btn.disabled=false;btn.textContent='📩 리포트 받기 (무료)';
-}
-}catch(e){
-showToast('⚠️ 네트워크 오류. 다시 시도해주세요.','error');
-btn.disabled=false;btn.textContent='📩 리포트 받기 (무료)';
-}
-}
-
-function showToast(msg,type){
-const t=document.getElementById('toast');
-t.textContent=msg;t.className='toast'+(type==='error'?' error':'')+' show';
-setTimeout(()=>{t.classList.remove('show');t.className='toast';},3000);
-}
-
-// Click handler for funnel lead button
-function openLeadModal(){document.getElementById('leadModal').classList.add('active');}
-
-calc();
+function st(msg,t){const el=document.getElementById('toast');el.textContent=msg;el.className='toast'+(t==='error'?' error':'')+' show';setTimeout(()=>el.className='toast',3000);}
 </script>
 </body>
 </html>

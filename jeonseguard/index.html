@@ -2,82 +2,110 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>전세 안전도 분석기 2026 | 전세사기 위험도 체크</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+<title>전세 안전도 분석기 2026 | 전세사기 위험도 실시간 체크</title>
 <meta name="description" content="전세 계약 전 반드시 확인! 전세가율, 건물 노후도, 등기부등본, 지역 리스크를 종합 분석하여 전세사기 위험도를 평가합니다.">
-<meta name="keywords" content="전세사기, 전세가율, 등기부등본, 전세안전, 깡통전세, 전세위험도, 프리미엄전세가이드">
+<meta name="keywords" content="전세사기, 전세가율, 등기부등본, 전세안전, 깡통전세, 전세위험도, 2026전세">
 <meta property="og:title" content="전세 안전도 분석기 2026">
-<meta property="og:description" content="전세사기 위험도 실시간 체크 + 프리미엄 전세 안전 가이드">
+<meta property="og:description" content="전세사기 위험도 실시간 체크 + 등기부등본 가이드">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mdpepastor3004.github.io/prometheus-utils/jeonseguard/">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0e0e18;--glass:#151520;--border:#1e1e30;--text:#d8d8e8;--sec:#b0b0c8;--muted:#8888a0;--accent:#e8a040;--accent-l:#f0c860;--accent-d:#b07830;--danger:#e84040;--warn:#e8a040;--ok:#48b8a0;--cyan:#4ecdc4}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.6;min-height:100vh;padding:20px}
-.container{max-width:600px;margin:0 auto}
-h1{font-size:1.5rem;color:var(--accent-l);text-align:center;margin-bottom:8px}
-.sub{color:var(--muted);text-align:center;font-size:.85rem;margin-bottom:24px}
-.card{background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
-.card h2{font-size:1.1rem;color:var(--cyan);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.field{margin-bottom:16px}
-.field label{display:block;font-size:.9rem;color:var(--sec);margin-bottom:6px}
-.field .hint{font-size:.75rem;color:var(--muted);margin-top:4px}
-input[type=number],input[type=text],input[type=tel],input[type=email]{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:1rem;width:100%;outline:none}
+:root{--bg:#0e0e18;--bg2:#12121e;--glass:#151520;--border:#1e1e30;--text:#d8d8e8;--sec:#b0b0c8;--muted:#8888a0;--accent:#e8a040;--accent-l:#f0c860;--accent-d:#b07830;--danger:#e84040;--warn:#e8a040;--ok:#48b8a0;--cyan:#4ecdc4}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.6;min-height:100vh;padding:0}
+.container{max-width:580px;margin:0 auto;padding:20px 16px 60px}
+.header{text-align:center;padding:20px 0 16px;position:relative}
+.header h1{font-size:1.4rem;color:var(--accent-l)}
+.header .sub{color:var(--muted);font-size:.8rem;margin-top:4px}
+.header .back-link{position:absolute;left:0;top:50%;transform:translateY(-50%);color:var(--muted);text-decoration:none;font-size:.85rem}
+.card{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px}
+.card h2{font-size:1rem;color:var(--cyan);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card h2 .badge{background:var(--cyan);color:#0e0e18;font-size:.65rem;padding:2px 6px;border-radius:4px;font-weight:700;margin-left:auto}
+.field{margin-bottom:14px}.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:.85rem;color:var(--sec);margin-bottom:6px}
+.field .hint{font-size:.65rem;color:var(--muted);margin-top:4px}
+input[type=number]{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.95rem;width:100%;outline:none;-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 input:focus{border-color:var(--accent)}
-select{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.95rem;width:100%;outline:none}
+select{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;width:100%;outline:none}
 select:focus{border-color:var(--accent)}
-.btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:12px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;transition:transform .1s}
-.btn:hover{transform:translateY(-1px)}
-.gauge-wrap{text-align:center;padding:24px 0}
-.gauge{width:160px;height:160px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:800;border:4px solid}
-.gauge-safe{color:var(--ok);border-color:var(--ok)}
-.gauge-caution{color:var(--warn);border-color:var(--warn)}
-.gauge-danger{color:var(--danger);border-color:var(--danger)}
-.gauge-label{margin-top:12px;font-size:.9rem}
-.gauge-sublabel{color:var(--muted);font-size:.75rem;margin-top:4px}
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
-.stat-item{background:var(--bg);border-radius:8px;padding:10px;text-align:center}
-.stat-item .val{font-size:1.5rem;font-weight:700}
-.stat-item .lbl{font-size:.7rem;color:var(--muted)}
-.risk-tip{padding:16px;border-radius:8px;margin-top:16px;font-size:.85rem}
-.risk-tip.safe{background:rgba(72,184,160,.1);border:1px solid var(--ok);color:var(--ok)}
-.risk-tip.caution{background:rgba(232,160,64,.1);border:1px solid var(--warn);color:var(--warn)}
-.risk-tip.danger{background:rgba(232,64,64,.1);border:1px solid var(--danger);color:var(--danger)}
-.risk-tip h3{font-size:.9rem;margin-bottom:8px}
-.checklist{list-style:none;margin-top:12px}
-.checklist li{padding:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;font-size:.85rem}
-.checklist li:last-child{border-bottom:none}
-.checklist .icon{font-size:1.2rem}
-.checklist .pass{color:var(--ok)}
-.checklist .fail{color:var(--danger)}
-.checklist .warn{color:var(--warn)}
-.premium-lock{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:12px;color:var(--muted);font-size:.8rem}
-.premium-lock .lock{color:var(--accent)}
 
-/* ── Lead Capture Modal ── */
+/* Gauge */
+.gauge-wrap{text-align:center;padding:16px 0}
+.gauge{width:140px;height:140px;margin:0 auto;position:relative}
+.gauge svg{transform:rotate(-90deg)}
+.gauge .bg-c{fill:none;stroke:var(--bg2);stroke-width:8}
+.gauge .fg-c{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .4s,stroke .3s}
+.gauge .ct{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.gauge .ct .emoji{font-size:2rem}
+.gauge .ct .score{font-size:1.8rem;font-weight:800}
+.gauge .ct .lbl{font-size:.7rem;color:var(--muted)}
+.gauge-title{margin-top:8px;font-size:.9rem;font-weight:700}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.stat{background:var(--bg2);border-radius:10px;padding:10px;text-align:center}
+.stat .val{font-size:1.4rem;font-weight:700}
+.stat .lbl{font-size:.65rem;color:var(--muted)}
+
+/* Risk Bar */
+.risk-bar{margin:12px 0}
+.risk-track{width:100%;height:8px;background:var(--bg2);border-radius:4px;position:relative;overflow:hidden}
+.risk-fill{height:100%;border-radius:4px;transition:width .3s ease}
+.risk-marks{display:flex;justify-content:space-between;font-size:.6rem;color:var(--muted);margin-top:4px}
+.risk-labels{display:flex;justify-content:space-between;font-size:.7rem;margin-top:2px}
+.risk-labels span{font-weight:700}
+
+/* Checklist */
+.checklist{list-style:none;margin-top:12px}
+.checklist li{padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;font-size:.8rem}
+.checklist li:last-child{border-bottom:none}
+.checklist .ic{font-size:1rem;flex-shrink:0}
+.checklist .pass{color:var(--ok)}.checklist .fail{color:var(--danger)}.checklist .warn{color:var(--warn)}
+
+/* Verdict */
+.verdict{padding:14px;border-radius:10px;margin-top:12px;font-size:.85rem}
+.verdict h3{font-size:.9rem;margin-bottom:6px}
+.verdict.safe{background:rgba(72,184,160,.1);border:1px solid var(--ok);color:var(--ok)}
+.verdict.caution{background:rgba(232,160,64,.1);border:1px solid var(--warn);color:var(--warn)}
+.verdict.danger{background:rgba(232,64,64,.1);border:1px solid var(--danger);color:var(--danger)}
+
+/* Share */
+.share-bar{display:flex;gap:8px;margin-top:14px}
+.share-bar button{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--sec);cursor:pointer;font-size:.75rem;text-align:center}
+.share-bar button:hover{border-color:var(--accent);color:var(--accent-l)}
+
+/* Funnel */
+.funnel{margin-top:20px;background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.funnel .tag{display:inline-block;background:rgba(78,205,196,.12);color:var(--cyan);font-size:.7rem;padding:2px 10px;border-radius:4px;margin-bottom:10px}
+.funnel p{font-size:.85rem;color:var(--sec);margin-bottom:14px}
+.funnel .lead-btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(232,160,64,.25)}
+.funnel .lead-sub{font-size:.7rem;color:var(--muted);margin-top:8px}
+.disclaimer{font-size:.65rem;color:var(--muted);text-align:center;margin-top:16px}
+
+/* Modal */
 .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;justify-content:center;align-items:center}
 .modal-overlay.active{display:flex}
-.modal{background:var(--glass);border:1px solid var(--accent);border-radius:16px;padding:28px;max-width:400px;width:90%;position:relative;max-height:90vh;overflow-y:auto}
-.modal h2{color:var(--accent-l);font-size:1.2rem;margin-bottom:8px;text-align:center}
-.modal .desc{color:var(--sec);font-size:.85rem;text-align:center;margin-bottom:20px}
+.modal{background:var(--glass);border:1px solid var(--accent);border-radius:16px;padding:28px;max-width:400px;width:90%;position:relative}
 .modal .close{position:absolute;top:12px;right:16px;color:var(--muted);cursor:pointer;font-size:1.2rem;background:none;border:none}
-.modal .close:hover{color:var(--text)}
-.modal .field{margin-bottom:14px}
-.modal .benefit{background:rgba(72,184,160,.1);border:1px solid var(--ok);border-radius:8px;padding:12px;margin-bottom:16px;font-size:.8rem;color:var(--ok)}
-.modal .benefit b{display:block;font-size:.9rem;margin-bottom:4px}
-.modal .success{display:none;text-align:center;padding:20px 0}
+.modal h2{color:var(--accent-l);font-size:1.15rem;text-align:center;margin-bottom:6px}
+.modal .desc{color:var(--sec);font-size:.8rem;text-align:center;margin-bottom:16px}
+.modal .benefit{background:rgba(72,184,160,.08);border:1px solid var(--ok);border-radius:10px;padding:14px;margin-bottom:16px;font-size:.8rem;color:var(--ok)}
+.modal .benefit b{display:block;font-size:.85rem;margin-bottom:6px}
+.modal .field{margin-bottom:12px}
+.modal input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;outline:none}
+.modal input:focus{border-color:var(--accent)}
+.modal .error-msg{color:var(--danger);font-size:.8rem;display:none;text-align:center;margin-bottom:8px}
+.modal .btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:12px;font-size:.95rem;font-weight:700;cursor:pointer;width:100%}
+.modal .success{display:none;text-align:center}
 .modal .success.active{display:block}
-.modal .success .icon{font-size:3rem;margin-bottom:8px}
-.modal .success h3{color:var(--ok);font-size:1.1rem;margin-bottom:8px}
-.modal .success p{color:var(--sec);font-size:.85rem;margin-bottom:16px}
-.modal .success .dl-btn{display:inline-block;background:var(--accent);color:#0e0e18;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px}
-.error-msg{color:var(--danger);font-size:.8rem;margin-top:4px;display:none}
+.modal .success .icon{font-size:2.5rem;margin-bottom:6px}
+.modal .success h3{color:var(--ok);font-size:1.05rem;margin-bottom:6px}
+.modal .success p{color:var(--sec);font-size:.8rem;margin-bottom:14px}
+.modal .success .dl-btn{display:inline-block;background:var(--accent);color:#0e0e18;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700}
 
-.funnel{margin-top:24px;padding:16px;background:var(--glass);border:1px solid var(--border);border-radius:12px;text-align:center}
-.funnel a{color:var(--accent-l);text-decoration:none;font-weight:600}
-.funnel a:hover{text-decoration:underline}
-.funnel .tag{display:inline-block;background:rgba(232,160,64,.15);color:var(--accent-l);font-size:.7rem;padding:2px 8px;border-radius:4px;margin-bottom:8px}
-.funnel .lead-btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;margin-top:12px;transition:transform .1s}
-.funnel .lead-btn:hover{transform:translateY(-1px)}
-.disclaimer{margin-top:16px;font-size:.7rem;color:var(--muted);text-align:center}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ok);color:#0e0e18;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:2000;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3)}
 .toast.error{background:var(--danger)}
 .toast.show{display:block;animation:fadeIn .3s}
@@ -86,166 +114,201 @@ select:focus{border-color:var(--accent)}
 </head>
 <body>
 <div class="container">
+<div class="header">
+<a class="back-link" href="../">←</a>
 <h1>🛡️ 전세 안전도 분석기</h1>
-<p class="sub">2026년 기준 · 전세사기 위험도 실시간 체크</p>
+<p class="sub">2026년 기준 · 실시간 전세사기 위험도 체크</p>
+</div>
 
 <div class="card">
-<h2>🔍 기본 정보 입력</h2>
-<div class="field"><label>전세 보증금 (만원)</label><input type="number" id="deposit" min="100" max="100000" value="10000" oninput="analyze()"></div>
-<div class="field"><label>매매가 (만원)</label><input type="number" id="price" min="500" max="500000" value="20000" oninput="analyze()"><div class="hint">동일 단지/평형 최근 실거래가 기준</div></div>
-<div class="field"><label>건물 유형</label><select id="type" onchange="analyze()"><option value="apt">아파트</option><option value="villa">빌라/연립</option><option value="officetel">오피스텔</option><option value="house">단독주택</option></select></div>
-<div class="field"><label>건물 연식</label><select id="age" onchange="analyze()"><option value="0">5년 미만</option><option value="5">5~10년</option><option value="10">10~20년</option><option value="20" selected>20~30년</option><option value="30">30년 이상</option></select></div>
+<h2>🔍 기본 정보 <span class="badge">실시간</span></h2>
+<div class="field">
+<label>전세 보증금 (만원)</label>
+<input type="number" id="dep" min="100" max="100000" value="10000" oninput="calc()">
+</div>
+<div class="field">
+<label>매매가 (만원)</label>
+<input type="number" id="price" min="500" max="500000" value="20000" oninput="calc()">
+<div class="hint">동일 단지/평형 최근 실거래가 기준</div>
+</div>
+<div class="field">
+<label>건물 유형</label>
+<select id="type" onchange="calc()">
+<option value="apt">아파트</option>
+<option value="villa">빌라/연립</option>
+<option value="officetel">오피스텔</option>
+<option value="house">단독주택</option>
+</select>
+</div>
+<div class="field">
+<label>건물 연식</label>
+<select id="age" onchange="calc()">
+<option value="0">5년 미만 (신축)</option>
+<option value="5">5~10년</option>
+<option value="10">10~20년</option>
+<option value="20" selected>20~30년</option>
+<option value="30">30년 이상</option>
+</select>
+</div>
 </div>
 
 <div class="card gauge-wrap">
-<div class="gauge" id="gauge">-</div>
-<div class="gauge-label" id="gaugeLabel">데이터를 입력하세요</div>
-<div class="gauge-sublabel" id="gaugeSub"></div>
-<div class="stats-grid">
-<div class="stat-item"><div class="val" id="jeonseRatio">--</div><div class="lbl">전세가율</div></div>
-<div class="stat-item"><div class="val" id="riskScore">--</div><div class="lbl">위험점수</div></div>
+<div class="gauge">
+<svg viewBox="0 0 140 140" width="140" height="140">
+<circle class="bg-c" cx="70" cy="70" r="60"/>
+<circle class="fg-c" id="gArc" cx="70" cy="70" r="60" stroke="var(--ok)" stroke-dasharray="377" stroke-dashoffset="377"/>
+</svg>
+<div class="ct">
+<div id="gEmoji" class="emoji">🟢</div>
+<div id="gScore" class="score" style="color:var(--ok)">0/10</div>
+<div class="lbl">위험점수</div>
 </div>
-<div class="risk-tip" id="riskTip"><h3>⚠️ 판단 결과</h3><p id="tipText">입력 후 분석됩니다.</p></div>
+</div>
+<div id="gTitle" class="gauge-title" style="color:var(--ok)">🟢 안전</div>
+
+<div class="stats-grid">
+<div class="stat"><div id="ratioVal" class="val" style="color:var(--ok)">50%</div><div class="lbl">전세가율</div></div>
+<div class="stat"><div id="riskVal" class="val" style="color:var(--ok)">0</div><div class="lbl">위험점수</div></div>
 </div>
 
-<div class="card" id="checklistCard">
+<div class="risk-bar">
+<div class="risk-track">
+<div id="rFill" class="risk-fill" style="width:0%;background:var(--ok)"></div>
+</div>
+<div class="risk-marks"><span>0</span><span>3</span><span>6</span><span>10</span></div>
+<div class="risk-labels"><span style="color:var(--ok)">안전</span><span style="color:var(--warn)">주의</span><span style="color:var(--danger)">위험</span></div>
+</div>
+
+<div class="verdict" id="verdictBox">
+<h3 id="verdictTitle">⚠️ 분석 대기중</h3>
+<p id="verdictText">데이터를 입력하면 실시간으로 분석됩니다.</p>
+</div>
+</div>
+
+<div class="card">
 <h2>✅ 등기부등본 체크리스트</h2>
-<ul class="checklist" id="checklist"><li><span class="icon">📌</span> 아래 항목을 계약 전 반드시 확인하세요</li></ul>
-<div class="premium-lock"><span class="lock">🔒</span> <span>전세사기 방지 풀가이드는 프리미엄 리포트에서</span></div>
+<ul class="checklist" id="cl"></ul>
+</div>
+
+<div class="share-bar" style="margin-top:0">
+<button onclick="cpLink()">🔗 링크 복사</button>
+<button onclick="screenShot()">📸 캡처</button>
+<button onclick="shareKakao()">💬 카톡</button>
 </div>
 
 <div class="funnel">
 <span class="tag">📖 프리미엄 리포트</span>
-<p style="font-size:.9rem;color:var(--sec);margin-bottom:8px">
-전세사기 방지 체크리스트 · 계약 전 필수 확인사항 · HUG 보증보험 가이드
-</p>
-<button class="lead-btn" onclick="openLeadModal()">📩 무료 프리미엄 리포트 받기</button>
+<p>전세사기 방지 7단계 · 등기부등본 가이드 · HUG 보험</p>
+<button class="lead-btn" onclick="openLead()">📩 무료 리포트 받기</button>
+<div class="lead-sub">✔ 위험도 기반 맞춤 가이드</div>
+</div>
+<div class="disclaimer">© 자룡봡 AI Research · Prometheus v2.0 · 참고용</div>
 </div>
 
-<div class="disclaimer">
-본 분석기는 참고용입니다. 계약 전 반드시 등기부등본 확인 및 전문가 상담하세요.<br>
-© 자룡봇 AI Research · Prometheus v2.0
-</div>
-</div>
-
-<!-- Lead Capture Modal -->
-<div class="modal-overlay" id="leadModal">
+<div class="modal-overlay" id="leadM">
 <div class="modal">
-<button class="close" onclick="closeLeadModal()">✕</button>
-<div id="modalForm">
+<button class="close" onclick="closeLead()">✕</button>
+<div id="mf">
 <h2>📩 프리미엄 리포트</h2>
-<p class="desc">정보를 입력하면 무료로 전자책을 보내드립니다</p>
-<div class="benefit">
-<b>🎁 받을 수 있는 혜택</b>
-✅ 전세사기 방지 7단계 체크리스트<br>
-✅ 등기부등본 보는 법 완벽 가이드<br>
-✅ HUG 전세보증보험 가입 방법<br>
-✅ AI 시대 생존 직업 가이드
+<p class="desc">정보 입력 후 무료 다운로드</p>
+<div class="benefit"><b>🎁 혜택</b>✅ 전세사기 방지 7단계<br>✅ 등기부등본 보는 법<br>✅ HUG 보험 가입 가이드</div>
+<div class="field"><input type="text" id="lName" placeholder="이름"></div>
+<div class="field"><input type="tel" id="lPhone" placeholder="전화번호"></div>
+<div class="field"><input type="email" id="lEmail" placeholder="이메일"></div>
+<div class="error-msg" id="lErr">모든 항목을 입력해주세요</div>
+<button class="btn" onclick="sLead()">📩 받기 (무료)</button>
 </div>
-<div class="field"><label>이름</label><input type="text" id="leadName" placeholder="홍길동" required></div>
-<div class="field"><label>전화번호</label><input type="tel" id="leadPhone" placeholder="010-1234-5678" required></div>
-<div class="field"><label>이메일</label><input type="email" id="leadEmail" placeholder="email@example.com" required></div>
-<div class="error-msg" id="leadError">모든 항목을 입력해주세요</div>
-<button class="btn" onclick="submitLead()">📩 리포트 받기 (무료)</button>
-</div>
-<div class="success" id="modalSuccess">
+<div class="success" id="ms">
 <div class="icon">🎉</div>
 <h3>신청 완료!</h3>
-<p>입력하신 연락처로 프리미엄 리포트를 보내드렸습니다.</p>
-<a class="dl-btn" id="downloadLink" href="#" target="_blank">📕 리포트 다운로드</a>
+<p>프리미엄 리포트를 보내드렸습니다</p>
+<a class="dl-btn" href="../ebook/2026_jeonse_report.pdf" target="_blank">📕 다운로드</a>
 </div>
 </div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
-function analyze(){
-const dep=parseInt(document.getElementById('deposit').value)||0;
-const pri=parseInt(document.getElementById('price').value)||1;
-const type=document.getElementById('type').value;
-const age=document.getElementById('age').value;
-const ratio=Math.round((dep/pri)*100);
-document.getElementById('jeonseRatio').textContent=ratio+'%';
+// Load saved
+try{const d=JSON.parse(localStorage.getItem('jg'));if(d){document.getElementById('dep').value=d.dep;document.getElementById('price').value=d.price;document.getElementById('type').value=d.type;document.getElementById('age').value=d.age;}}catch(e){}
+calc();
 
+function calc(){
+const dp=parseInt(document.getElementById('dep').value)||0;
+const pr=parseInt(document.getElementById('price').value)||1;
+const tp=document.getElementById('type').value;
+const ag=document.getElementById('age').value;
+const ratio=Math.round((dp/pr)*100);
+document.getElementById('ratioVal').textContent=ratio+'%';
+
+// Risk calculation
 let risk=0;
-if(ratio>=90){risk+=4;document.getElementById('jeonseRatio').style.color='var(--danger)'}
-else if(ratio>=80){risk+=3;document.getElementById('jeonseRatio').style.color='var(--warn)'}
-else if(ratio>=70){risk+=2;document.getElementById('jeonseRatio').style.color='var(--warn)'}
-else if(ratio>=60){risk+=1;document.getElementById('jeonseRatio').style.color='var(--ok)'}
-else{document.getElementById('jeonseRatio').style.color='var(--ok)';risk+=0}
+if(ratio>=90){risk+=4;document.getElementById('ratioVal').style.color='var(--danger)';}
+else if(ratio>=80){risk+=3;document.getElementById('ratioVal').style.color='var(--warn)';}
+else if(ratio>=70){risk+=2;document.getElementById('ratioVal').style.color='var(--warn)';}
+else if(ratio>=60){risk+=1;document.getElementById('ratioVal').style.color='var(--ok)';}
+else{document.getElementById('ratioVal').style.color='var(--ok)';}
 
-if(type==='villa')risk+=2;
-else if(type==='officetel')risk+=1.5;
-else if(type==='house')risk+=1;
-if(age=='30')risk+=2;
-else if(age=='20')risk+=1.5;
-else if(age=='10')risk+=1;
-else if(age=='5')risk+=0.5;
+if(tp==='villa')risk+=2;
+else if(tp==='officetel')risk+=1.5;
+else if(tp==='house')risk+=1;
+if(ag==='30')risk+=2;else if(ag==='20')risk+=1.5;else if(ag==='10')risk+=1;else if(ag==='5')risk+=0.5;
 risk=Math.round(Math.min(risk,10));
-document.getElementById('riskScore').textContent=risk+'/10';
 
-const gauge=document.getElementById('gauge');
-const gLabel=document.getElementById('gaugeLabel');
-const tip=document.getElementById('riskTip');
-const tipText=document.getElementById('tipText');
-gauge.className='gauge ';tip.className='risk-tip ';
+// Save
+try{localStorage.setItem('jg',JSON.stringify({dep:dp,price:pr,type:tp,age:ag}));}catch(e){}
 
-let items;
+// Display
+document.getElementById('riskVal').textContent=risk;
+const gE=document.getElementById('gEmoji'),gS=document.getElementById('gScore'),gT=document.getElementById('gTitle');
+const arc=document.getElementById('gArc');
+const fill=document.getElementById('rFill');
+const vb=document.getElementById('verdictBox'),vT=document.getElementById('verdictTitle'),vTx=document.getElementById('verdictText');
+
+// Gauge arc (inverted: low risk = green, high = red)
+const safety=10-risk;
+const off=377-((safety/10)*377);
+arc.setAttribute('stroke-dashoffset',off);
+fill.style.width=(risk/10*100)+'%';
+
+let items,cls,emoji,title,color,bg;
 if(risk<=3){
-gauge.className='gauge gauge-safe';gauge.textContent='🟢';gLabel.textContent='🟢 안전';
-tip.classList.add('safe');tipText.textContent='현재 입력하신 조건은 비교적 안전합니다. 그래도 등기부등본은 반드시 확인하세요.';
-items=[{icon:'✅',c:'pass',t:'전세가율 80% 미만 — 안전 수준'},{icon:'✅',c:'pass',t:'깡통전세 리스크 낮음'},{icon:'📌',c:'warn',t:'등기부등본에서 근저당권 설정액 확인 (필수)'},{icon:'📌',c:'warn',t:'선순위 보증금 + 대출 합계가 매매가 이하인지 확인'}];
+emoji='🟢';color='var(--ok)';cls='safe';title='🟢 안전';
+arc.style.stroke='var(--ok)';fill.style.background='var(--ok)';
+bg='현재 조건은 비교적 안전합니다. 등기부등본은 반드시 확인하세요.';
+items=[{i:'✅',c:'pass',t:'전세가율 80% 미만 — 안전 수준'},{i:'✅',c:'pass',t:'깡통전세 리스크 낮음'},{i:'📌',c:'warn',t:'근저당권 설정액 확인 (필수)'},{i:'📌',c:'warn',t:'선순위 보증금+대출 ≤ 매매가인지 확인'}];
 }else if(risk<=6){
-gauge.className='gauge gauge-caution';gauge.textContent='🟡';gLabel.textContent='🟡 주의';
-tip.classList.add('caution');tipText.textContent='리스크가 있는 수준입니다. 반드시 등기부등본과 선순위 채권을 확인하세요.';
-items=[{icon:'⚠️',c:'fail',t:'전세가율 80% 이상 — 깡통전세 위험'},{icon:'⚠️',c:'warn',t:'빌라/오피스텔은 리스크가 높은 편'},{icon:'📌',c:'warn',t:'등기부등본: 근저당권 설정액 확인'},{icon:'📌',c:'warn',t:'선순위 보증금+대출 = 매매가 80% 이내?'},{icon:'📌',c:'warn',t:'건물 노후도 확인 (20년↑ = 리스크 증가)'}];
+emoji='🟡';color='var(--warn)';cls='caution';title='🟡 주의';
+arc.style.stroke='var(--warn)';fill.style.background='var(--warn)';
+bg='리스크가 있는 수준입니다. 반드시 등기부등본과 선순위 채권을 확인하세요.';
+items=[{i:'⚠️',c:'fail',t:'전세가율 80% 이상 — 깡통전세 위험'},{i:'⚠️',c:'warn',t:'빌라/오피스텔 리스크 높음'},{i:'📌',c:'warn',t:'근저당권 설정액 확인'},{i:'📌',c:'warn',t:'선순위 보증금+대출 ≤ 매매가 80%?'},{i:'📌',c:'warn',t:'건물 노후도 확인'}];
 }else{
-gauge.className='gauge gauge-danger';gauge.textContent='🔴';gLabel.textContent='🔴 위험!';
-tip.classList.add('danger');tipText.textContent='리스크가 매우 높습니다. 계약을 재고하거나 전문가 검토를 받으세요. 전세사기 피해자 70%는 2030 청년입니다.';
-items=[{icon:'🚨',c:'fail',t:'전세가율 90% 이상 — 깡통전세 확률 높음'},{icon:'🚨',c:'fail',t:'빌라+노후건물 = 최고위험 조합'},{icon:'⚠️',c:'fail',t:'등기부등본 반드시 발급 (대법원 인터넷등기소)'},{icon:'⚠️',c:'fail',t:'선순위 채권: 전세보증금이 몇 순위인지 확인'},{icon:'⚠️',c:'fail',t:'국토부 전세사기 피해인정 4만건↑'},{icon:'📌',c:'warn',t:'HUG 전세보증보험 가입여부 확인'}];
+emoji='🔴';color='var(--danger)';cls='danger';title='🔴 위험!';
+arc.style.stroke='var(--danger)';fill.style.background='var(--danger)';
+bg='리스크 매우 높음! 계약 재고 또는 전문가 검토 필수. 전세사기 피해자 70%는 2030 청년입니다.';
+items=[{i:'🚨',c:'fail',t:'전세가율 90%+ — 깡통전세 확률 높음'},{i:'🚨',c:'fail',t:'빌라+노후건물 = 최고위험'},{i:'⚠️',c:'fail',t:'등기부등본 필수 발급'},{i:'⚠️',c:'fail',t:'선순위 채권 확인'},{i:'⚠️',c:'fail',t:'국토부 전세사기 4만건↑'},{i:'📌',c:'warn',t:'HUG 전세보증보험 확인'}];
 }
-const cl=document.getElementById('checklist');cl.innerHTML='';
-items.forEach(i=>{cl.innerHTML+='<li><span class="icon '+i.c+'">'+i.icon+'</span> '+i.t+'</li>';});
+gE.textContent=emoji;gS.textContent=risk+'/10';gS.style.color=color;gT.textContent=title;gT.style.color=color;
+vb.className='verdict '+cls;vT.textContent=title;vTx.textContent=bg;
+let cl='';items.forEach(it=>{cl+='<li><span class="ic '+it.c+'">'+it.i+'</span> '+it.t+'</li>';});
+document.getElementById('cl').innerHTML=cl;
 }
-analyze();
-
-// Lead Capture
-const BOT_TOKEN='826873…k2k0';
-const CHAT_ID='730152102';
-function openLeadModal(){document.getElementById('leadModal').classList.add('active');}
-function closeLeadModal(){document.getElementById('leadModal').classList.remove('active');}
-document.getElementById('leadModal').addEventListener('click',function(e){if(e.target===this)closeLeadModal();});
-
-async function submitLead(){
-const name=document.getElementById('leadName').value.trim();
-const phone=document.getElementById('leadPhone').value.trim();
-const email=document.getElementById('leadEmail').value.trim();
-const err=document.getElementById('leadError');
-err.style.display='none';
-if(!name||!phone||!email){err.style.display='block';return;}
-const btn=document.querySelector('.modal .btn');
-btn.disabled=true;btn.textContent='처리 중...';
-try{
-const msg='🆕 [리드 캡처] 전세 안전도 분석기\n━━━━━━━━━━━━━━━\n👤 이름: '+name+'\n📞 전화: '+phone+'\n📧 이메일: '+email+'\n📱 기기: '+(/Mobi|Android/i.test(navigator.userAgent)?'모바일':'PC')+'\n🕐 시간: '+new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+'\n━━━━━━━━━━━━━━━\n#리드 #전세 #안전도분석기';
-const resp=await fetch('https://api.telegram.org/bot'+BOT_TOKEN+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CHAT_ID,text:msg})});
-const r=await resp.json();
-if(r.ok){
-document.getElementById('modalForm').style.display='none';
-document.getElementById('modalSuccess').classList.add('active');
-document.getElementById('downloadLink').href='https://mdpepastor3004.github.io/prometheus-utils/ebook/2026_jeonse_report.pdf';
-showToast('✅ 신청 완료! 프리미엄 리포트를 확인하세요');
-}else{throw new Error();}
-}catch(e){
-showToast('⚠️ 일시적 오류. 다시 시도해주세요.','error');
-btn.disabled=false;btn.textContent='📩 리포트 받기 (무료)';
+function cpLink(){navigator.clipboard.writeText(window.location.href).then(()=>st('🔗 복사 완료!')).catch(()=>st('🔗 수동 복사'));}
+function screenShot(){st('📸 캡처 후 공유하세요!');}
+function shareKakao(){st('💬 친구에게 공유해보세요!');}
+const BT='***';const CI='730152102';
+function openLead(){document.getElementById('leadM').classList.add('active');}
+function closeLead(){document.getElementById('leadM').classList.remove('active');}
+document.getElementById('leadM').addEventListener('click',function(e){if(e.target===this)closeLead();});
+async function sLead(){
+const n=document.getElementById('lName').value.trim(),p=document.getElementById('lPhone').value.trim(),e=document.getElementById('lEmail').value.trim();
+document.getElementById('lErr').style.display='none';
+if(!n||!p||!e){document.getElementById('lErr').style.display='block';return;}
+const btn=document.querySelector('.modal .btn');btn.disabled=true;btn.textContent='처리 중...';
+const sc=document.getElementById('gScore').textContent;
+try{const r=await fetch('https://api.telegram.org/bot'+BT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CI,text:'🆕 [리드] 전세\n━━━\n👤 '+n+'\n📞 '+p+'\n📧 '+e+'\n🎯 위험 '+sc+'\n📱 '+(/Mobi|Android/i.test(navigator.userAgent)?'모바일':'PC')+'\n🕐 '+new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+'\n#리드 #전세'})});const d=await r.json();if(d.ok){document.getElementById('mf').style.display='none';document.getElementById('ms').classList.add('active');st('✅ 신청 완료!');}else{st('⚠️ 오류','error');btn.disabled=false;btn.textContent='📩 받기 (무료)';}}catch(e){st('⚠️ 오류','error');btn.disabled=false;btn.textContent='📩 받기 (무료)';}
 }
-}
-function showToast(msg,type){
-const t=document.getElementById('toast');
-t.textContent=msg;t.className='toast'+(type==='error'?' error':'')+' show';
-setTimeout(()=>{t.classList.remove('show');t.className='toast';},3000);
-}
+function st(msg,t){const el=document.getElementById('toast');el.textContent=msg;el.className='toast'+(t==='error'?' error':'')+' show';setTimeout(()=>el.className='toast',3000);}
 </script>
 </body>
 </html>
