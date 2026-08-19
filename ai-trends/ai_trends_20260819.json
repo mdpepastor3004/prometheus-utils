@@ -1,0 +1,1182 @@
+{
+  "date": "20260819",
+  "ts": "2026-08-19T22:34:32.689537",
+  "total": 146,
+  "sources": {
+    "github_trending": 23,
+    "reddit": 10,
+    "hackernews": 102,
+    "x_nitter": 21
+  },
+  "keywords_count": 63,
+  "items": [
+    {
+      "source": "github_api",
+      "title": "guillaumemeyer/watermarks-remover",
+      "url": "https://github.com/guillaumemeyer/watermarks-remover",
+      "desc": "Strip multi-vendor AI provenance marks: Unicode text hygiene, statistical rewrite hooks, and C2PA/metadata from PNG/JPEG/SVG/PDF/DOCX/HTML/MD",
+      "author": "guillaumemeyer",
+      "ts": "2026-08-19T22:34:02.193651"
+    },
+    {
+      "source": "github_api",
+      "title": "KKKKhazix/human-writing",
+      "url": "https://github.com/KKKKhazix/human-writing",
+      "desc": "让 AI 写的中文读起来像一个具体的人在说话。通用创作与改稿 Skill，开箱即用。",
+      "author": "KKKKhazix",
+      "ts": "2026-08-19T22:34:02.195789"
+    },
+    {
+      "source": "github_api",
+      "title": "yetone/cumora",
+      "url": "https://github.com/yetone/cumora",
+      "desc": "Where agent teams gather. Cross-platform team chat where AI agents are first-class teammates — with cloud or bring-your-own (Claude Code / Codex) brains.",
+      "author": "yetone",
+      "ts": "2026-08-19T22:34:02.195848"
+    },
+    {
+      "source": "github_api",
+      "title": "ShawnPana/phone-harness",
+      "url": "https://github.com/ShawnPana/phone-harness",
+      "desc": "let your agent control your phone",
+      "author": "ShawnPana",
+      "ts": "2026-08-19T22:34:02.195863"
+    },
+    {
+      "source": "github_api",
+      "title": "AMAP-ML/LongHorizon-Harness",
+      "url": "https://github.com/AMAP-ML/LongHorizon-Harness",
+      "desc": "The long-horizon computer-use harness. Run AI agents across desktop apps and the CLI for extended periods while preserving task state and making reliable progress on complex workflows. Features fresh-",
+      "author": "AMAP-ML",
+      "ts": "2026-08-19T22:34:03.035401"
+    },
+    {
+      "source": "github_api",
+      "title": "MarcosSete/awesome-free-ai-course-notes",
+      "url": "https://github.com/MarcosSete/awesome-free-ai-course-notes",
+      "desc": "A curated collection of machine learning and AI lecture notes from the world's leading universities.  This repository gives you access to the same lecture notes used by students at top institutions su",
+      "author": "MarcosSete",
+      "ts": "2026-08-19T22:34:03.035631"
+    },
+    {
+      "source": "github_api",
+      "title": "decionis/agent-safe-pipeline",
+      "url": "https://github.com/decionis/agent-safe-pipeline",
+      "desc": "Reference architecture for AI agents that propose actions but cannot authorize them — immutable intent capture, an independent Decionis policy verdict (ALLOW/ESCALATE/BLOCK), verified human approval, ",
+      "author": "decionis",
+      "ts": "2026-08-19T22:34:03.035774"
+    },
+    {
+      "source": "github_api",
+      "title": "tanishqkancharla/calldiff",
+      "url": "https://github.com/tanishqkancharla/calldiff",
+      "desc": "Diffs for function call stacks across git commits. 22 languages supported (AST-based, built using Tree-sitter). Great for agentic review.",
+      "author": "tanishqkancharla",
+      "ts": "2026-08-19T22:34:03.036004"
+    },
+    {
+      "source": "github_api",
+      "title": "joeseesun/qiaomu-seo",
+      "url": "https://github.com/joeseesun/qiaomu-seo",
+      "desc": "Audit, diagnose, research, plan, implement, experiment on, and verify website SEO across Google, Bing, and AI-search surfaces. Use for technical SEO, ",
+      "author": "joeseesun",
+      "ts": "2026-08-19T22:34:03.036113"
+    },
+    {
+      "source": "github_api",
+      "title": "patchy631/time-to-first-token",
+      "url": "https://github.com/patchy631/time-to-first-token",
+      "desc": "A 10-week, 30-minutes-a-day roadmap for LLM inference serving and optimization. vLLM, SGLang, quantization, speculative decoding, benchmarking.",
+      "author": "patchy631",
+      "ts": "2026-08-19T22:34:04.468145"
+    },
+    {
+      "source": "github_api",
+      "title": "sudoingX/qwen38-mtp",
+      "url": "https://github.com/sudoingX/qwen38-mtp",
+      "desc": "One llama.cpp flag unlocks +33-39% decode speed for Qwen3.8-27B on consumer GPUs. The MTP head already ships inside your GGUF. Recipe, paired benchmarks, probe tool.",
+      "author": "sudoingX",
+      "ts": "2026-08-19T22:34:04.468389"
+    },
+    {
+      "source": "github_api",
+      "title": "syv-ai/qwen38-27b-rtx3090",
+      "url": "https://github.com/syv-ai/qwen38-27b-rtx3090",
+      "desc": "Qwen3.8-27B on a single RTX 3090 with vLLM: ~1,000 tok/s at 64 concurrent (int8 tensor-core GEMMs, fp16 DeltaNet state), ~114 tok/s single-user at default sampling / ~124 greedy (MTP drafts, own-outpu",
+      "author": "syv-ai",
+      "ts": "2026-08-19T22:34:04.468611"
+    },
+    {
+      "source": "github_api",
+      "title": "madeye/ad-skipper",
+      "url": "https://github.com/madeye/ad-skipper",
+      "desc": "Local VLM-based Android splash-ad skipper: accessibility service + three-tier detection (node match -> OCR -> llama.cpp GGUF VLM grounding)",
+      "author": "madeye",
+      "ts": "2026-08-19T22:34:04.468732"
+    },
+    {
+      "source": "github_api",
+      "title": "julianmb/q38rocm",
+      "url": "https://github.com/julianmb/q38rocm",
+      "desc": "Qwen 3.8 27B ROCmFP4 on AMD Strix Halo (Ryzen AI Max+ 395). Up to 36 tok/s via MTP Speculation, TurboQuant & Mesa RADV Wave64.",
+      "author": "julianmb",
+      "ts": "2026-08-19T22:34:04.468901"
+    },
+    {
+      "source": "github_api",
+      "title": "a2307588073-arch/zynq-yolov3-tiny-accelerator",
+      "url": "https://github.com/a2307588073-arch/zynq-yolov3-tiny-accelerator",
+      "desc": "INT8 single-class YOLOv3-Tiny accelerator and OV5640-to-HDMI bare-metal demo for Xilinx Zynq-7000 XC7Z100, with PyTorch training and parameter-export tools.  Topics  yolov3-tiny, fpga, zynq-7000, xc7z",
+      "author": "a2307588073-arch",
+      "ts": "2026-08-19T22:34:04.469121"
+    },
+    {
+      "source": "github_api",
+      "title": "duckyshell/ComfyUI-MiniMaxH3-Prompt-Writer",
+      "url": "https://github.com/duckyshell/ComfyUI-MiniMaxH3-Prompt-Writer",
+      "desc": "Local multimodal MiniMax H3 prompt writer for ComfyUI, powered by Gemma 4 GGUF models.",
+      "author": "duckyshell",
+      "ts": "2026-08-19T22:34:04.469247"
+    },
+    {
+      "source": "github_api",
+      "title": "Wassimyounes01/qwen38-uncensored",
+      "url": "https://github.com/Wassimyounes01/qwen38-uncensored",
+      "desc": "Local Qwen 3.8 27B uncensored Q4_K_M + harvested SYSTEM pack. Official 3.8 weights, not a 3.6 retitle.",
+      "author": "Wassimyounes01",
+      "ts": "2026-08-19T22:34:04.469437"
+    },
+    {
+      "source": "github_api",
+      "title": "Greninja9257/LabLLM",
+      "url": "https://github.com/Greninja9257/LabLLM",
+      "desc": "A native macOS lab for teaching tiny language models to think — build the architecture, train the weights, and watch a small LLM emerge from scratch, locally on Apple Silicon with custom data, tokeniz",
+      "author": "Greninja9257",
+      "ts": "2026-08-19T22:34:04.469640"
+    },
+    {
+      "source": "github_api",
+      "title": "SweiryDev/MicroCNN-TangNano20k",
+      "url": "https://github.com/SweiryDev/MicroCNN-TangNano20k",
+      "desc": "An end-to-end SystemVerilog SoC implementing a quantized MicroCNN accelerator on the Tang Nano 20K for BloodMNIST image classification.",
+      "author": "SweiryDev",
+      "ts": "2026-08-19T22:34:04.469752"
+    },
+    {
+      "source": "reddit_LocalLLaMA",
+      "title": "[Megathread] Qwen 3.8 27B Release Day",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1voojjz/megathread_qwen_38_27b_release_day/",
+      "desc": "",
+      "author": "LocalLLaMA",
+      "ts": "2026-08-19T22:34:05.447517"
+    },
+    {
+      "source": "reddit_LocalLLaMA",
+      "title": "Best Local LLMs - August 2026",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vkmhyl/best_local_llms_august_2026/",
+      "desc": "",
+      "author": "LocalLLaMA",
+      "ts": "2026-08-19T22:34:05.447921"
+    },
+    {
+      "source": "reddit_LocalLLaMA",
+      "title": "Thoughts About Scaling Law - Z.ai",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vsf9eg/thoughts_about_scaling_law_zai/",
+      "desc": "",
+      "author": "LocalLLaMA",
+      "ts": "2026-08-19T22:34:05.448090"
+    },
+    {
+      "source": "reddit_LocalLLaMA",
+      "title": "Stop Anthropomorphisizing Intermediate Tokens: Qwen3.8 doesn't &quot;overthink&quot;",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vsjcf7/stop_anthropomorphisizing_intermediate_tokens/",
+      "desc": "",
+      "author": "LocalLLaMA",
+      "ts": "2026-08-19T22:34:05.448224"
+    },
+    {
+      "source": "reddit_LocalLLaMA",
+      "title": "Qwen 3.8 35B-A3B vagueposting",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vsl6yf/qwen_38_35ba3b_vagueposting/",
+      "desc": "",
+      "author": "LocalLLaMA",
+      "ts": "2026-08-19T22:34:05.448322"
+    },
+    {
+      "source": "reddit_LocalLLaMA",
+      "title": "New midsize Qwen 3.8 model coming next week (hopefully) according to community manager!",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vs9zym/new_midsize_qwen_38_model_coming_next_week/",
+      "desc": "",
+      "author": "LocalLLaMA",
+      "ts": "2026-08-19T22:34:05.448433"
+    },
+    {
+      "source": "reddit_LocalLLaMA",
+      "title": "Qwen3.8-27B on 2x 3090 + vLLM + DFlash2: 218 tok/s single request",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vsccit/qwen3827b_on_2x_3090_vllm_dflash2_218_toks_single/",
+      "desc": "",
+      "author": "LocalLLaMA",
+      "ts": "2026-08-19T22:34:05.448550"
+    },
+    {
+      "source": "reddit_LocalLLaMA",
+      "title": "Am I doing something wrong? Qwen 3.8 27B seems useless for agentic coding",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vsinej/am_i_doing_something_wrong_qwen_38_27b_seems/",
+      "desc": "",
+      "author": "LocalLLaMA",
+      "ts": "2026-08-19T22:34:05.448656"
+    },
+    {
+      "source": "reddit_LocalLLaMA",
+      "title": "Alibaba's RISC-V CPU, XuanTie C950, Runs Qwen-3.8 27B at 30 tps",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vs0wsl/alibabas_riscv_cpu_xuantie_c950_runs_qwen38_27b/",
+      "desc": "",
+      "author": "LocalLLaMA",
+      "ts": "2026-08-19T22:34:05.448759"
+    },
+    {
+      "source": "reddit_LocalLLaMA",
+      "title": "DFlash 2 available for Qwen 3.8 27B and Muse Glimmer",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1vs2tsn/dflash_2_available_for_qwen_38_27b_and_muse/",
+      "desc": "",
+      "author": "LocalLLaMA",
+      "ts": "2026-08-19T22:34:05.448858"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: A CLI to query the unsealed court files with local LLMs",
+      "url": "https://github.com/simulationship/epstein-search",
+      "desc": "points: 2, comments: 0",
+      "author": "simulationship",
+      "ts": "2026-08-19T22:34:10.300098"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Lemonade: Run LLMs Locally with GPU and NPU Acceleration",
+      "url": "https://github.com/lemonade-sdk/lemonade",
+      "desc": "points: 15, comments: 0",
+      "author": "ramkrishna2910",
+      "ts": "2026-08-19T22:34:10.300364"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Blink-Edit – Cursor-style next-edit predictions for Neovim (local LLMs)",
+      "url": "https://github.com/BlinkResearchLabs/blink-edit.nvim",
+      "desc": "points: 6, comments: 0",
+      "author": "atemyipod",
+      "ts": "2026-08-19T22:34:10.300460"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: We open sourced Verbis, a local AI assistant with SaaS connectors",
+      "url": "https://github.com/verbis-ai/verbis",
+      "desc": "points: 4, comments: 0",
+      "author": "alexmavr",
+      "ts": "2026-08-19T22:34:10.300676"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: LLMKube – Kubernetes for Local LLMs with GPU Acceleration",
+      "url": "https://github.com/defilantech/LLMKube",
+      "desc": "points: 5, comments: 0",
+      "author": "defilan",
+      "ts": "2026-08-19T22:34:10.300742"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Loqi, a \"local-first\" translation tool using Ollama/llama.cpp",
+      "url": "https://github.com/danterolle/loqi",
+      "desc": "points: 3, comments: 0",
+      "author": "danterolle",
+      "ts": "2026-08-19T22:34:10.300801"
+    },
+    {
+      "source": "hackernews",
+      "title": "A small tool I made for local LLMs: LLM-neofetch-plus",
+      "url": "https://news.ycombinator.com/item?id=47143746",
+      "desc": "points: 1, comments: 2",
+      "author": "HFerrahoglu",
+      "ts": "2026-08-19T22:34:10.301036"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Extract (financial) data from emails with local LLM",
+      "url": "https://github.com/brainless/dwata",
+      "desc": "points: 1, comments: 0",
+      "author": "brainless",
+      "ts": "2026-08-19T22:34:10.301085"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Local LLM AIME benchmarking tool",
+      "url": "https://github.com/Belluxx/LocalAIME",
+      "desc": "points: 1, comments: 0",
+      "author": "belluxx",
+      "ts": "2026-08-19T22:34:10.301129"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN:Localapi.ai – Local AI Platform",
+      "url": "https://news.ycombinator.com/item?id=43544889",
+      "desc": "points: 1, comments: 0",
+      "author": "LocalAPIAI",
+      "ts": "2026-08-19T22:34:10.301453"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: KTransformers–236B Model and 1M Context LLM Inference on Local Machines",
+      "url": "https://github.com/kvcache-ai/ktransformers",
+      "desc": "points: 20, comments: 3",
+      "author": "sssummer",
+      "ts": "2026-08-19T22:34:10.301714"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: LLM-use – Open-source tool to route and orchestrate multi-LLM tasks",
+      "url": "https://news.ycombinator.com/item?id=46920069",
+      "desc": "points: 2, comments: 0",
+      "author": "justvugg",
+      "ts": "2026-08-19T22:34:10.302163"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: LLM-use – cost-effective LLM orchestrator for agents",
+      "url": "https://news.ycombinator.com/item?id=47073778",
+      "desc": "points: 2, comments: 1",
+      "author": "justvugg",
+      "ts": "2026-08-19T22:34:10.302400"
+    },
+    {
+      "source": "hackernews",
+      "title": "Ask HN: Who's running local AI workstations in 2026?",
+      "url": "https://news.ycombinator.com/item?id=46560663",
+      "desc": "points: 9, comments: 8",
+      "author": "Blue_Cosma",
+      "ts": "2026-08-19T22:34:10.302517"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Composable middleware for LLM inference Optimization Passes",
+      "url": "https://github.com/liquidos-ai/AutoAgents",
+      "desc": "points: 7, comments: 0",
+      "author": "human_hack3r",
+      "ts": "2026-08-19T22:34:10.302638"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: MirrorNeuron – an open-source runtime for reliable on-device AI agents",
+      "url": "https://www.mirrorneuron.io/",
+      "desc": "points: 1, comments: 1",
+      "author": "homerquan",
+      "ts": "2026-08-19T22:34:10.989856"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Python SDK for RamaLama AI Containers",
+      "url": "https://github.com/ramalama-labs/ramalama-sdk",
+      "desc": "points: 1, comments: 0",
+      "author": "ersatz_username",
+      "ts": "2026-08-19T22:34:10.990293"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: I made Qwen3.5-4B 13% smarter by compressing it to 4-bit",
+      "url": "https://huggingface.co/SingularityPrinciple/Qwen3.5-4B-Singularity-Max",
+      "desc": "points: 2, comments: 0",
+      "author": "singularity_max",
+      "ts": "2026-08-19T22:34:10.990792"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: We built a knowledge hub for running LLMs on edge devices",
+      "url": "https://github.com/NexaAI/Awesome-LLMs-on-device",
+      "desc": "points: 13, comments: 0",
+      "author": "alanzhuly",
+      "ts": "2026-08-19T22:34:10.991424"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Shodh – Cognitive memory for AI agents (runs on edge)",
+      "url": "https://github.com/varun29ankuS/shodh-memory",
+      "desc": "points: 1, comments: 0",
+      "author": "Varun_shodh",
+      "ts": "2026-08-19T22:34:10.991970"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Collate – Offline AI PDF reader and chat for Mac (private, on-device)",
+      "url": "https://collate.ai/",
+      "desc": "points: 1, comments: 0",
+      "author": "velyan",
+      "ts": "2026-08-19T22:34:10.993435"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Aidlab – Health Data for Devs",
+      "url": "https://news.ycombinator.com/item?id=45549392",
+      "desc": "points: 59, comments: 18",
+      "author": "guzik",
+      "ts": "2026-08-19T22:34:10.994573"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Dlog – Journaling and AI coach that learns what drives wellbeing (Mac)",
+      "url": "https://dlog.pro/",
+      "desc": "points: 47, comments: 39",
+      "author": "dr-j",
+      "ts": "2026-08-19T22:34:10.995043"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Luxonis – OAK 4: spatial AI camera that runs Linux, with up to 52 TOPS",
+      "url": "https://www.luxonis.com/oak4",
+      "desc": "points: 18, comments: 12",
+      "author": "huntdunbar",
+      "ts": "2026-08-19T22:34:10.995506"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Inworld Runtime – A C++ graph-based runtime for production AI apps",
+      "url": "https://inworld.ai/runtime",
+      "desc": "points: 7, comments: 2",
+      "author": "rogilop",
+      "ts": "2026-08-19T22:34:10.995945"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: OpenCastor – A universal runtime connecting AI models to robot hardware",
+      "url": "https://www.opencastor.com",
+      "desc": "points: 4, comments: 0",
+      "author": "craigm26",
+      "ts": "2026-08-19T22:34:10.996433"
+    },
+    {
+      "source": "hackernews",
+      "title": "2026 will be the year of on-device agents",
+      "url": "https://news.ycombinator.com/item?id=46471524",
+      "desc": "points: 2, comments: 1",
+      "author": "mycelial_ali",
+      "ts": "2026-08-19T22:34:10.996889"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Sokuji – Open-source speech translator with on-device AI WASM/WebGPU",
+      "url": "https://github.com/kizuna-ai-lab/sokuji",
+      "desc": "points: 2, comments: 0",
+      "author": "jiangzhuo",
+      "ts": "2026-08-19T22:34:10.997154"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Agentic – Vesta AI Explorer",
+      "url": "https://kruks.ai/",
+      "desc": "points: 1, comments: 1",
+      "author": "scouzi1966",
+      "ts": "2026-08-19T22:34:10.997367"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: NoSpamPro – AI Spam Blocker for Android (Privacy-First)",
+      "url": "https://byauth.com/en",
+      "desc": "points: 1, comments: 0",
+      "author": "huseyinsari",
+      "ts": "2026-08-19T22:34:10.997782"
+    },
+    {
+      "source": "hackernews",
+      "title": "Lemonade by AMD: a fast and open source local LLM server using GPU and NPU",
+      "url": "https://lemonade-server.ai",
+      "desc": "points: 572, comments: 111",
+      "author": "AbuAssar",
+      "ts": "2026-08-19T22:34:11.459240"
+    },
+    {
+      "source": "hackernews",
+      "title": "InternLM – new open source 7B LLM",
+      "url": "https://github.com/InternLM/InternLM",
+      "desc": "points: 308, comments: 89",
+      "author": "freediver",
+      "ts": "2026-08-19T22:34:11.459323"
+    },
+    {
+      "source": "hackernews",
+      "title": "Bamba: An open-source LLM that crosses a transformer with an SSM",
+      "url": "https://research.ibm.com/blog/bamba-ssm-transformer-model",
+      "desc": "points: 207, comments: 69",
+      "author": "shallow-mind",
+      "ts": "2026-08-19T22:34:11.459353"
+    },
+    {
+      "source": "hackernews",
+      "title": "DeepSeek v2.5 – open-source LLM comparable to GPT-4, but 95% less expensive",
+      "url": "https://www.deepseek.com/",
+      "desc": "points: 193, comments: 75",
+      "author": "jchook",
+      "ts": "2026-08-19T22:34:11.459412"
+    },
+    {
+      "source": "hackernews",
+      "title": "How long can open-source LLMs truly promise on context length?",
+      "url": "https://lmsys.org/blog/2023-06-29-longchat/",
+      "desc": "points: 189, comments: 62",
+      "author": "dacheng2",
+      "ts": "2026-08-19T22:34:11.459439"
+    },
+    {
+      "source": "hackernews",
+      "title": "Ask HN: Open source LLM for commercial use?",
+      "url": "https://news.ycombinator.com/item?id=35512338",
+      "desc": "points: 184, comments: 61",
+      "author": "LewisDavidson",
+      "ts": "2026-08-19T22:34:11.459465"
+    },
+    {
+      "source": "hackernews",
+      "title": "Sarvam 105B, the first competitive Indian open source LLM",
+      "url": "https://www.sarvam.ai/blogs/sarvam-30b-105b",
+      "desc": "points: 179, comments: 63",
+      "author": "logicchains",
+      "ts": "2026-08-19T22:34:11.459490"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: We made glhf.chat – run almost any open-source LLM, including 405B",
+      "url": "https://glhf.chat/landing/home",
+      "desc": "points: 161, comments: 95",
+      "author": "reissbaker",
+      "ts": "2026-08-19T22:34:11.459567"
+    },
+    {
+      "source": "hackernews",
+      "title": "Meta Open-Sources Megalodon LLM for Efficient Long Sequence Modeling",
+      "url": "https://www.infoq.com/news/2024/06/meta-llm-megalodon/",
+      "desc": "points: 129, comments: 10",
+      "author": "rbanffy",
+      "ts": "2026-08-19T22:34:11.459594"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Open-source LLM provider price comparison",
+      "url": "https://github.com/arc53/llm-price-compass",
+      "desc": "points: 125, comments: 32",
+      "author": "shelar1423",
+      "ts": "2026-08-19T22:34:11.459619"
+    },
+    {
+      "source": "hackernews",
+      "title": "Tell HN: We need to push the notion that only open-source LLMs can be “safe”",
+      "url": "https://news.ycombinator.com/item?id=35288606",
+      "desc": "points: 119, comments: 61",
+      "author": "meghan_rain",
+      "ts": "2026-08-19T22:34:11.459696"
+    },
+    {
+      "source": "hackernews",
+      "title": "Open source LLM with 32k Context Length",
+      "url": "https://blog.abacus.ai/blog/2023/08/22/giraffe-long-context-llms/",
+      "desc": "points: 115, comments: 28",
+      "author": "shubham_saboo",
+      "ts": "2026-08-19T22:34:11.459720"
+    },
+    {
+      "source": "hackernews",
+      "title": "Training open-source LLMs on ChatGPT output is a really bad idea.",
+      "url": "https://gist.github.com/mlaprise/bf4745655194162babfc2d158162e2e0",
+      "desc": "points: 114, comments: 76",
+      "author": "laprise",
+      "ts": "2026-08-19T22:34:11.459746"
+    },
+    {
+      "source": "hackernews",
+      "title": "A guide to open-source LLM inference and performance",
+      "url": "https://www.baseten.co/blog/llm-transformer-inference-guide/",
+      "desc": "points: 113, comments: 14",
+      "author": "varunshenoy",
+      "ts": "2026-08-19T22:34:11.459771"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Open Codex – OpenAI Codex CLI with open-source LLMs",
+      "url": "https://github.com/codingmoh/open-codex",
+      "desc": "points: 106, comments: 37",
+      "author": "codingmoh",
+      "ts": "2026-08-19T22:34:11.459838"
+    },
+    {
+      "source": "hackernews",
+      "title": "Lumos: Learning Agents with Unified Data, Modular Design, and Open-Source LLMs",
+      "url": "https://allenai.github.io/lumos/",
+      "desc": "points: 102, comments: 10",
+      "author": "milliondreams",
+      "ts": "2026-08-19T22:34:11.459858"
+    },
+    {
+      "source": "hackernews",
+      "title": "Playing with Open Source LLMs",
+      "url": "https://alicegg.tech//2025/07/29/open-source-llm.html",
+      "desc": "points: 90, comments: 52",
+      "author": "zer0tonin",
+      "ts": "2026-08-19T22:34:11.459880"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Opik, an open source LLM evaluation framework",
+      "url": "https://github.com/comet-ml/opik",
+      "desc": "points: 86, comments: 15",
+      "author": "calebkaiser",
+      "ts": "2026-08-19T22:34:11.459906"
+    },
+    {
+      "source": "hackernews",
+      "title": "Falcon 40B (potentially the most capable open-source LLM) is now open-source",
+      "url": "https://www.tii.ae/news/uaes-falcon-40b-now-royalty-free",
+      "desc": "points: 69, comments: 1",
+      "author": "rish-b",
+      "ts": "2026-08-19T22:34:11.459934"
+    },
+    {
+      "source": "hackernews",
+      "title": "Open Source LLMOps Stack",
+      "url": "https://oss-llmops-stack.com",
+      "desc": "points: 64, comments: 7",
+      "author": "marcklingen",
+      "ts": "2026-08-19T22:34:11.459955"
+    },
+    {
+      "source": "hackernews",
+      "title": "Phi-4: Microsoft's Newest Small Language Model Specializing in Complex Reasoning",
+      "url": "https://techcommunity.microsoft.com/blog/aiplatformblog/introducing-phi-4-microsoft%E2%80%99s-newest-small-language-model-specializing-in-comple/4357090",
+      "desc": "points: 439, comments: 143",
+      "author": "lappa",
+      "ts": "2026-08-19T22:34:11.883204"
+    },
+    {
+      "source": "hackernews",
+      "title": "Phi-2: The surprising power of small language models",
+      "url": "https://www.microsoft.com/en-us/research/blog/phi-2-the-surprising-power-of-small-language-models/",
+      "desc": "points: 269, comments: 121",
+      "author": "birriel",
+      "ts": "2026-08-19T22:34:11.883289"
+    },
+    {
+      "source": "hackernews",
+      "title": "Apple releases eight small AI language models aimed at on-device use",
+      "url": "https://arstechnica.com/information-technology/2024/04/apple-releases-eight-small-ai-language-models-aimed-at-on-device-use/",
+      "desc": "points: 182, comments: 61",
+      "author": "MBCook",
+      "ts": "2026-08-19T22:34:11.883366"
+    },
+    {
+      "source": "hackernews",
+      "title": "TinyLlama: An Open-Source Small Language Model",
+      "url": "https://arxiv.org/abs/2401.02385",
+      "desc": "points: 143, comments: 44",
+      "author": "matt1",
+      "ts": "2026-08-19T22:34:11.883386"
+    },
+    {
+      "source": "hackernews",
+      "title": "Small language models are the future of agentic AI",
+      "url": "https://arxiv.org/abs/2506.02153",
+      "desc": "points: 113, comments: 45",
+      "author": "favoboa",
+      "ts": "2026-08-19T22:34:11.883425"
+    },
+    {
+      "source": "hackernews",
+      "title": "Dispersion loss counteracts embedding condensation in small language models",
+      "url": "https://chenliu-1996.github.io/projects/LM-Dispersion/",
+      "desc": "points: 42, comments: 8",
+      "author": "E-Reverance",
+      "ts": "2026-08-19T22:34:11.883519"
+    },
+    {
+      "source": "hackernews",
+      "title": "Building Agents for Small Language Models: A Deep Dive into Lightweight AI",
+      "url": "https://www.msuiche.com/posts/building-agents-for-small-language-models-a-deep-dive-into-lightweight-ai/",
+      "desc": "points: 26, comments: 2",
+      "author": "transpute",
+      "ts": "2026-08-19T22:34:11.883560"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Qwodel – An open-source unified pipeline for LLM quantization",
+      "url": "https://news.ycombinator.com/item?id=47348708",
+      "desc": "points: 1, comments: 0",
+      "author": "kinderasteroid",
+      "ts": "2026-08-19T22:34:12.604208"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: QKV Core – Run 7B LLMs on 4GB VRAM via surgical memory alignment",
+      "url": "https://github.com/QKV-Core/QKV-Core",
+      "desc": "points: 1, comments: 0",
+      "author": "broxytr",
+      "ts": "2026-08-19T22:34:12.604560"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Run Unsloth Dynamic GGUFs using Docker model runner",
+      "url": "https://github.com/docker/model-runner",
+      "desc": "points: 3, comments: 1",
+      "author": "ericcurtin",
+      "ts": "2026-08-19T22:34:12.604607"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: ZSE – Open-source LLM inference engine with 3.9s cold starts",
+      "url": "https://github.com/Zyora-Dev/zse",
+      "desc": "points: 58, comments: 9",
+      "author": "zyoralabs",
+      "ts": "2026-08-19T22:34:12.604898"
+    },
+    {
+      "source": "hackernews",
+      "title": "Tq-KV – Rust implementation of TurboQuant that works on GGUF models",
+      "url": "https://news.ycombinator.com/item?id=47599463",
+      "desc": "points: 3, comments: 0",
+      "author": "onurgokyildiz",
+      "ts": "2026-08-19T22:34:12.604986"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Explainer/docs for GGUF quantization (unofficial)",
+      "url": "https://github.com/iuliaturc/gguf-docs",
+      "desc": "points: 1, comments: 0",
+      "author": "irt24",
+      "ts": "2026-08-19T22:34:12.605023"
+    },
+    {
+      "source": "hackernews",
+      "title": "LLMs Are Moving Local – So Why Are We Still Paying for Tokens?",
+      "url": "https://news.ycombinator.com/item?id=45748270",
+      "desc": "points: 3, comments: 3",
+      "author": "josephinepqt",
+      "ts": "2026-08-19T22:34:12.605537"
+    },
+    {
+      "source": "hackernews",
+      "title": "Small Language Models (SLMs) vs. Large Language Models (LLMs)",
+      "url": "https://news.ycombinator.com/item?id=47000145",
+      "desc": "points: 3, comments: 1",
+      "author": "AkshatRaj00",
+      "ts": "2026-08-19T22:34:12.605632"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: DeepBrainz-R1 – Reasoning-First Small Models for Agentic Systems",
+      "url": "https://huggingface.co/DeepBrainz",
+      "desc": "points: 3, comments: 0",
+      "author": "DeepBrainz",
+      "ts": "2026-08-19T22:34:12.605805"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Loft CLI – Fine-tune and run LLMs (1–3B) on 8 GB MacBook Air, no GPUs",
+      "url": "https://news.ycombinator.com/item?id=44627754",
+      "desc": "points: 2, comments: 1",
+      "author": "dips2umar",
+      "ts": "2026-08-19T22:34:12.606132"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: HF-agents, CLI extension to find the best model/quant for your hardware",
+      "url": "https://github.com/huggingface/hf-agents",
+      "desc": "points: 2, comments: 0",
+      "author": "clmnt",
+      "ts": "2026-08-19T22:34:12.606202"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: I wrote an LLM inference engine in pure Go – 48 tok/s zero dependencies",
+      "url": "https://github.com/computerex/dlgo/tree/main",
+      "desc": "points: 2, comments: 0",
+      "author": "computerex",
+      "ts": "2026-08-19T22:34:12.606484"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Cactus Hybrid: We taught Gemma 4 to know when it's wrong",
+      "url": "https://github.com/cactus-compute/cactus-hybrid",
+      "desc": "points: 191, comments: 44",
+      "author": "HenryNdubuaku",
+      "ts": "2026-08-19T22:34:13.245008"
+    },
+    {
+      "source": "hackernews",
+      "title": "Ask HN: Is GenAI heading for a crypto-esque bubble pop?",
+      "url": "https://news.ycombinator.com/item?id=37747040",
+      "desc": "points: 63, comments: 53",
+      "author": "brucethemoose2",
+      "ts": "2026-08-19T22:34:13.245231"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Model2Vec: make sentence transformers 500x faster on CPU, 15x smaller",
+      "url": "https://github.com/MinishLab/model2vec",
+      "desc": "points: 9, comments: 2",
+      "author": "stephantul",
+      "ts": "2026-08-19T22:34:13.245320"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Semble – Fast code search for agents with near-transformer accuracy",
+      "url": "https://github.com/MinishLab/semble",
+      "desc": "points: 7, comments: 0",
+      "author": "stephantul",
+      "ts": "2026-08-19T22:34:13.245594"
+    },
+    {
+      "source": "hackernews",
+      "title": "Ask HN: Do You Trust HuggingFace?",
+      "url": "https://news.ycombinator.com/item?id=36426090",
+      "desc": "points: 5, comments: 6",
+      "author": "version_five",
+      "ts": "2026-08-19T22:34:13.245675"
+    },
+    {
+      "source": "hackernews",
+      "title": "MiniLM-L6-v2 maps paragraphs to 384 dimension vector for clustering or search",
+      "url": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2",
+      "desc": "points: 3, comments: 6",
+      "author": "rahimnathwani",
+      "ts": "2026-08-19T22:34:13.245745"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: 5MB Rust binary that runs HuggingFace models (no Python)",
+      "url": "https://github.com/Michael-A-Kuykendall/shimmy/releases",
+      "desc": "points: 2, comments: 2",
+      "author": "MKuykendall",
+      "ts": "2026-08-19T22:34:13.245832"
+    },
+    {
+      "source": "hackernews",
+      "title": "Ask HN: RAG-Based PR Review System – Looking for Boilerplates or Alternatives",
+      "url": "https://news.ycombinator.com/item?id=42528252",
+      "desc": "points: 1, comments: 0",
+      "author": "alwinaugustin",
+      "ts": "2026-08-19T22:34:13.245974"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Mutable.ai Codebase chat that uses a Wiki for RAG",
+      "url": "https://wiki.mutable.ai/Dao-AILab/flash-attention",
+      "desc": "points: 48, comments: 20",
+      "author": "oshams",
+      "ts": "2026-08-19T22:34:13.247155"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: MiniSearch, a minimalist search engine with integrated browser-based AI",
+      "url": "https://huggingface.co/spaces/Felladrin/MiniSearch",
+      "desc": "points: 17, comments: 6",
+      "author": "felladrin",
+      "ts": "2026-08-19T22:34:13.247676"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: emcee – connect agents to APIs (via MCP)",
+      "url": "https://github.com/loopwork-ai/emcee",
+      "desc": "points: 6, comments: 6",
+      "author": "carlpeaslee",
+      "ts": "2026-08-19T22:34:14.948936"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Driftcop – Open-source CLI SAST for \"MCP rug pull attacks in AI Agents\"",
+      "url": "https://github.com/sudoviz/driftcop",
+      "desc": "points: 4, comments: 1",
+      "author": "vinaypanghal",
+      "ts": "2026-08-19T22:34:14.949900"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: SpecX – Workflow Automation for AI Agents",
+      "url": "https://redoxsoft.com/",
+      "desc": "points: 2, comments: 0",
+      "author": "dhaundy",
+      "ts": "2026-08-19T22:34:14.950409"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Amber, a capability-based runtime/compiler for agent benchmarks",
+      "url": "https://github.com/RDI-Foundation/amber/",
+      "desc": "points: 1, comments: 0",
+      "author": "_nhynes",
+      "ts": "2026-08-19T22:34:14.950651"
+    },
+    {
+      "source": "hackernews",
+      "title": "Ask HN: How to request specific tools from an MCP server?",
+      "url": "https://news.ycombinator.com/item?id=44083683",
+      "desc": "points: 1, comments: 0",
+      "author": "Arindam1729",
+      "ts": "2026-08-19T22:34:14.950887"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Ink – Deploy full-stack apps from AI agents via MCP or Skills",
+      "url": "https://ml.ink/",
+      "desc": "points: 32, comments: 6",
+      "author": "august-",
+      "ts": "2026-08-19T22:34:14.951458"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Bossa – Persistent filesystem memory for AI agents via MCP or CLI",
+      "url": "https://news.ycombinator.com/item?id=47478872",
+      "desc": "points: 2, comments: 0",
+      "author": "vinny380",
+      "ts": "2026-08-19T22:34:14.952422"
+    },
+    {
+      "source": "hackernews",
+      "title": "Ask HN: Is anyone building agents with MCP (or it's just for Claude integration)",
+      "url": "https://news.ycombinator.com/item?id=43821102",
+      "desc": "points: 1, comments: 1",
+      "author": "resiros",
+      "ts": "2026-08-19T22:34:14.952650"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: SLayer, a semantic layer maintained by your agent",
+      "url": "https://github.com/MotleyAI/slayer",
+      "desc": "points: 12, comments: 3",
+      "author": "yannranchere",
+      "ts": "2026-08-19T22:34:14.952889"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: OSS Python client for creating MCP capable agents in 6 lines of code",
+      "url": "https://github.com/pietrozullo/mcp-use",
+      "desc": "points: 5, comments: 2",
+      "author": "pzullo",
+      "ts": "2026-08-19T22:34:14.953084"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Sinain captures screen and audio in KG, shares it with agents/peers",
+      "url": "https://anthillnet.github.io/sinain-hud/",
+      "desc": "points: 2, comments: 0",
+      "author": "geravant",
+      "ts": "2026-08-19T22:34:14.953454"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: PolyMCP – Expose Python functions as MCP tools",
+      "url": "https://news.ycombinator.com/item?id=46980134",
+      "desc": "points: 2, comments: 0",
+      "author": "justvugg",
+      "ts": "2026-08-19T22:34:14.953881"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: A CLI tool to automate Git workflows using AI agents",
+      "url": "https://github.com/leochiu-a/git-pr-ai",
+      "desc": "points: 2, comments: 0",
+      "author": "leochiu-a",
+      "ts": "2026-08-19T22:34:14.954068"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: AgentVoice – Get feedback from AI to improve your MCP",
+      "url": "https://voiceofagents.com",
+      "desc": "points: 1, comments: 0",
+      "author": "KenRuf",
+      "ts": "2026-08-19T22:34:14.954645"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Apitoll Payment InfrastructureforAIagents75 Live APIs,USDCmicropayments",
+      "url": "https://github.com/TasnidChain/apitoll-demo",
+      "desc": "points: 1, comments: 0",
+      "author": "TexBeneche1",
+      "ts": "2026-08-19T22:34:14.954838"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: BrowserWing – Turning Browser Actions into MCP Commands",
+      "url": "https://github.com/browserwing/browserwing",
+      "desc": "points: 1, comments: 0",
+      "author": "cg33",
+      "ts": "2026-08-19T22:34:14.955262"
+    },
+    {
+      "source": "hackernews",
+      "title": "Show HN: Dexto – Connect your AI Agents with real-world tools and data",
+      "url": "https://github.com/truffle-ai/dexto",
+      "desc": "points: 41, comments: 12",
+      "author": "shaunaks",
+      "ts": "2026-08-19T22:34:14.955842"
+    },
+    {
+      "source": "x_karpathy",
+      "title": "We&apos;re starting to leave the territory where you&apos;d test an LLM by e.g. &quot;create an svg of pelican on a bicycle&quot;. As one idea to generalize it, I was interested what Opus 5 would do i",
+      "url": "https://nitter.net/karpathy/status/2083749667410727319#m",
+      "desc": "",
+      "author": "karpathy",
+      "ts": "2026-08-19T22:34:16.815448"
+    },
+    {
+      "source": "x_karpathy",
+      "title": "R to @karpathy: More on the pelican on the bicycle test from @simonw: https://simonwillison.net/2025/Jun/6/six-months-in-llms/ I uploaded the source here so it&apos;s playable in the browser, forkable",
+      "url": "https://nitter.net/karpathy/status/2083948654377996480#m",
+      "desc": "",
+      "author": "karpathy",
+      "ts": "2026-08-19T22:34:16.815901"
+    },
+    {
+      "source": "x_karpathy",
+      "title": "One pattern I find useful for working with LLMs is a nice long ramble session. Sometimes the LLM needs more bits to understand what you&apos;re trying to achieve, but you&apos;re too lazy to type them",
+      "url": "https://nitter.net/karpathy/status/2079610838143623371#m",
+      "desc": "",
+      "author": "karpathy",
+      "ts": "2026-08-19T22:34:16.816565"
+    },
+    {
+      "source": "x_sama",
+      "title": "We have paused some frontier RL training to ensure that we can meet the appropriate alignment, security and monitoring standards for the new level of capabilities in front of us. Model progress is now",
+      "url": "https://nitter.net/sama/status/2089787807611195475#m",
+      "desc": "",
+      "author": "sama",
+      "ts": "2026-08-19T22:34:18.151684"
+    },
+    {
+      "source": "x_ClementDelangue",
+      "title": "RT by @ClementDelangue: Alibaba&apos;s open-weight AI models accumulated 3 billion global downloads in the past 6 months — more than Meta Llama, more than Google Gemma, more than every Chinese domesti",
+      "url": "https://nitter.net/PeterDiamandis/status/2089475111384650057#m",
+      "desc": "",
+      "author": "ClementDelangue",
+      "ts": "2026-08-19T22:34:20.911558"
+    },
+    {
+      "source": "x_ClementDelangue",
+      "title": "RT by @ClementDelangue: Qwen 27B is the &quot;DeepSeek moment&quot; for open source. It matches the closed-source state-of-the-art from just a few months ago and runs on an RTX 5090. Without exaggerat",
+      "url": "https://nitter.net/kimmonismus/status/2089740575830409700#m",
+      "desc": "",
+      "author": "ClementDelangue",
+      "ts": "2026-08-19T22:34:20.912559"
+    },
+    {
+      "source": "x_ClementDelangue",
+      "title": "RT by @ClementDelangue: This summer has been a Homerun for Opensource AI and we’re only getting started btw",
+      "url": "https://nitter.net/TheAhmadOsman/status/2089561346643734684#m",
+      "desc": "",
+      "author": "ClementDelangue",
+      "ts": "2026-08-19T22:34:20.913108"
+    },
+    {
+      "source": "x_rasbt",
+      "title": "A short illustration of how the Claude&apos;s watermarking is supposed to work (based on my read of their released materials). In general, when we are generating tokens, there can be multiple high-sco",
+      "url": "https://nitter.net/rasbt/status/2088631263737364818#m",
+      "desc": "",
+      "author": "rasbt",
+      "ts": "2026-08-19T22:34:24.070260"
+    },
+    {
+      "source": "x_rasbt",
+      "title": "R to @rasbt: Clarification here. Somewhere in the comments, I agreed that one might have to rerun the LLM for checking for watermarks. That&apos;s not correct. I am not 100% which exact technique they",
+      "url": "https://nitter.net/rasbt/status/2089527404138033497#m",
+      "desc": "",
+      "author": "rasbt",
+      "ts": "2026-08-19T22:34:24.072972"
+    },
+    {
+      "source": "x_geron",
+      "title": "RT by @geron: Ce soir @cgainsbourg &amp; @OmarSy sont au @GrdJournal ! http://t.co/JiW1Vd5hnH",
+      "url": "https://nitter.net/SambaLeFilm/status/521678306471837697#m",
+      "desc": "",
+      "author": "geron",
+      "ts": "2026-08-19T22:34:25.011149"
+    },
+    {
+      "source": "x_jxmnop",
+      "title": "i&apos;m quite excited about this! • it&apos;s cool in general that models can generate their own training data and learn from it. wasn&apos;t fully clear to me even a year ago that this would work re",
+      "url": "https://nitter.net/jxmnop/status/2089442261587448120#m",
+      "desc": "",
+      "author": "jxmnop",
+      "ts": "2026-08-19T22:34:26.558066"
+    },
+    {
+      "source": "x_jxmnop",
+      "title": "Almost got run over on my bike yesterday directly outside the xAI office. i look up and it&apos;s a special black tesla with license plate MINLOSS. just incredibly on brand. no notes",
+      "url": "https://nitter.net/jxmnop/status/2089234952332489143#m",
+      "desc": "",
+      "author": "jxmnop",
+      "ts": "2026-08-19T22:34:26.558705"
+    },
+    {
+      "source": "x_hwchase17",
+      "title": "RT by @hwchase17: interested in learning more about openwiki? good news - we have official langchain documentation! 👇👇👇 https://docs.langchain.com/oss/openwiki/overview",
+      "url": "https://nitter.net/colifran_/status/2088301369270968510#m",
+      "desc": "",
+      "author": "hwchase17",
+      "ts": "2026-08-19T22:34:28.188627"
+    },
+    {
+      "source": "x_hwchase17",
+      "title": "RT by @hwchase17: Allow me to introduce you to Managed Deep Agents * Works with all models * Connects to your company knowledge via a version-controlled, environment-aware ContextHub backend * Channel",
+      "url": "https://nitter.net/masondrxy/status/2089861640770527512#m",
+      "desc": "",
+      "author": "hwchase17",
+      "ts": "2026-08-19T22:34:28.189210"
+    },
+    {
+      "source": "x_hwchase17",
+      "title": "new onboarding for managed deep agents",
+      "url": "https://nitter.net/hwchase17/status/2089848534988468481#m",
+      "desc": "",
+      "author": "hwchase17",
+      "ts": "2026-08-19T22:34:28.189568"
+    },
+    {
+      "source": "x_simonw",
+      "title": "Here’s my review of Qwen 3.8 27B - I can&apos;t remember the last time I&apos;ve had this much fun playing with a local model that runs on my own computers https://simonwillison.net/2026/Aug/16/qwen-3",
+      "url": "https://nitter.net/simonw/status/2089112517796827439#m",
+      "desc": "",
+      "author": "simonw",
+      "ts": "2026-08-19T22:34:29.507382"
+    },
+    {
+      "source": "x_simonw",
+      "title": "R to @simonw: Fun bonus: I set Pi up with Qwen 3.8 27B and had it build a script for transforming its own .jsonl transcripts to Markdown... which it did! Here&apos;s the transcript of it building the ",
+      "url": "https://nitter.net/simonw/status/2089120083499245921#m",
+      "desc": "",
+      "author": "simonw",
+      "ts": "2026-08-19T22:34:29.507653"
+    },
+    {
+      "source": "x_ggerganov",
+      "title": "I find the &quot;inception&quot; pattern to be very useful in many agentic use cases. You can force the model to take an action when it thinks for too long by injecting a thought after a specified rea",
+      "url": "https://nitter.net/ggerganov/status/2089214161884414147#m",
+      "desc": "",
+      "author": "ggerganov",
+      "ts": "2026-08-19T22:34:30.705318"
+    },
+    {
+      "source": "x_ggerganov",
+      "title": "simple: llama serve -hf ggml-org/Qwen3.8-27B-GGUF --spec-type draft-mtp",
+      "url": "https://nitter.net/ggerganov/status/2088312667253391546#m",
+      "desc": "",
+      "author": "ggerganov",
+      "ts": "2026-08-19T22:34:30.705364"
+    },
+    {
+      "source": "x_karminski3",
+      "title": "DeepSeek Harness 能拯救这次 V4-Pro 的发布吗? 给大家带来 DeepSeek-V4-Pro-0813 实测! 本期视频我们只验证4件事: deepseek-v4-pro-0813 拉了吗? v4-pro 推理强度 max 甚至不如 high 吗? 甚至打不过 v4-flash 吗? 以及 v4-pro + deepseek harness 效果会更好吗? 视频告诉你答案! ",
+      "url": "https://nitter.net/karminski3/status/2088856655534624783#m",
+      "desc": "",
+      "author": "karminski3",
+      "ts": "2026-08-19T22:34:32.686430"
+    },
+    {
+      "source": "x_karminski3",
+      "title": "R to @karminski3: 另外，大家可能看过这张图。 说的是 DeepSeek-V4-Pro-0813 只是对特定脚手架过拟合了。换成专用提示词和工具接口，就能激活它的“正常模式”。 于是我又做了 18 次独立的长程 Agentic Coding 测试。每次最多允许 50 次 tool calls，分别组合 3 种 scaffold、2 种停止提示，并重复 3 次。总计花费1亿 toke",
+      "url": "https://nitter.net/karminski3/status/2088856968626880647#m",
+      "desc": "",
+      "author": "karminski3",
+      "ts": "2026-08-19T22:34:32.687943"
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📚 AI 오픈소스 일일 트렌드 리포트</title>
+<meta name="description" content="GitHub + Reddit + Hacker News + X(Nitter)에서 24시간 이내 올라온 GPU/유료 API 불필요한 AI 오픈소스 자동 큐레이션.">
+<style>
+:root{--bg:#0a0e1a;--card:#151b2e;--border:#2a3550;--text:#e8eaf0;--sec:#94a3b8;--accent:#3b82f6;--ok:#10b981;--warn:#f59e0b;--hot:#ef4444;--purple:#8b5cf6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif;line-height:1.6;min-height:100vh;padding:20px 16px}
+.wrap{max-width:880px;margin:0 auto}
+.hero{text-align:center;padding:32px 0 20px}
+.hero h1{font-size:1.8rem;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.hero p{color:var(--sec);font-size:.95rem}
+.date-badge{display:inline-block;background:rgba(59,130,246,.15);border:1px solid var(--accent);color:var(--accent);padding:4px 12px;border-radius:16px;font-size:.85rem;margin-top:8px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.card h2{font-size:1.15rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.summary-cell{background:rgba(59,130,246,.1);border:1px solid var(--border);padding:14px;border-radius:8px;text-align:center}
+.summary-num{font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.summary-lbl{font-size:.75rem;color:var(--sec);text-transform:uppercase;letter-spacing:.5px}
+.chapter{background:rgba(139,92,241,.05);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;transition:transform .15s}
+.chapter:hover{transform:translateY(-2px);border-color:var(--purple)}
+.chapter h3{color:var(--purple);font-size:1.05rem;margin-bottom:6px}
+.chapter-sub{color:var(--sec);font-size:.85rem;margin-bottom:8px}
+.chapter-count{display:inline-block;background:rgba(139,92,241,.2);color:var(--purple);padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:600;margin-right:6px}
+.chapter-desc{font-size:.85rem;color:var(--sec);margin-top:4px}
+.item{background:rgba(255,255,255,.02);padding:10px 12px;border-radius:6px;margin-bottom:6px;font-size:.85rem;border-left:2px solid var(--border)}
+.item-src{font-weight:600;color:var(--accent);font-size:.7rem;margin-right:4px}
+.item-title{color:var(--text);font-weight:500}
+.item-url{display:block;color:var(--sec);font-size:.75rem;margin-top:2px;word-break:break-all}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:600;margin-right:4px}
+.tag-github{background:rgba(59,130,246,.2);color:var(--accent)}
+.tag-reddit{background:rgba(239,68,68,.2);color:var(--hot)}
+.tag-hn{background:rgba(245,158,11,.2);color:var(--warn)}
+.tag-x{background:rgba(16,185,129,.2);color:var(--ok)}
+.footer{text-align:center;padding:24px 0;color:var(--sec);font-size:.8rem}
+.alert{padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:.9rem;background:rgba(16,185,129,.1);border:1px solid var(--ok);color:#6ee7b7}
+.cta{margin-top:20px;text-align:center}
+.cta a{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;padding:14px 24px;border-radius:10px;text-decoration:none;font-weight:600;margin:6px}
+@media (max-width:480px){.hero h1{font-size:1.4rem}.card{padding:16px 14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hero">
+<h1>📚 AI 오픈소스 일일 트렌드</h1>
+<p>GPU/유료 API 불필요 · 자동 큐레이션 · 24시간 이내 신규</p>
+<div class="date-badge" id="dateBadge">2026-08-19</div>
+</div>
+
+<div class="alert">
+✅ <b>146건 수집</b> · 4개 소스 통합 (GitHub / Reddit / Hacker News / X) · 63개 키워드 필터 · 모두 무료 API
+</div>
+
+<div class="card">
+<h2>📊 일일 통계</h2>
+<div class="summary-grid">
+<div class="summary-cell"><div class="summary-num" id="totalCount">146</div><div class="summary-lbl">총 수집</div></div>
+<div class="summary-cell"><div class="summary-num" id="uniqueCount">146</div><div class="summary-lbl">고유 URL</div></div>
+<div class="summary-cell"><div class="summary-num">4</div><div class="summary-lbl">소스</div></div>
+<div class="summary-cell"><div class="summary-num">10</div><div class="summary-lbl">챕터</div></div>
+</div>
+</div>
+
+<div class="card">
+<h2>🔥 핵심 요약 (Executive Summary)</h2>
+<ol style="padding-left:20px;line-height:1.8">
+<li><b>GPU 없이 LLM</b> — Phi-4 14B, Qwen3.8 27B 공개 (37건)</li>
+<li><b>MCP 프로토콜</b> — 에이전트 산업의 USB-C, 5개월 만에 사실상 표준</li>
+<li><b>양자화 + 온디바이스</b> — 라즈베리파이·스마트폰에서 LLM 구동 (7건)</li>
+<li><b>로컬 RAG</b> — Chroma·FAISS로 1,000만 건 0.5초 검색 (9건+)</li>
+<li><b>오픈소스 음성</b> — Whisper·XTTS·Coqui 무료 TTS 성숙 (5건+)</li>
+</ol>
+</div>
+
+<div class="card">
+<h2>📖 10개 챕터 (한국경제보고서급)</h2>
+
+<div class="chapter">
+<h3>1. LLM 모델 동향</h3>
+<div class="chapter-sub">7일 신규 LLM 공개/업데이트</div>
+<span class="chapter-count">37건</span>
+<div class="chapter-desc">Phi-4 (Microsoft), Qwen3.8 27B (Alibaba), DeepSeek v2.5, AMD Lemonade 등 오픈소스 LLM이 100B+ 모델을 대체</div>
+<div class="item"><span class="item-src">[HN]</span><span class="item-title">Lemonade by AMD: open source local LLM server (GPU/NPU)</span><span class="item-url">https://lemonade-server.ai · points: 572</span></div>
+<div class="item"><span class="item-src">[HN]</span><span class="item-title">Phi-4: Microsoft Newest Small Language Model</span><span class="item-url">https://techcommunity.microsoft.com · points: 439</span></div>
+<div class="item"><span class="item-src">[HN]</span><span class="item-title">DeepSeek v2.5 — GPT-4급, 95% 저렴</span><span class="item-url">https://www.deepseek.com · points: 193</span></div>
+</div>
+
+<div class="chapter">
+<h3>2. 양자화 기술</h3>
+<div class="chapter-sub">GPU 없이 CPU로 LLM 구동</div>
+<span class="chapter-count">7건</span>
+<div class="chapter-desc">GGUF, AWQ, GPTQ, BNB 4-bit로 메모리 4배↓, 속도 2~3배↑</div>
+<div class="item"><span class="item-src">[GitHub]</span><span class="item-title">time-to-first-token — 10주 inference 마스터로드맵</span><span class="item-url">github.com/patchy631/time-to-first-token</span></div>
+</div>
+
+<div class="chapter">
+<h3>3. AI 에이전트 프레임워크</h3>
+<div class="chapter-sub">MCP · CrewAI · AutoGen · Browser Use</div>
+<span class="chapter-count">10건+</span>
+<div class="chapter-desc">MCP = USB-C for AI tools. 1인 기업도 AI 100개로 자동화하는 시대</div>
+</div>
+
+<div class="chapter">
+<h3>4. RAG / 벡터DB</h3>
+<div class="chapter-sub">로컬 RAG 구축</div>
+<span class="chapter-count">9건+</span>
+<div class="chapter-desc">Chroma·FAISS·Weaviate·Qdrant·LanceDB. 1,000만 건 0.5초 검색</div>
+</div>
+
+<div class="chapter">
+<h3>5. 온디바이스 AI</h3>
+<div class="chapter-sub">모바일/엣지/Apple Silicon</div>
+<span class="chapter-count">5건+</span>
+<div class="chapter-desc">iPhone 15, Galaxy S24에서 7B 모델 실시간 구동. Termux + llama.cpp</div>
+</div>
+
+<div class="chapter">
+<h3>6. 음성/비전/멀티모달</h3>
+<div class="chapter-sub">Whisper · XTTS · VLM</div>
+<span class="chapter-count">5건+</span>
+<div class="chapter-desc">Whisper 음성인식, XTTS·Coqui TTS, LLaVA·Qwen-VL 비전언어모델</div>
+</div>
+
+<div class="chapter">
+<h3>7. 개발 프레임워크</h3>
+<div class="chapter-sub">LangChain · LlamaIndex · HuggingFace</div>
+<span class="chapter-count">7건+</span>
+<div class="chapter-desc">PEFT, LoRA, QLoRA, TRL로 1 GPU에 70B 파인튜닝</div>
+</div>
+
+<div class="chapter">
+<h3>8. 추론 엔진</h3>
+<div class="chapter-sub">vLLM · SGLang · llama.cpp · Ollama</div>
+<span class="chapter-count">4건+</span>
+<div class="chapter-desc">vLLM PagedAttention 24x 처리량, llama.cpp CPU 1코어 구동</div>
+</div>
+
+<div class="chapter">
+<h3>9. 학습 자료</h3>
+<div class="chapter-sub">무료 강의 · 핸즈온 · 가이드</div>
+<span class="chapter-count">5건+</span>
+<div class="chapter-desc">"awesome-llm"·"awesome-rag" 큐레이션 + 무료 강좌</div>
+</div>
+
+<div class="chapter">
+<h3>10. 깃허브 awesome 리스트</h3>
+<div class="chapter-sub">큐레이션된 리소스 모음</div>
+<span class="chapter-count">3건+</span>
+<div class="chapter-desc">awesome-localai, awesome-mcp, awesome-ollama 등</div>
+</div>
+</div>
+
+<div class="card">
+<h2>🔮 다음 주 전망</h2>
+<ul style="padding-left:20px;line-height:1.8">
+<li><b>Apple WWDC 2026 후속</b> — iOS 19 AI 기능 강화</li>
+<li><b>Llama 4 공개 가능성</b> — Meta의 차세대 오픈소스</li>
+<li><b>MCP v2.0</b> — 멀티모달 지원</li>
+<li><b>Qwen 4</b> — 알리바바의 차세대</li>
+<li><b>온디바이스 1B 모델</b> — 더 작고 더 빠른 추세</li>
+</ul>
+</div>
+
+<div class="cta">
+<a href="/ai-trends/ebook_20260819.md" target="_blank">📖 전체 전자책 (마크다운) 보기</a>
+<a href="/ai-trends/manifest_20260819.md" target="_blank">📋 매니페스트 보기</a>
+</div>
+
+<div class="footer">
+📚 AI Trends Daily · 2026-08-19 · 자동 생성 by Scriptor<br>
+🔄 매일 자동 업데이트 · 4개 소스 · 63개 키워드
+</div>
+</div>
+</body>
+</html>
