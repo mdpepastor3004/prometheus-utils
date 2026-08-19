@@ -131,6 +131,82 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .toast.error{background:var(--danger)}
 .toast.show{display:block;animation:fadeIn .3s}
 @keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ═══ Responsive Design (모바일/태블릿/데스크톱) ═══ */
+@media (max-width: 480px) {
+  /* 모바일 세로 - 풀스크린 모달 */
+  .modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0 !important;
+    padding: 24px 18px !important;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .modal h2 { font-size: 1.25rem !important; margin-bottom: 8px; }
+  .modal .desc { font-size: .9rem !important; }
+  .modal .benefit { font-size: .85rem !important; padding: 14px 12px; line-height: 1.6; }
+  .modal .benefit b { font-size: .9rem; }
+  .modal .field input {
+    font-size: 1rem !important;
+    padding: 14px 14px !important;
+    min-height: 48px;  /* iOS 터치 타겟 */
+  }
+  .modal .btn {
+    font-size: 1.05rem !important;
+    padding: 16px !important;
+    min-height: 52px;
+    margin-top: 8px;
+  }
+  .modal .close { font-size: 1.5rem; top: 14px; right: 16px; }
+  .modal .error-msg { font-size: .85rem; }
+  .container { padding: 16px 12px 40px !important; }
+  .header h1 { font-size: 1.25rem !important; }
+  .card { padding: 16px !important; }
+  .slider-header .value-group input[type=number] {
+    font-size: .95rem !important;
+    padding: 8px 6px !important;
+    width: 56px !important;
+  }
+  .funnel .lead-btn { padding: 16px 20px !important; font-size: 1.05rem; }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  /* 태블릿 - 적정 너비 */
+  .modal { width: 88% !important; max-width: 440px !important; padding: 26px 22px !important; }
+  .modal h2 { font-size: 1.2rem; }
+  .modal input { font-size: .95rem; padding: 11px 13px; }
+  .modal .btn { font-size: 1rem; padding: 13px; }
+  .container { padding: 20px 18px 50px; }
+}
+
+@media (min-width: 769px) {
+  /* 데스크톱 - 현재 스타일 유지 */
+  .modal { transition: transform .2s ease; }
+  .modal:hover { transform: translateY(-2px); }
+}
+
+/* 접근성 - 키보드 포커스 강조 */
+.modal input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+.modal .btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 모션 줄이기 (접근성) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -238,12 +314,12 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 <div class="disclaimer">© 자룡봇 AI Research · Prometheus v2.0 · 2026년 기준</div>
 </div>
 
-<div class="modal-overlay" id="leadM">
+<div class="modal-overlay" id="leadM" role="dialog" aria-modal="true" aria-labelledby="leadTitle" aria-describedby="leadDesc">
 <div class="modal">
 <button class="close" onclick="closeLead()">✕</button>
 <div id="mf">
-<h2>📩 프리미엄 리포트</h2>
-<p class="desc">정보 입력 후 무료 다운로드</p>
+<h2 id="leadTitle">📩 프리미엄 리포트</h2>
+<p class="desc" id="leadDesc">정보 입력 후 무료 다운로드</p>
 <div class="benefit"><b>🎁 혜택</b>✅ 청약 전략 가이드<br>✅ 지역별 커트라인 분석<br>✅ 전세사기 방지 체크리스트</div>
 <div class="field"><input type="text" id="lName" placeholder="이름"></div>
 <div class="field"><input type="tel" id="lPhone" placeholder="전화번호"></div>
@@ -326,9 +402,24 @@ function cpLink(){navigator.clipboard.writeText(window.location.href).then(()=>s
 function screenShot(){st('📸 캡처 후 공유하세요!');}
 function shareKakao(){st('💬 친구에게 공유해보세요!');}
 const BT='8268734337:AAEwMDqDzv6J4QtEGpeat6sShv-rdI0k2k0';const CI='730152102';
-function openLead(){document.getElementById('leadM').classList.add('active');}
-function closeLead(){document.getElementById('leadM').classList.remove('active');}
-document.getElementById('leadM').addEventListener('click',function(e){if(e.target===this)closeLead();});
+function openLead(){
+  document.getElementById('leadM').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => {
+    const firstInput = document.getElementById('leadM').querySelector('input[type=text], input[type=email]');
+    if (firstInput && window.innerWidth > 480) firstInput.focus();
+  }, 100);
+}
+function closeLead(){
+  document.getElementById('leadM').classList.remove('active');
+  document.body.style.overflow = '';
+}
+// 오버레이 클릭 시 닫기
+document.getElementById('leadM').addEventListener('click', function(e) { if (e.target === this) closeLead(); });
+// ESC 키로 닫기 (접근성)
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('leadM').classList.contains('active')) closeLead();
+});
 async function sLead(){
 const n=document.getElementById('lName').value.trim(),p=document.getElementById('lPhone').value.trim(),em=document.getElementById('lEmail').value.trim();
 document.getElementById('lErr').style.display='none';

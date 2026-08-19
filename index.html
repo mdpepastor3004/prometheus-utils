@@ -55,6 +55,50 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ok);color:#ffffff;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:2000;display:none;box-shadow:0 4px 12px rgba(28,35,51,.08)}
 .toast.show{display:block;animation:fadeIn .3s}
 @keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ═══ Responsive Design ═══ */
+@media (max-width: 480px) {
+  .hero { padding: 32px 16px 24px !important; }
+  .hero h1 { font-size: 1.8rem !important; }
+  .hero .tagline { font-size: .9rem !important; }
+  .hero .stats { gap: 16px !important; }
+  .stat .num { font-size: 1.8rem !important; }
+  .stat .lbl { font-size: .7rem !important; }
+  .grid { padding: 16px 12px !important; grid-template-columns: 1fr !important; gap: 14px !important; }
+  .card { padding: 20px 16px !important; }
+  .card .icon { font-size: 2.2rem !important; }
+  .card h2 { font-size: 1.15rem !important; }
+  .card .desc { font-size: .85rem !important; line-height: 1.6; }
+  .card .link { padding: 12px !important; font-size: .9rem; }
+  .cta-section { padding: 0 14px 32px !important; }
+  .cta-card { padding: 22px 18px !important; }
+  .cta-card h3 { font-size: 1.1rem !important; }
+  .cta-card .benefits { font-size: .8rem !important; gap: 8px !important; flex-direction: column; align-items: center; }
+  .cta-card .benefits span { white-space: nowrap; }
+  .cta-card .btn { padding: 14px 24px !important; font-size: .95rem; width: 100%; }
+  .footer { font-size: .7rem !important; padding: 24px 16px !important; }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .hero { padding: 40px 18px 28px; }
+  .hero h1 { font-size: 2.1rem; }
+  .grid { padding: 20px 18px; grid-template-columns: 1fr 1fr; }
+  .cta-card { padding: 26px 22px; }
+  .cta-card h3 { font-size: 1.15rem; }
+}
+
+@media (min-width: 769px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .cta-card:hover { transform: translateY(-2px); transition: transform .2s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>
 </head>
 <body>
