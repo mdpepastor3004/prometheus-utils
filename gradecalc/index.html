@@ -6,13 +6,13 @@
 <title>수능 등급 계산기 2027 | Prometheus</title>
 <meta name="description" content="2027학년도 수능 등급컷 계산기. 국어, 수학, 탐구 과목별 원점수를 입력하면 예상 표준점수, 백분위, 등급을 실시간으로 확인하고, 주요 대학 지원 가능성을 예측합니다.">
 <meta name="keywords" content="수능등급계산기, 등급컷, 2027수능, 표준점수, 백분위, 정시">
-<meta property="og:title" content="{{OG_TITLE}}">
-<meta property="og:description" content="{{OG_DESC}}">
+<meta property="og:title" content="수능 등급 계산기 2027">
+<meta property="og:description" content="2027학년도 수능 등급컷 계산기. 국어, 수학, 탐구 과목별 원점수를 입력하면 예상 표준점수, 백분위, 등급을 실시간으로 확인하고, 주요 대학 지원 가능성을 예측합니다.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mdpepastor3004.github.io/prometheus-utils/gradecalc/">
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Google Analytics (deactivated; no real ID) -->
+<!-- gtag disabled -->
+<!-- gtag config disabled -->
 <style>
 /* === PROMETHEUS CORE STYLES === */
 *{margin:0;padding:0;box-sizing:border-box}
@@ -166,14 +166,14 @@ select.t-d:focus{border-color:var(--accent)}
 <div class="slider-header">
 <label>국어 (원점수)</label>
 <div class="value-group">
-<input type="number" id="korNum" min="0" max="100" value="0" oninput="syncNumGS('kor',100)">
+<input type="number" id="korNum" min="0" max="100" value="0" oninput="syncNum('kor',100)">
 <span class="unit">점</span>
 <span class="score-badge gs-badge" id="gsKor">등급 -</span>
 </div>
 </div>
 <div class="slider-track">
 <div class="slider-fill" id="fillKor" style="width:0%"></div>
-<input type="range" id="kor" min="0" max="100" value="0" step="1" oninput="syncSldGS('kor',100)">
+<input type="range" id="kor" min="0" max="100" value="0" step="1" oninput="syncSld('kor',100)">
 </div>
 <div class="hint"><span>0점</span><span>100점 만점</span></div>
 </div>
@@ -181,14 +181,14 @@ select.t-d:focus{border-color:var(--accent)}
 <div class="slider-header">
 <label>수학 (원점수)</label>
 <div class="value-group">
-<input type="number" id="mathNum" min="0" max="100" value="0" oninput="syncNumGS('math',100)">
+<input type="number" id="mathNum" min="0" max="100" value="0" oninput="syncNum('math',100)">
 <span class="unit">점</span>
 <span class="score-badge gs-badge" id="gsMath">등급 -</span>
 </div>
 </div>
 <div class="slider-track">
 <div class="slider-fill" id="fillMath" style="width:0%"></div>
-<input type="range" id="math" min="0" max="100" value="0" step="1" oninput="syncSldGS('math',100)">
+<input type="range" id="math" min="0" max="100" value="0" step="1" oninput="syncSld('math',100)">
 </div>
 <div class="hint"><span>0점</span><span>100점 만점</span></div>
 </div>
@@ -196,14 +196,14 @@ select.t-d:focus{border-color:var(--accent)}
 <div class="slider-header">
 <label>영어 (원점수)</label>
 <div class="value-group">
-<input type="number" id="engNum" min="0" max="100" value="0" oninput="syncNumGS('eng',100)">
+<input type="number" id="engNum" min="0" max="100" value="0" oninput="syncNum('eng',100)">
 <span class="unit">점</span>
 <span class="score-badge gs-badge" id="gsEng">등급 -</span>
 </div>
 </div>
 <div class="slider-track">
 <div class="slider-fill" id="fillEng" style="width:0%"></div>
-<input type="range" id="eng" min="0" max="100" value="0" step="1" oninput="syncSldGS('eng',100)">
+<input type="range" id="eng" min="0" max="100" value="0" step="1" oninput="syncSld('eng',100)">
 </div>
 <div class="hint"><span>0점</span><span>100점 만점</span></div>
 </div>
@@ -211,14 +211,14 @@ select.t-d:focus{border-color:var(--accent)}
 <div class="slider-header">
 <label>탐구 (원점수 평균)</label>
 <div class="value-group">
-<input type="number" id="sciNum" min="0" max="50" value="0" oninput="syncNumGS('sci',50)">
+<input type="number" id="sciNum" min="0" max="50" value="0" oninput="syncNum('sci',50)">
 <span class="unit">점</span>
 <span class="score-badge gs-badge" id="gsSci">등급 -</span>
 </div>
 </div>
 <div class="slider-track">
 <div class="slider-fill" id="fillSci" style="width:0%"></div>
-<input type="range" id="sci" min="0" max="50" value="0" step="1" oninput="syncSldGS('sci',50)">
+<input type="range" id="sci" min="0" max="50" value="0" step="1" oninput="syncSld('sci',50)">
 </div>
 <div class="hint"><span>0점</span><span>50점 만점</span></div>
 </div>
@@ -226,14 +226,14 @@ select.t-d:focus{border-color:var(--accent)}
 <div class="slider-header">
 <label>한국사 (원점수)</label>
 <div class="value-group">
-<input type="number" id="histNum" min="0" max="50" value="0" oninput="syncNumGS('hist',50)">
+<input type="number" id="histNum" min="0" max="50" value="0" oninput="syncNum('hist',50)">
 <span class="unit">점</span>
 <span class="score-badge gs-badge" id="gsHist">등급 -</span>
 </div>
 </div>
 <div class="slider-track">
 <div class="slider-fill" id="fillHist" style="width:0%"></div>
-<input type="range" id="hist" min="0" max="50" value="0" step="1" oninput="syncSldGS('hist',50)">
+<input type="range" id="hist" min="0" max="50" value="0" step="1" oninput="syncSld('hist',50)">
 </div>
 <div class="hint"><span>0점</span><span>50점 만점</span></div>
 </div>
@@ -538,24 +538,24 @@ function leadScore() {
   return kor+'점|'+math+'점|'+eng+'점|'+sci+'점|'+hist+'점';
 }
 
-const subjMapGS = {kor:'kor',math:'math',eng:'eng',sci:'sci',hist:'hist'};
-const subjMaxGS = {kor:100,math:100,eng:100,sci:50,hist:50};
+const subjects = {kor:'kor',math:'math',eng:'eng',sci:'sci',hist:'hist'};
+const maxScores = {kor:100,math:100,eng:100,sci:50,hist:50};
 
-function syncNumGS(id, max) {
+function syncNum(id, max) {
   let v = parseInt(gId(id+'Num').value)||0;
   v = Math.max(0, Math.min(v, max));
   gId(id+'Num').value = v;
   gId(id).value = v;
-  fillGS(id, max);
+  fillSlider(id, max);
   computeGrade();
 }
-function syncSldGS(id, max) {
+function syncSld(id, max) {
   const s = gId(id);
   gId(id+'Num').value = s.value;
-  fillGS(id, max);
+  fillSlider(id, max);
   computeGrade();
 }
-function fillGS(id, max) {
+function fillSlider(id, max) {
   const p = (parseInt(gId(id).value)/max)*100;
   gId('fill'+id.charAt(0).toUpperCase()+id.slice(1)).style.width = p+'%';
 }
@@ -564,11 +564,11 @@ function fillGS(id, max) {
 window.addEventListener('DOMContentLoaded', () => {
   const d = ldls('gradecalc', null);
   if (d) {
-    Object.keys(subjMapGS).forEach(k => {
+    Object.keys(subjects).forEach(k => {
       if (d[k] !== undefined) {
         gId(k).value = d[k];
         gId(k+'Num').value = d[k];
-        fillGS(k, subjMaxGS[k]);
+        fillSlider(k, maxScores[k]);
       }
     });
     computeGrade();

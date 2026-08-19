@@ -10,9 +10,9 @@
 <meta property="og:description" content="전세사기 위험도 실시간 체크 + 등기부등본 가이드">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mdpepastor3004.github.io/prometheus-utils/jeonseguard/">
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Google Analytics (deactivated; no real ID) -->
+<!-- gtag disabled -->
+<!-- gtag config disabled -->
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#f4f7fc;--bg2:#e9eef7;--glass:#ffffff;--border:#e2e8f2;--text:#1c2333;--sec:#47516b;--muted:#8b93a8;--accent:#ff7a45;--accent-l:#ffa066;--accent-d:#e85d2a;--danger:#ff5b5b;--warn:#ff9f43;--ok:#2fb3a0;--cyan:#2fb3a0}
@@ -243,19 +243,20 @@ const ag=document.getElementById('age').value;
 const ratio=Math.round((dp/pr)*100);
 document.getElementById('ratioVal').textContent=ratio+'%';
 
-// Risk calculation
-let risk=0;
-if(ratio>=90){risk+=4;document.getElementById('ratioVal').style.color='var(--danger)';}
-else if(ratio>=80){risk+=3;document.getElementById('ratioVal').style.color='var(--warn)';}
-else if(ratio>=70){risk+=2;document.getElementById('ratioVal').style.color='var(--warn)';}
-else if(ratio>=60){risk+=1;document.getElementById('ratioVal').style.color='var(--ok)';}
-else{document.getElementById('ratioVal').style.color='var(--ok)';}
+// Risk 가중치 매핑 (깔끔한 점수 누적)
+const RATIO_RISK = [[90, 4], [80, 3], [70, 2], [60, 1], [0, 0]];
+const TYPE_RISK = {villa: 2, officetel: 1.5, house: 1, apt: 0};
+const AGE_RISK = {'30': 2, '20': 1.5, '10': 1, '5': 0.5, '0': 0};
+const RISK_COLOR = ['var(--ok)', 'var(--ok)', 'var(--ok)', 'var(--ok)', 'var(--warn)', 'var(--warn)', 'var(--warn)', 'var(--danger)', 'var(--danger)', 'var(--danger)', 'var(--danger)'];
 
-if(tp==='villa')risk+=2;
-else if(tp==='officetel')risk+=1.5;
-else if(tp==='house')risk+=1;
-if(ag==='30')risk+=2;else if(ag==='20')risk+=1.5;else if(ag==='10')risk+=1;else if(ag==='5')risk+=0.5;
-risk=Math.round(Math.min(risk,10));
+let risk = 0;
+for (const [threshold, score] of RATIO_RISK) {
+  if (ratio >= threshold) { risk += score; break; }
+}
+document.getElementById('ratioVal').style.color = RISK_COLOR[Math.min(10, Math.floor(risk))];
+risk += (TYPE_RISK[tp] || 0);
+risk += (AGE_RISK[ag] || 0);
+risk = Math.round(Math.min(risk, 10));
 
 // Save
 try{localStorage.setItem('jg',JSON.stringify({dep:dp,price:pr,type:tp,age:ag}));}catch(e){}
@@ -300,7 +301,7 @@ function screenShot(){st('📸 캡처 후 공유하세요!');}
 function shareKakao(){st('💬 친구에게 공유해보세요!');}
 const BT='8268734337:AAEwMDqDzv6J4QtEGpeat6sShv-rdI0k2k0';
 const CI='730152102';
-const RELAY='https://4de3af6b1bdf89b2-14-36-5-214.serveousercontent.com';
+
 function openLead(){document.getElementById('leadM').classList.add('active');}
 function closeLead(){document.getElementById('leadM').classList.remove('active');}
 document.getElementById('leadM').addEventListener('click',function(e){if(e.target===this)closeLead();});

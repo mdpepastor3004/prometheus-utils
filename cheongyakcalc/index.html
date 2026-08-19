@@ -10,9 +10,9 @@
 <meta property="og:description" content="실시간 청약 점수 계산 + 등급 + 지역별 예측">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mdpepastor3004.github.io/prometheus-utils/cheongyakcalc/">
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Google Analytics (deactivated; no real ID) -->
+<!-- gtag disabled -->
+<!-- gtag config disabled -->
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#f4f7fc;--bg2:#e9eef7;--glass:#ffffff;--glass2:#f8fafd;--border:#e2e8f2;--text:#1c2333;--sec:#47516b;--muted:#8b93a8;--accent:#ff7a45;--accent-l:#ffa066;--accent-d:#e85d2a;--danger:#ff5b5b;--warn:#ff9f43;--ok:#2fb3a0;--vhigh:#8b7cf6;--high:#2fb3a0;--mid:#ff9f43;--low:#ff5b5b}
@@ -269,21 +269,25 @@ try{const d=JSON.parse(localStorage.getItem('cc'));if(d){document.getElementById
 calc();
 
 function gId(id){return document.getElementById(id);}
-function syncSld(id,max){
-  const s=gId(id);let n;
-  if(id==='noHouse')n=gId('noHouseNum');else if(id==='dependents')n=gId('depNum');else if(id==='account')n=gId('accNum');
-  n.value=s.value;fl(id,max);calc();sv();
+// 슬라이더-넘버 매핑 (subject → input/number id)
+const SLIDER_MAP = {noHouse:'noHouseNum', dependents:'depNum', account:'accNum'};
+const FILL_MAP = {noHouse:'fillNo', dependents:'fillDep', account:'fillAcc'};
+function syncSld(id, max) {
+  gId(SLIDER_MAP[id]).value = gId(id).value;
+  fl(id, max);
+  calc();
+  sv();
 }
-function syncNum(id,max){
-  let v=0;
-  if(id==='noHouse')v=parseInt(gId('noHouseNum').value)||0;
-  else if(id==='dependents')v=parseInt(gId('depNum').value)||0;
-  else if(id==='account')v=parseInt(gId('accNum').value)||0;
-  const s=gId(id);v=Math.max(0,Math.min(v,max));
-  if(id==='noHouse')gId('noHouseNum').value=v;else if(id==='dependents')gId('depNum').value=v;else if(id==='account')gId('accNum').value=v;
-  s.value=v;fl(id,max);calc();sv();
+function syncNum(id, max) {
+  const v = clamp(parseInt(gId(SLIDER_MAP[id]).value) || 0, 0, max);
+  gId(SLIDER_MAP[id]).value = v;
+  gId(id).value = v;
+  fl(id, max);
+  calc();
+  sv();
 }
-function fl(id,max){const s=document.getElementById(id);const p=(s.value/max)*100;const map={noHouse:'fillNo',dependents:'fillDep',account:'fillAcc'};document.getElementById(map[id]).style.width=p+'%';}
+function clamp(v, min, max) { return Math.max(min, Math.min(v, max)); }
+function fl(id, max) { gId(FILL_MAP[id]).style.width = (gId(id).value / max) * 100 + '%'; }
 function sv(){try{localStorage.setItem('cc',JSON.stringify({n:parseInt(document.getElementById('noHouse').value),d:parseInt(document.getElementById('dependents').value),a:parseInt(document.getElementById('account').value)}));}catch(e){}}
 
 function calc(){
@@ -301,15 +305,15 @@ document.getElementById('bAcc').textContent=sAcc;
 document.getElementById('total').textContent=t;
 const p=t/84;const off=377-(p*377);const arc=document.getElementById('arc');arc.setAttribute('stroke-dashoffset',off);
 let g,c,ch;const gt=document.getElementById('gradeTxt');const bn=document.getElementById('banner');const cb=document.getElementById('chBar');const cl=document.getElementById('chLbl');
-if(t===0){g='입력 필요';c='mid';ch=0;}
-else if(t>=80){g='🔥 신의 경지';c='god';ch=99;}
-else if(t>=75){g='🔥 확실한 당첨';c='high';ch=95;}
+if(t===0){g='⌨️ 입력 필요';c='mid';ch=0;}
+else if(t>=80){g='👑 신의 경지';c='god';ch=99;}
+else if(t>=75){g='🏆 확실한 당첨';c='high';ch=95;}
 else if(t>=70){g='✅ 강남 가능';c='high';ch=85;}
-else if(t>=60){g='✅ 서울 외곽';c='high';ch=70;}
-else if(t>=55){g='⚠️ 수도권';c='mid';ch=55;}
-else if(t>=45){g='⚠️ 인천/경기';c='mid';ch=40;}
-else if(t>=35){g='😅 지방';c='mid';ch=25;}
-else{g='😰 가점↑ 필요';c='low';ch=10;}
+else if(t>=60){g='🌆 서울 외곽';c='high';ch=70;}
+else if(t>=55){g='🏙️ 수도권';c='mid';ch=55;}
+else if(t>=45){g='🏘️ 인천·경기';c='mid';ch=40;}
+else if(t>=35){g='🛤️ 지방';c='mid';ch=25;}
+else{g='📈 가점 더 필요';c='low';ch=10;}
 gt.textContent=g;gt.className='grade grade-'+c;
 bn.className='verdict-banner '+c;bn.innerHTML='<span>'+g+': '+t+'점</span><div class="detail">당첨 가능성 '+ch+'%</div>';
 cb.style.width=ch+'%';cb.className='bar '+(ch>=70?'bar-ok':ch>=40?'bar-mid':'bar-low');cl.textContent=ch+'%';
@@ -321,7 +325,7 @@ document.getElementById('rBody').innerHTML=h;
 function cpLink(){navigator.clipboard.writeText(window.location.href).then(()=>st('🔗 복사 완료!')).catch(()=>st('🔗 수동 복사: '+window.location.href));}
 function screenShot(){st('📸 캡처 후 공유하세요!');}
 function shareKakao(){st('💬 친구에게 공유해보세요!');}
-const BT='8268734337:AAEwMDqDzv6J4QtEGpeat6sShv-rdI0k2k0';const CI='730152102';const RELAY='https://4de3af6b1bdf89b2-14-36-5-214.serveousercontent.com';
+const BT='8268734337:AAEwMDqDzv6J4QtEGpeat6sShv-rdI0k2k0';const CI='730152102';
 function openLead(){document.getElementById('leadM').classList.add('active');}
 function closeLead(){document.getElementById('leadM').classList.remove('active');}
 document.getElementById('leadM').addEventListener('click',function(e){if(e.target===this)closeLead();});
