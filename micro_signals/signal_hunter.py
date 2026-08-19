@@ -137,8 +137,18 @@ def forge_micro_service(signal):
         "url": f"https://mdpepastor3004.github.io/prometheus-utils/micro_signals/services/{slug}.html"
     }
     (SRV_DIR / f"{slug}.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+    manifest_fp = SRV_DIR / "manifest.json"
+    manifest = []
+    if manifest_fp.exists():
+        try:
+            manifest = json.loads(manifest_fp.read_text(encoding="utf-8"))
+        except Exception:
+            manifest = []
+    seen = {(m.get("category"), m.get("slot")) for m in manifest}
+    if (meta["category"], meta["slug"].split("_")[-1]) not in seen:
+        manifest.append(meta)
+        manifest_fp.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     return meta
-
 
 def build_dashboard(signals, services):
     sig_rows = []

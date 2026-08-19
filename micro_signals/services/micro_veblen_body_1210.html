@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>💪 다이어트·성형 — ROI 계산기 | Prometheus Utils</title>
+</head>
+<body>
+<h1>💪 다이어트·성형 — ROI 계산기</h1>
+<p>score: 88.2 / 100</p>
+<div class="signal">🔬 신호 디템트 · veblen_body · 탐직소: 인스타</div>
+<div class="kwbox"><span class="kw">#다이어트</span> <span class="kw">#PT</span> <span class="kw">#필라테스</span></div>
+<form id="qForm">
+<div class="q"><label>1. 지금 가장 긴한 상황은?</label>
+<label class="opt"><input type="radio" name="q1" value="3" required> 지금 당장 결정</label>
+<label class="opt"><input type="radio" name="q1" value="2"> 이번 주 안에</label>
+<label class="opt"><input type="radio" name="q1" value="1"> 1달 이내</label></div>
+<div class="q"><label>2. 잃을 수 없는 게?</label>
+<label class="opt"><input type="radio" name="q2" value="3" required> 돈</label>
+<label class="opt"><input type="radio" name="q2" value="2"> 시간</label>
+<label class="opt"><input type="radio" name="q2" value="1"> 멘털/관계</label></div>
+<div class="q"><label>3. 전문가 상담?</label>
+<label class="opt"><input type="radio" name="q3" value="1" required> 있음</label>
+<label class="opt"><input type="radio" name="q3" value="2"> 없음</label></div>
+<button type="button" class="btn" onclick="calc()">🎯 진단하기</button></form>
+<div id="res" class="result"><div class="score" id="score">0</div><div class="advice" id="advice"></div></div>
+<script>function calc(){var v=[].slice.call(document.querySelectorAll("input:checked")).map(function(i){return +i.value});if(v.length<3){alert("모든 질문에 답해주세요");return}var s=Math.min(100,Math.round((v[0]*10+v[1]*12+v[2]*8+88.0*0.3)*1.1));document.getElementById("score").textContent=s;var a=s>=80?"🔴 즉시 행동 필요.":s>=50?"🟡 이번 주 내 정리.":"🟢 여유 있음.";document.getElementById("advice").textContent=a;document.getElementById("res").classList.add("show")}</script>
+<footer>© Prometheus Utils · HEPHAESTUS v2.1 · 2026-08-19 1210</footer>
+</body></html>
