@@ -113,64 +113,81 @@ async function sendEmail() {
   if (!consent) { st('⚠️ 동의 체크 필요', 'err'); return; }
 
   btn.disabled = true; btn.textContent = '발송 중...';
-  st('⏳ Resend API 호출 중...', 'info');
+  st('⏳ PDF 다운로드 및 Resend API 호출 중...', 'info');
 
   const pdfUrl = GHPAGES + ebook;
   const title = EBOOK_TITLES[ebook];
   try {
-    const r = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + _k,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        from: FROM,
-        to: [email],
-        subject: '📘 [' + title + '] Prometheus Utils 무료 전자책',
-        html: '<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">'
-          + '<h2 style="color:#ff7a45">📘 ' + title + '</h2>'
-          + '<p>안녕하세요 ' + name + '님, 요청하신 전자책을 첨부했습니다.</p>'
-          + '<p>아래 버튼으로 다운로드 받으세요:</p>'
-          + '<a href="' + pdfUrl + '" style="display:inline-block;background:#ff7a45;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;margin:16px 0">📥 PDF 다운로드</a>'
-          + '<p style="color:#666;font-size:.85rem;margin-top:24px">발신: Prometheus Utils · 1급 소방안전관리자 + AI 저작 시스템</p>'
-          + '<p style="color:#666;font-size:.75rem">본 메일은 정보 수신 동의에 따라 발송되었습니다.</p>'
-          + '</div>',
-        attachments: [
-          { filename: ebook, path: pdfUrl }
-        ]
-      })
-    });
+    // 1. PDF 다운로드
+    const pdfRes = await fetch(pdfUrl);
+    if (!pdfRes.ok) throw new Error('PDF 다운로드 실패 (' + pdfRes.status + ')');
+    const pdfBlob = await pdfRes.blob();
 
-    const d = await r.json();
+    // 2. Base64 인코딩
+    const reader = new FileReader();
+    reader.readAsDataURL(pdfBlob);
+    reader.onloadend = async function() {
+      const base64data = reader.result.split(',')[1];
 
-    if (r.ok) {
-      st('✅ <b>발송 성공!</b> ' + email + ' 로 "' + title + '" 발송됨<br>'
-        + '<small>Resend ID: ' + (d.id || 'N/A') + '</small>'
-        + '<pre>' + JSON.stringify(d, null, 2) + '</pre>', 'ok');
+      try { // Resend API 호출 블록
+        const r = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + _k,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            from: FROM,
+            to: [email],
+            subject: '📘 [' + title + '] Prometheus Utils 무료 전자책',
+            html: '<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">'
+              + '<h2 style="color:#ff7a45">📘 ' + title + '</h2>'
+              + '<p>안녕하세요 ' + name + '님, 요청하신 전자책을 첨부했습니다.</p>'
+              + '<p>아래 버튼으로 다운로드 받으세요:</p>'
+              + '<a href="' + pdfUrl + '" style="display:inline-block;background:#ff7a45;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;margin:16px 0">📥 PDF 다운로드</a>'
+              + '<p style="color:#666;font-size:.85rem;margin-top:24px">발신: Prometheus Utils · 1급 소방안전관리자 + AI 저작 시스템</p>'
+              + '<p style="color:#666;font-size:.75rem">본 메일은 정보 수신 동의에 따라 발송되었습니다.</p>'
+              + '</div>',
+            attachments: [
+              { filename: ebook, content: base64data }
+            ]
+          })
+        });
 
-      fetch(SUPABASE, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_KEY,
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify({
-          name: name, email: email, phone: '',
-          source: 'send_email_test', device: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'pc',
-          score: ebook, consent: consent ? 'Y' : 'N',
-          resend_id: d.id || ''
-        })
-      }).catch(() => {});
-    } else {
-      st('❌ <b>발송 실패</b><br><small>' + (d.message || JSON.stringify(d)) + '</small>'
-        + '<pre>' + JSON.stringify(d, null, 2) + '</pre>', 'err');
-    }
+        const d = await r.json();
+
+        if (r.ok) {
+          st('✅ <b>발송 성공!</b> ' + email + ' 로 "' + title + '" 발송됨<br>'
+            + '<small>Resend ID: ' + (d.id || 'N/A') + '</small>'
+            + '<pre>' + JSON.stringify(d, null, 2) + '</pre>', 'ok');
+
+          fetch(SUPABASE, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_KEY,
+              'Authorization': 'Bearer ' + SUPABASE_KEY,
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({
+              name: name, email: email, phone: '',
+              source: 'send_email_test_v2', device: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'pc',
+              score: ebook, consent: consent ? 'Y' : 'N',
+              resend_id: d.id || ''
+            })
+          }).catch(() => {});
+        } else {
+          st('❌ <b>발송 실패</b><br><small>' + (d.message || JSON.stringify(d)) + '</small>'
+            + '<pre>' + JSON.stringify(d, null, 2) + '</pre>', 'err');
+        }
+      } catch (e) {
+        st('❌ API 호출 오류: ' + e.message, 'err');
+      } finally {
+        btn.disabled = false; btn.textContent = '📩 발송 테스트';
+      }
+    } // onloadend
   } catch (e) {
-    st('❌ 네트워크 오류: ' + e.message, 'err');
-  } finally {
+    st('❌ PDF 다운로드 또는 Base64 인코딩 오류: ' + e.message, 'err');
     btn.disabled = false; btn.textContent = '📩 발송 테스트';
   }
 }
