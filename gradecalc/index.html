@@ -291,10 +291,10 @@ select.t-d:focus{border-color:var(--accent)}
 
 
 <div class="funnel">
-<span class="tag">📖 🚀 정시 합격 예측</span>
-<p>내 점수로 갈 수 있는 대학은? 상세 분석 리포트 받기</p>
-<button class="lead-btn" onclick="openLead()">📩 지금 바로 확인하기</button>
-<div class="lead-sub">✔ 주요 15개 대학 합격선 포함</div>
+<span class="tag">📖 🏆 수능 1등급 비결</span>
+<p>3개월 만에 12만번 → 1.2만번, 실전 수기 기반 학습법 공개</p>
+<button class="lead-btn" onclick="openLead()">📩 수능 비결서 받기 (무료)</button>
+<div class="lead-sub">✔ 23회 모의고사 회독 전략 + D-100 12주 시간표 포함</div>
 </div>
 <div class="disclaimer">© 자룡봇 AI Research · Prometheus v2.0 · 2026년 기준</div>
 </div>
@@ -306,18 +306,20 @@ select.t-d:focus{border-color:var(--accent)}
 <div id="mf">
 <h2>📩 프리미엄 리포트</h2>
 <p class="desc">정보 입력 후 무료 다운로드</p>
-<div class="benefit"><b>🎁 혜택</b>✅ 2027 수능 완벽 분석 리포트<br>✅ 주요 대학 정시 합격선 예측<br>✅ 과목별 만점 전략 가이드</div>
-<div class="field"><input type="text" id="lName" placeholder="이름"></div>
-<div class="field"><input type="tel" id="lPhone" placeholder="전화번호"></div>
-<div class="field"><input type="email" id="lEmail" placeholder="이메일"></div>
-<div class="error-msg" id="lErr">모든 항목을 입력해주세요</div>
+<div class="benefit"><b>🎁 즉시 다운로드 (이메일 필수)</b>✅ <b>3개월 만에 수능 대박 난 학습비법</b> 전자책 (PDF)<br>✅ D-100 12주 시간표 + 23회 모의고사 회독 전략<br>✅ 과목별 인출연습 50% 루틴 · 멘탈 5계명<br>✅ 마케팅 정보 동의 시 추가 수능·입시 자료 발송</div>
+<div class="field"><input type="text" id="lName" placeholder="이름 (필수)" required></div>
+<div class="field"><input type="email" id="lEmail" placeholder="📧 이메일 (필수) — 리포트 발송처" required></div>
+<div class="field"><input type="tel" id="lPhone" placeholder="전화번호 (선택) — 카카오 발송 시"></div>
+<div class="field consent"><label style="font-size:.7rem;color:var(--sec);display:flex;align-items:flex-start;gap:6px;line-height:1.4"><input type="checkbox" id="lConsent" required style="margin-top:2px;flex-shrink:0"><span>(필수) 개인정보 수집 및 마케팅 정보 수신 동의 — 리포트 발송 및 입시/수능 관련 자료 제공에 활용</span></label></div>
+<div class="error-msg" id="lErr">⚠️ 이름·이메일·동의는 필수입니다</div>
 <button class="btn" onclick="sLead()">📩 받기 (무료)</button>
 </div>
 <div class="success" id="ms">
 <div class="icon">🎉</div>
 <h3>신청 완료!</h3>
 <p>프리미엄 리포트를 보내드렸습니다</p>
-<a class="dl-btn" href="../ebook/2027_grade_report.pdf" target="_blank">📕 다운로드</a>
+<a class="dl-btn" href="../ebook/sungjeok_study.pdf" target="_blank">📘 PDF 다운로드</a>
+<a class="dl-btn" href="../ebook/sungjeok_study.epub" target="_blank" style="margin-left:6px;background:var(--high)">📱 EPUB</a>
 </div>
 </div>
 </div>
@@ -338,11 +340,15 @@ gId('leadM').addEventListener('click',function(e){if(e.target===this)closeLead()
 async function sLead(){
 const n=gId('lName').value.trim(),p=gId('lPhone').value.trim(),em=gId('lEmail').value.trim();
 gId('lErr').style.display='none';
-if(!n||!p||!em){gId('lErr').style.display='block';return;}
+if(!n||!em){document.getElementById('lErr').textContent='⚠️ 이름과 이메일은 필수입니다';document.getElementById('lErr').style.display='block';return;}
+const ok_consent=document.getElementById('lConsent')?document.getElementById('lConsent').checked:true;
+if(!ok_consent){document.getElementById('lErr').textContent='⚠️ 개인정보 수집·마케팅 동의는 필수입니다';document.getElementById('lErr').style.display='block';return;}
+const email_re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if(!email_re.test(em)){document.getElementById('lErr').textContent='⚠️ 올바른 이메일 형식이 아닙니다';document.getElementById('lErr').style.display='block';return;}
 const btn=document.querySelector('.modal .btn');btn.disabled=true;btn.textContent='처리 중...';
 const sc=typeof leadScore==='function'?leadScore():'';
 const dv=/Mobi|Android/i.test(navigator.userAgent)?'mobile':'pc';
-const pay={name:n,phone:p,email:em,source:'gradecalc',score:sc,device:dv};
+const pay={name:n,phone:p,email:em,source:'gradecalc',score:sc,device:dv,consent:ok_consent?'Y':'N'};
 let ok=false;
 try{
 const r=await fetch('https://delughjxtvjvdjxwjzwe.supabase.co/rest/v1/leads',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Authorization':'Bearer sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Prefer':'return=minimal'},body:JSON.stringify(pay)});

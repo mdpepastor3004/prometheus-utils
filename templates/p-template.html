@@ -178,10 +178,11 @@ select.t-d:focus{border-color:var(--accent)}
 <h2>📩 프리미엄 리포트</h2>
 <p class="desc">정보 입력 후 무료 다운로드</p>
 <div class="benefit"><b>🎁 혜택</b>{{LEAD_BENEFITS}}</div>
-<div class="field"><input type="text" id="lName" placeholder="이름"></div>
-<div class="field"><input type="tel" id="lPhone" placeholder="전화번호"></div>
-<div class="field"><input type="email" id="lEmail" placeholder="이메일"></div>
-<div class="error-msg" id="lErr">모든 항목을 입력해주세요</div>
+<div class="field"><input type="text" id="lName" placeholder="이름 (필수)" required></div>
+<div class="field"><input type="email" id="lEmail" placeholder="📧 이메일 (필수) — 리포트 발송처" required></div>
+<div class="field"><input type="tel" id="lPhone" placeholder="전화번호 (선택)"></div>
+<div class="field consent"><label style="font-size:.7rem;color:var(--sec);display:flex;align-items:flex-start;gap:6px;line-height:1.4"><input type="checkbox" id="lConsent" required style="margin-top:2px;flex-shrink:0"><span>(필수) 개인정보 수집 및 마케팅 정보 수신 동의</span></label></div>
+<div class="error-msg" id="lErr">⚠️ 이름·이메일·동의는 필수입니다</div>
 <button class="btn" onclick="sLead()">📩 받기 (무료)</button>
 </div>
 <div class="success" id="ms">
@@ -208,12 +209,17 @@ function closeLead(){gId('leadM').classList.remove('active')}
 gId('leadM').addEventListener('click',function(e){if(e.target===this)closeLead()});
 async function sLead(){
 const n=gId('lName').value.trim(),p=gId('lPhone').value.trim(),em=gId('lEmail').value.trim();
+const ok_consent=gId('lConsent')?gId('lConsent').checked:true;
 gId('lErr').style.display='none';
-if(!n||!p||!em){gId('lErr').style.display='block';return;}
+// 이메일 형식 검증
+const email_re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if(!n||!em){gId('lErr').textContent='⚠️ 이름과 이메일은 필수입니다';gId('lErr').style.display='block';return;}
+if(!email_re.test(em)){gId('lErr').textContent='⚠️ 올바른 이메일 형식이 아닙니다';gId('lErr').style.display='block';return;}
+if(!ok_consent){gId('lErr').textContent='⚠️ 개인정보 수집·마케팅 동의는 필수입니다';gId('lErr').style.display='block';return;}
 const btn=document.querySelector('.modal .btn');btn.disabled=true;btn.textContent='처리 중...';
 const sc=typeof leadScore==='function'?leadScore():'';
 const dv=/Mobi|Android/i.test(navigator.userAgent)?'mobile':'pc';
-const pay={name:n,phone:p,email:em,source:'{{LEAD_SOURCE}}',score:sc,device:dv};
+const pay={name:n,phone:p,email:em,source:'{{LEAD_SOURCE}}',score:sc,device:dv,consent:ok_consent?'Y':'N'};
 let ok=false;
 try{
 const r=await fetch('https://delughjxtvjvdjxwjzwe.supabase.co/rest/v1/leads',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Authorization':'Bearer sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Prefer':'return=minimal'},body:JSON.stringify(pay)});
