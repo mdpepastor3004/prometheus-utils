@@ -43,6 +43,7 @@ TITLES = {
     "pain_finance": "\U0001F4B3 \ube49 \uc6b0\uc120\uc0c1\ud68c \uc21c\uc11c \u2014 \uc2e0\uc6a9\uc810\uc218 \uc601\ud5a5 \uacc4\uc0b0"
 }
 
+from _quiz_block import render_quiz_html, QUIZZES
 from _forms_block import render_micro_html
 
 SEEDS = {k: k for k in TITLES.keys()}
@@ -95,7 +96,7 @@ def forge_micro_service(signal):
         return None
     seed = signal["micro_service_seed"]
     title = TITLES.get(seed, f"💎 {cat} 진단기")
-    html = render_micro_html(cat, title)
+    html = render_quiz_html(cat, title) if cat in QUIZZES else render_micro_html(cat, title)
     if not html:
         return None
     slug = f"micro_{cat}_{TIME_SLOT}"
