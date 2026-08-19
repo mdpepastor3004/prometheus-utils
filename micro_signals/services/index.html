@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>⚡ 마이크로 서비스 카탈로그 | PROMETHEUS</title>
+<style>
+:root{--bg:#f4f7fc;--glass:#fff;--border:#e2e8f2;--text:#1c2333;--sec:#47516b;--accent:#ff7a45;--high:#3b82f6;--ok:#10b981;--warn:#f59e0b;--purple:#8b5cf6;--pink:#ec4899;--shadow:0 4px 24px rgba(0,0,0,.05)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.7;padding:0;margin:0}
+header{background:linear-gradient(135deg,#fff5f0,#e0f2fe);padding:32px 20px 24px;text-align:center;border-bottom:1px solid var(--border)}
+h1{font-size:1.6rem;color:var(--accent);margin-bottom:6px}
+.sub{color:var(--sec);font-size:.9rem}
+.back{position:absolute;top:24px;left:20px;font-size:.78rem;color:var(--high);text-decoration:none}
+.container{max-width:1080px;margin:0 auto;padding:24px 20px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0;justify-content:center}
+.tab{background:var(--glass);border:1px solid var(--border);padding:6px 14px;border-radius:99px;font-size:.78rem;cursor:pointer;color:var(--sec);transition:all .12s}
+.tab:hover{border-color:var(--accent);color:var(--accent)}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:20px 0}
+.card{background:var(--glass);border:2px solid var(--border);border-radius:14px;padding:20px 18px;box-shadow:var(--shadow);transition:all .15s;position:relative}
+.card.hot{border-color:var(--accent)}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.card .em{font-size:2rem;margin-bottom:6px}
+.card h3{font-size:1.05rem;margin-bottom:4px}
+.card .score{position:absolute;top:14px;right:14px;background:var(--accent);color:#fff;padding:3px 8px;border-radius:6px;font-size:.7rem;font-weight:600}
+.card p{color:var(--sec);font-size:.82rem;margin:8px 0 12px}
+.card .meta{font-size:.7rem;color:var(--sec);margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.tag-cat{background:#eef1f7;padding:2px 6px;border-radius:4px;font-size:.7rem}
+.card a{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;padding:8px 14px;border-radius:8px;font-size:.82rem;font-weight:600;margin-top:6px}
+.empty{text-align:center;padding:40px;color:var(--sec);background:var(--glass);border-radius:12px;border:1px dashed var(--border)}
+footer{text-align:center;padding:24px;color:var(--sec);font-size:.7rem;border-top:1px solid var(--border);margin-top:32px}
+</style>
+</head>
+<body>
+<a class="back" href="../../">← PROMETHEUS</a>
+<header>
+  <h1>⚡ 마이크로 서비스 카탈로그</h1>
+  <p class="sub">신호 헌터가 60점+ 감지 시 자동 forge한 1분 자가진단 HTML 모음</p>
+  <div class="tabs" id="tabs"></div>
+</header>
+
+<div class="container">
+  <div class="grid" id="grid"></div>
+</div>
+
+<footer>
+  🔥 <b>PROMETHEUS v3.0</b> · HEPHAESTUS v2.1 · 30분마다 자동 forge
+</footer>
+
+<script>
+const BASE='https://mdpepastor3004.github.io/prometheus-utils/micro_signals';
+const TITLE_MAP={
+  veblen_luxury:{e:'💎',t:'명품 구매 결정 계산기',d:'5초 진단 · 진짜 필요 vs 충동 식별'},
+  veblen_home:{e:'🏠',t:'월세 vs 전세 vs 매수',d:'1년 후 진짜 손익은? 4가지 시나리오'},
+  veblen_body:{e:'💪',t:'다이어트·성형 ROI',d:'비용·회복·심리효과 환산'},
+  veblen_education:{e:'🎓',t:'자격증 ROI',d:'취득비 vs 연봉 효과'},
+  veblen_sidebiz:{e:'💸',t:'부업 30일 손익분기',d:'시간 투입당 시급'},
+  pain_legal:{e:'⚖️',t:'법적 문제 1분 자가진단',d:'5개 질문으로 긴급도 평가'},
+  pain_health:{e:'🏥',t:'실비보험 청구 가능 체크',d:'30초 진단 · 90% 환급 가이드'},
+  pain_job:{e:'💼',t:'퇴사→실업급여 시뮬',d:'6개월 캐시플로우'},
+  pain_housing:{e:'🔑',t:'전세 계약해지/하자보수',d:'즉시 할 일 7가지'},
+  pain_finance:{e:'💳',t:'빚 우선상환 순서',d:'신용점수 영향 계산'}
+};
+
+const CAT_NAMES={
+  veblen_luxury:'💎 베블렌·럭셔리',
+  veblen_home:'🏠 베블렌·주거',
+  veblen_body:'💪 베블렌·신체',
+  veblen_education:'🎓 베블렌·교육',
+  veblen_sidebiz:'💸 베블렌·부업',
+  pain_legal:'⚖️ 고통·법률',
+  pain_health:'🏥 고통·건강',
+  pain_job:'💼 고통·직장',
+  pain_housing:'🔑 고통·주거',
+  pain_finance:'💳 고통·금융'
+};
+
+async function load(){
+  const grid=document.getElementById('grid');
+  const tabsBox=document.getElementById('tabs');
+
+  // services/ 디렉토리에서 JSON 메타 + HTML 목록을 직접 fetch 시도
+  // GitHub Pages는 디렉토리 listing 비활성. JSON 메타는 forge 시 생성되지만 모든 게 live fetch는 어려움
+  // → 인덱스는 manifest.json (크론이 매 실행마다 갱신)
+  let services=[];
+  try{
+    const r=await fetch('../services/manifest.json');
+    if(r.ok){services=await r.json();}
+  }catch(e){}
+
+  // manifest 없으면 신호 데이터에서 역산
+  if(services.length===0){
+    try{
+      const today=new Date().toISOString().slice(0,10);
+      const r=await fetch('../signals/'+today+'.jsonl');
+      if(r.ok){
+        const t=await r.text();
+        const sigs=t.trim().split('\n').filter(Boolean).map(l=>JSON.parse(l));
+        const seen=new Set();
+        for(const s of sigs){
+          if(s.score>=60 && !seen.has(s.category+'_'+s.slot)){
+            seen.add(s.category+'_'+s.slot);
+            services.push({category:s.category,score:s.score,slot:s.slot,platform:s.platform,keywords:s.keywords,url:BASE+'/services/micro_'+s.category+'_'+s.slot+'.html'});
+          }
+        }
+      }
+    }catch(e){}
+  }
+
+  // 탭 (카테고리)
+  const cats=[...new Set(services.map(s=>s.category))];
+  tabsBox.innerHTML=`<span class="tab active" data-cat="all">전체 (${services.length})</span>`+
+    cats.map(c=>`<span class="tab" data-cat="${c}">${CAT_NAMES[c]||c} (${services.filter(s=>s.category===c).length})</span>`).join('');
+  tabsBox.querySelectorAll('.tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      tabsBox.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      render(services,t.dataset.cat);
+    });
+  });
+
+  render(services,'all');
+}
+
+function render(services,cat){
+  const grid=document.getElementById('grid');
+  const filtered=cat==='all'?services:services.filter(s=>s.category===cat);
+  if(filtered.length===0){
+    grid.innerHTML='<div class="empty">이 카테고리엔 아직 forge된 마이크로 서비스가 없습니다.<br><br>다음 헌팅 (08:30/12:30/18:30 KST) 기다려주세요</div>';
+    return;
+  }
+  grid.innerHTML=filtered.map(s=>{
+    const m=TITLE_MAP[s.category]||{e:'🔬',t:s.category,d:''};
+    return `<div class="card hot">
+      <div class="score">${s.score}점</div>
+      <div class="em">${m.e}</div>
+      <h3>${m.t}</h3>
+      <p>${m.d}</p>
+      <div class="meta">
+        <span class="tag-cat">${CAT_NAMES[s.category]||s.category}</span>
+        <span class="tag-cat">${s.platform}</span>
+        <span class="tag-cat">${s.slot.slice(0,2)}:${s.slot.slice(2)}</span>
+      </div>
+      <a href="${s.url}" target="_blank">🎯 진단하러 가기 →</a>
+    </div>`;
+  }).join('');
+}
+load();
+setInterval(load,60000);
+</script>
+</body>
+</html>
