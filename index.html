@@ -21,10 +21,10 @@ gtag('config','G-XXXXXXXXXX');
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0e0e18;--bg2:#12121e;--glass:#151520;--glass2:#1a1a28;--border:#1e1e30;--border2:#2a2a40;--text:#d8d8e8;--sec:#b0b0c8;--muted:#8888a0;--accent:#e8a040;--accent-l:#f0c860;--accent-d:#b07830;--ok:#48b8a0;--warn:#e8a040;--danger:#e84040;--cyan:#4ecdc4;--purple:#a78bfa}
+:root{--bg:#f4f7fc;--bg2:#e9eef7;--glass:#ffffff;--glass2:#f8fafd;--border:#e2e8f2;--border2:#d0d9e8;--text:#1c2333;--sec:#47516b;--muted:#8b93a8;--accent:#ff7a45;--accent-l:#ffa066;--accent-d:#e85d2a;--ok:#2fb3a0;--warn:#ff9f43;--danger:#ff5b5b;--cyan:#2fb3a0;--purple:#8b7cf6}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.6;min-height:100vh;overflow-x:hidden}
 .hero{text-align:center;padding:48px 20px 32px;position:relative}
-.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(232,160,64,.08) 0%,transparent 70%);pointer-events:none}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(255,122,69,.08) 0%,transparent 70%);pointer-events:none}
 .hero h1{font-size:2.4rem;color:var(--accent-l);margin-bottom:4px;position:relative;z-index:1}
 .hero .tagline{color:var(--sec);font-size:1rem;margin-bottom:24px}
 .hero .stats{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:32px}
@@ -35,27 +35,27 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 @media(min-width:640px){.grid{grid-template-columns:1fr 1fr}}
 .card{background:var(--glass);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all .2s;position:relative;overflow:hidden}
 .card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent),var(--cyan));opacity:0;transition:opacity .2s}
-.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(28,35,51,.08)}
 .card:hover::before{opacity:1}
 .card .icon{font-size:2rem;margin-bottom:8px}
 .card h2{font-size:1.15rem;color:var(--accent-l);margin-bottom:6px}
 .card .desc{color:var(--sec);font-size:.85rem;margin-bottom:12px;line-height:1.5}
 .card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.card .tag{background:rgba(232,160,64,.12);color:var(--accent);font-size:.7rem;padding:3px 8px;border-radius:4px}
-.card .tag.edu{background:rgba(78,205,196,.12);color:var(--cyan)}
+.card .tag{background:rgba(255,122,69,.12);color:var(--accent);font-size:.7rem;padding:3px 8px;border-radius:4px}
+.card .tag.edu{background:rgba(47,179,160,.12);color:var(--cyan)}
 .card .link{display:inline-flex;align-items:center;gap:6px;color:var(--accent-l);text-decoration:none;font-weight:600;font-size:.9rem;transition:gap .1s}
 .card .link:hover{gap:10px}
-.card .badge{position:absolute;top:12px;right:12px;background:var(--ok);color:#0e0e18;font-size:.65rem;padding:2px 8px;border-radius:4px;font-weight:700}
+.card .badge{position:absolute;top:12px;right:12px;background:var(--ok);color:#ffffff;font-size:.65rem;padding:2px 8px;border-radius:4px;font-weight:700}
 .cta-section{max-width:700px;margin:0 auto;padding:0 20px 40px}
-.cta-card{background:linear-gradient(135deg,rgba(232,160,64,.08),rgba(78,205,196,.04));border:1px solid var(--accent);border-radius:16px;padding:28px;text-align:center}
+.cta-card{background:linear-gradient(135deg,rgba(255,122,69,.08),rgba(47,179,160,.04));border:1px solid var(--accent);border-radius:16px;padding:28px;text-align:center}
 .cta-card h3{color:var(--accent-l);font-size:1.2rem;margin-bottom:12px}
 .cta-card .benefits{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:16px 0;font-size:.85rem;color:var(--sec)}
 .cta-card .benefits span{display:flex;align-items:center;gap:4px}
-.cta-card .btn{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;padding:14px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:1rem;transition:transform .1s;box-shadow:0 4px 12px rgba(232,160,64,.3)}
-.cta-card .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(232,160,64,.4)}
+.cta-card .btn{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#ffffff;padding:14px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:1rem;transition:transform .1s;box-shadow:0 4px 12px rgba(255,122,69,.3)}
+.cta-card .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,122,69,.4)}
 .footer{text-align:center;color:var(--muted);font-size:.75rem;padding:32px 20px;border-top:1px solid var(--border)}
 .footer a{color:var(--accent-l);text-decoration:none}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ok);color:#0e0e18;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:2000;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ok);color:#ffffff;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:2000;display:none;box-shadow:0 4px 12px rgba(28,35,51,.08)}
 .toast.show{display:block;animation:fadeIn .3s}
 @keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 </style>
@@ -65,8 +65,8 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 <h1>🔥 프로메테우스</h1>
 <p class="tagline">한국인의 디지털 마찰을 해소하는 무료 도구</p>
 <div class="stats">
-<div class="stat"><div class="num" id="utilCount">2</div><div class="lbl">유틸리티</div></div>
-<div class="stat"><div class="num" id="reportCount">2</div><div class="lbl">프리미엄 리포트</div></div>
+<div class="stat"><div class="num" id="utilCount">4</div><div class="lbl">유틸리티</div></div>
+<div class="stat"><div class="num" id="reportCount">3</div><div class="lbl">프리미엄 리포트</div></div>
 <div class="stat"><div class="num">100%</div><div class="lbl">무료</div></div>
 </div>
 </div>
@@ -100,11 +100,11 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 </div>
 
 <div class="card">
-<div class="badge">운영중</div>
+<div class="badge">NEW ✨</div>
 <div class="icon">🧠</div>
 <h2>WordForge</h2>
-<p class="desc">에빙하우스 망각곡선 기반 스마트 영단어 암기. SRS 알고리즘으로 최적 복습 주기 자동 결정.</p>
-<div class="tags"><span class="tag edu">교육</span><span class="tag edu">영어</span><span class="tag edu">SRS</span></div>
+<p class="desc">에빙하우스 망각곡선 + 능동회상 기반 스마트 영단어 암기. 뇌과학 SRS 알고리즘으로 최적 복습 주기를 자동 계산해 기억률 2배.</p>
+<div class="tags"><span class="tag edu">교육</span><span class="tag edu">영어</span><span class="tag edu">뇌과학</span><span class="tag edu">SRS</span></div>
 <a class="link" href="wordforge/">👉 사용하기 →</a>
 </div>
 </div>
@@ -115,9 +115,21 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 <div class="benefits">
 <span>✅ 청약 전략 가이드</span>
 <span>✅ 전세사기 방지 체크리스트</span>
-<span>✅ AI 생존 전략</span>
+<span>✅ 뇌과학 영단어 암기법</span>
 </div>
 <a class="btn" href="ebook/">📕 리포트 받기</a>
+</div>
+</div>
+
+<div class="cta-section">
+<div class="cta-card">
+<h3>🧠 뇌과학 기반 영단어 암기법 전자책</h3>
+<div class="benefits">
+<span>✅ 망각곡선 완전 이해</span>
+<span>✅ 능동회상·인출연습 프로토콜</span>
+<span>✅ 30일 3,000단어 루틴</span>
+</div>
+<a class="btn" href="ebook/wordforge_guide.html">📘 전자책 보기</a>
 </div>
 </div>
 
@@ -131,6 +143,13 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 <div class="toast" id="toast"></div>
 <script>
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show';setTimeout(()=>t.className='toast',3000)}
+// 유틸리티/리포트 자동 카운트
+document.addEventListener('DOMContentLoaded',function(){
+const c=document.querySelectorAll('.grid .card').length;
+const r=document.querySelectorAll('.cta-section').length;
+if(c>0)document.getElementById('utilCount').textContent=c;
+if(r>0)document.getElementById('reportCount').textContent=r;
+});
 </script>
 </body>
 </html>
