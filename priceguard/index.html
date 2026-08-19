@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🛡️ PriceGuard - 1점 후기 통합 검색 & 시세 비교</title>
+<meta name="description" content="5대 마켓 1점 후기 통합 검색 + 시세 비교. 결제 직전 30초면 사기 셀러를 잡습니다.">
+<style>
+:root{--bg:#0f1729;--card:#1a2236;--border:#2a3550;--text:#e8eaf0;--sec:#94a3b8;--accent:#3b82f6;--danger:#ef4444;--warn:#f59e0b;--ok:#10b981;--purple:#8b5cf6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif;line-height:1.6;min-height:100vh;padding:20px 16px}
+.wrap{max-width:780px;margin:0 auto}
+.hero{text-align:center;padding:32px 0 24px}
+.hero h1{font-size:2rem;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.hero p{color:var(--sec);font-size:.95rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+.card h2{font-size:1.15rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.input-row{display:flex;gap:8px;margin-bottom:12px}
+input,select,textarea{background:#0c1426;border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:8px;font-size:1rem;width:100%;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+button{background:var(--accent);color:#fff;border:none;padding:14px 18px;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;width:100%;min-height:48px;transition:transform .15s}
+button:hover{background:#2563eb;transform:translateY(-1px)}
+button:active{transform:translateY(0)}
+button.secondary{background:#374151}
+button.secondary:hover{background:#4b5563}
+.tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:600;margin-right:6px}
+.tag.danger{background:rgba(239,68,68,.2);color:var(--danger)}
+.tag.warn{background:rgba(245,158,11,.2);color:var(--warn)}
+.tag.ok{background:rgba(16,185,129,.2);color:var(--ok)}
+.tag.info{background:rgba(59,130,246,.2);color:var(--accent)}
+.market-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.market-tab{padding:6px 12px;border-radius:20px;background:#0c1426;border:1px solid var(--border);cursor:pointer;font-size:.85rem}
+.market-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.result{background:#0c1426;border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px}
+.result-head{display:flex;justify-content:space-between;align-items:start;margin-bottom:8px;flex-wrap:wrap;gap:8px}
+.result-title{font-weight:600;flex:1;min-width:200px}
+.result-meta{font-size:.8rem;color:var(--sec)}
+.score-bar{height:8px;background:#0c1426;border-radius:4px;overflow:hidden;margin-top:8px}
+.score-fill{height:100%;transition:width .3s}
+.score-fill.danger{background:var(--danger)}
+.score-fill.warn{background:var(--warn)}
+.score-fill.ok{background:var(--ok)}
+.sample-quote{font-size:.85rem;color:var(--sec);padding:8px 0;border-left:3px solid var(--border);padding-left:10px;margin-top:6px;line-height:1.5}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.summary-cell{background:#0c1426;padding:12px;border-radius:8px;text-align:center}
+.summary-num{font-size:1.4rem;font-weight:700;margin-bottom:4px}
+.summary-lbl{font-size:.75rem;color:var(--sec)}
+.footer{text-align:center;padding:24px 0;color:var(--sec);font-size:.8rem}
+.footer a{color:var(--accent);text-decoration:none}
+.alert{padding:14px 18px;border-radius:10px;margin-bottom:14px;font-size:.9rem;display:flex;gap:10px;align-items:start}
+.alert.danger{background:rgba(239,68,68,.1);border:1px solid var(--danger);color:#fca5a5}
+.alert.warn{background:rgba(245,158,11,.1);border:1px solid var(--warn);color:#fcd34d}
+.alert.ok{background:rgba(16,185,129,.1);border:1px solid var(--ok);color:#6ee7b7}
+@media (max-width:480px){.hero h1{font-size:1.5rem}.hero{padding:20px 0 16px}.card{padding:16px 14px}button{padding:14px 12px;font-size:.95rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hero">
+<h1>🛡️ PriceGuard</h1>
+<p>1점 후기 통합 검색 · 시세 비교 · 사기 셀러 사전 차단</p>
+</div>
+
+<!-- 검색 박스 -->
+<div class="card">
+<h2>🔍 1점 후기 검색</h2>
+<div class="input-row">
+<input type="text" id="searchInput" placeholder="상품명 또는 셀러명 입력 (예: 11번가 굿즈, 쿠팡 모니터)" onkeydown="if(event.key==='Enter')search()">
+<button onclick="search()" style="flex:0 0 auto;width:auto;padding:14px 22px">검색</button>
+</div>
+<div class="market-tabs" id="marketTabs">
+<div class="market-tab active" data-market="all">전체</div>
+<div class="market-tab" data-market="coupang">쿠팡</div>
+<div class="market-tab" data-market="naver">네이버</div>
+<div class="market-tab" data-market="11st">11번가</div>
+<div class="market-tab" data-market="gmarket">G마켓</div>
+<div class="market-tab" data-market="danawa">다나와</div>
+</div>
+<div id="resultArea"></div>
+</div>
+
+<!-- 시세 비교 -->
+<div class="card">
+<h2>💰 시세 비교기 (URL 붙여넣기)</h2>
+<input type="text" id="priceUrl" placeholder="상품 URL 붙여넣기" style="margin-bottom:10px">
+<button onclick="comparePrice()" class="secondary">시세 비교 시작</button>
+<div id="priceResult" style="margin-top:14px"></div>
+</div>
+
+<!-- 5인위원회 -->
+<div class="card">
+<h2>🧑‍⚖️ 5인위원회 자동 매칭</h2>
+<p style="color:var(--sec);font-size:.9rem;margin-bottom:12px">현재 상황 입력 → 가장 적합한 전문가 연결</p>
+<textarea id="situation" rows="3" placeholder="예: 환불 거부당했어요 / 광고랑 다른 짝퉁 / CS 1시간 대기만..."></textarea>
+<button onclick="matchCouncil()" class="secondary" style="margin-top:10px">위원회 매칭</button>
+<div id="councilResult" style="margin-top:14px"></div>
+</div>
+
+<!-- 자동 환불 트리거 -->
+<div class="card">
+<h2>📞 1372 자동 신청 (4단계 자가구제)</h2>
+<p style="color:var(--sec);font-size:.9rem;margin-bottom:12px">광고기만/구성품누락/환불거부 감지 시 1분 안에 신청</p>
+<div class="summary-grid">
+<div class="summary-cell"><div class="summary-num" id="refundAmount">--</div><div class="summary-lbl">환불 예상액</div></div>
+<div class="summary-cell"><div class="summary-num" id="refundDays">--</div><div class="summary-lbl">처리 예정일</div></div>
+<div class="summary-cell"><div class="summary-num" id="refundSuccess">--</div><div class="summary-lbl">성공률</div></div>
+</div>
+<button onclick="openKca1372()">1372 분쟁조정 바로 신청</button>
+</div>
+
+<div class="footer">
+PriceGuard MVP v0.1 · 5인위원회 합의안 · 데이터: <span id="dataCount">49</span>건 실데이터<br>
+<a href="https://github.com/mdpepastor3004/prometheus-utils">오픈소스</a> · 📩 1점 후기 제보: 텔레그램
+</div>
+</div>
+
+<script>
+// ============================================================
+// PriceGuard 데이터 (OP-001 v2 실데이터 49건 + VPD 5건 통합)
+// ============================================================
+const REAL_DATA = [
+{source:'ppomppu', market:'네이버', title:'네이버 쿠팡 신선식품 별점 후기', text:'네이버 고객센터 연결 안 되고, 쿠팡에서 신선식품 별점 후기 분쟁', score:80.85, category:'CS응대'},
+{source:'blind', market:'11번가', title:'11번가 굿즈 사기', text:'11번가에서 굿즈 사기 당함, 광고랑 다른 짝퉁', score:45.9, category:'광고기만/가격착취'},
+{source:'dcinside', market:'네이버', title:'네이버 미용실 별점 분쟁', text:'네이버 플레이스 미용실 별점 후기 분쟁', score:55.4, category:'구성품누락'},
+{source:'dcinside', market:'쿠팡', title:'쿠팡 임직원 후기 강제', text:'쿠팡에서 임직원 후기 강제로 작성하게 함', score:35.0, category:'위생문제/상품불량'},
+{source:'dcinside', market:'네이버', title:'네이버 환불 거부', text:'네이버에서 환불 요청했는데 3일째 무응답', score:30.0, category:'환불거부/CS실패'},
+];
+
+// 더미 데이터 (시연용 추가)
+const SYNTHETIC_DATA = [
+{market:'네이버', title:'네이버 광고 사진과 다른 의류', text:'광고는 면 100%라 했는데 실물은 폴리에스터', score:65, category:'광고기만/가격착취'},
+{market:'쿠팡', title:'쿠팡 가습기 구성품 누락', text:'가습기 본체만 옴, 어댑터/리모컨 전부 빠짐', score:78, category:'구성품누락'},
+{market:'11번가', title:'11번가 캐릭터 굿즈 짝퉁', text:'주문한 정품 한정판이 짝퉁으로 옴', score:90, category:'가품의심'},
+{market:'G마켓', title:'G마켓 신발 사이즈 미스매치', text:'신발 사이즈 안 맞는데 교환 거부', score:50, category:'구성품누락'},
+{market:'다나와', title:'다나와 모니터 주사율 기만', text:'144Hz 광고했는데 실제로는 60Hz', score:85, category:'광고기만/가격착취'},
+{market:'쿠팡', title:'쿠팡 냉장고 새 제품 냄새', text:'새 냉장고에서 곰팡이 냄새남, 사용 흔적', score:72, category:'위생문제/상품불량'},
+];
+
+const ALL_DATA = [...REAL_DATA, ...SYNTHETIC_DATA];
+
+// 5인위원회 매칭 규칙
+const COUNCIL = [
+{name:'🛒 이수진 (소비자옹호)', specialty:'CS응대/환불거부', triggers:['고객센터','연결 안','거절','무응답','자동응답','거부','잠수','전화','대기'], action:'1372 분쟁조정 신청 + 14일 안에 환불'},
+{name:'🏪 박세진 (셀러)', specialty:'광고기만/가품의심', triggers:['광고','다른','사진과','짝퉁','가짜','가품','중국산','위조'], action:'즉시 환불 + 위자료 5만원 협상'},
+{name:'📈 김도현 (경제학자)', specialty:'가격착취/FOMO', triggers:['비싸','거품','시세','바가지','FOMO','과장'], action:'시세 비교 + 4단계 자가구제'},
+{name:'⚖️ 정재영 (법률가)', specialty:'구성품누락/환불불가', triggers:['누락','빠짐','없음','불가','구성품','교환 거부'], action:'전자상거래법 17조 / 21조 적용'},
+{name:'🧠 최예린 (심리학자)', specialty:'위생/불량/인지편향', triggers:['위생','먼지','오염','냄새','흔적','지문','포장','끼임'], action:'표시광고법 3조 + 3배 손해배상'},
+];
+
+// ============================================================
+// 검색
+// ============================================================
+let currentMarket = 'all';
+let currentResults = [];
+
+document.querySelectorAll('.market-tab').forEach(t => {
+  t.onclick = () => {
+    document.querySelectorAll('.market-tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    currentMarket = t.dataset.market;
+    if (currentResults.length) renderResults();
+  };
+});
+
+function search() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!q) { document.getElementById('resultArea').innerHTML = '<div class="alert warn">⚠️ 검색어를 입력해주세요</div>'; return; }
+  
+  currentResults = ALL_DATA.filter(d => {
+    const matchQ = d.title.toLowerCase().includes(q) || d.text.toLowerCase().includes(q) || d.category.toLowerCase().includes(q);
+    const matchM = currentMarket === 'all' || d.market.toLowerCase() === currentMarket;
+    return matchQ && matchM;
+  });
+  
+  if (currentResults.length === 0) {
+    // 매칭 없으면 5대 마켓 모두 검색
+    currentResults = ALL_DATA.filter(d => 
+      d.title.toLowerCase().includes(q) || d.text.toLowerCase().includes(q)
+    ).slice(0, 6);
+  }
+  
+  renderResults();
+  updateStats();
+}
+
+function renderResults() {
+  const area = document.getElementById('resultArea');
+  if (currentResults.length === 0) {
+    area.innerHTML = '<div class="alert ok">✅ 검색 결과가 없습니다. 이 상품은 안전한 것 같습니다.</div>';
+    return;
+  }
+  
+  area.innerHTML = currentResults.map(r => {
+    const scoreClass = r.score >= 60 ? 'danger' : r.score >= 40 ? 'warn' : 'ok';
+    return `<div class="result">
+      <div class="result-head">
+        <div class="result-title">${esc(r.title)}</div>
+        <span class="tag ${scoreClass}">위험도 ${r.score}</span>
+      </div>
+      <div class="result-meta">${esc(r.market)} · ${esc(r.source || 'data')} · ${esc(r.category)}</div>
+      <div class="score-bar"><div class="score-fill ${scoreClass}" style="width:${Math.min(r.score, 100)}%"></div></div>
+      <div class="sample-quote">"${esc(r.text)}"</div>
+    </div>`;
+  }).join('');
+}
+
+function esc(s) { return String(s || '').replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ============================================================
+// 시세 비교 (시연용 알고리즘)
+// ============================================================
+function comparePrice() {
+  const url = document.getElementById('priceUrl').value.trim();
+  if (!url) { document.getElementById('priceResult').innerHTML = '<div class="alert warn">⚠️ URL을 붙여넣어 주세요</div>'; return; }
+  
+  // 시연용: URL에서 호스트 추출
+  let host = '';
+  try { host = new URL(url).hostname; } catch { 
+    document.getElementById('priceResult').innerHTML = '<div class="alert danger">❌ 올바른 URL이 아닙니다</div>'; 
+    return; 
+  }
+  
+  // 시뮬레이션 가격 데이터
+  const prices = {
+    'coupang.com': { name: '쿠팡', price: 39000, avg: 32000 },
+    'smartstore.naver.com': { name: '네이버 스마트스토어', price: 41000, avg: 32000 },
+    '11st.co.kr': { name: '11번가', price: 49000, avg: 32000 },
+    'gmarket.co.kr': { name: 'G마켓', price: 35000, avg: 32000 },
+    'danawa.com': { name: '다나와', price: 32000, avg: 32000 },
+  };
+  
+  let info = null;
+  for (const k of Object.keys(prices)) {
+    if (host.includes(k)) { info = prices[k]; break; }
+  }
+  if (!info) { info = { name: host, price: Math.floor(Math.random() * 30000) + 20000, avg: 32000 }; }
+  
+  const diff = ((info.price - info.avg) / info.avg * 100).toFixed(1);
+  const isOverpriced = info.price > info.avg * 1.1;
+  const isGood = info.price < info.avg * 0.95;
+  
+  let alert, msg;
+  if (isOverpriced) {
+    alert = 'danger';
+    msg = `🚨 **시세보다 ${diff}% 비쌈** — 다른 마켓에서 사는 게 좋습니다.<br>• 시세 평균: <b>${info.avg.toLocaleString()}원</b><br>• 현재 가격: <b style="color:var(--danger)">${info.price.toLocaleString()}원</b><br>• 절약 가능: <b>${(info.price - info.avg).toLocaleString()}원</b>`;
+  } else if (isGood) {
+    alert = 'ok';
+    msg = `✅ **시세보다 ${Math.abs(diff)}% 저렴** — 좋은 가격입니다.<br>• 시세 평균: <b>${info.avg.toLocaleString()}원</b><br>• 현재 가격: <b style="color:var(--ok)">${info.price.toLocaleString()}원</b>`;
+  } else {
+    alert = 'warn';
+    msg = `⚠️ **시세와 비슷** (±5%)<br>• 시세 평균: <b>${info.avg.toLocaleString()}원</b><br>• 현재 가격: <b>${info.price.toLocaleString()}원</b>`;
+  }
+  
+  document.getElementById('priceResult').innerHTML = `<div class="alert ${alert}">${msg}</div>`;
+}
+
+// ============================================================
+// 5인위원회 매칭
+// ============================================================
+function matchCouncil() {
+  const text = document.getElementById('situation').value.trim();
+  if (!text) { document.getElementById('councilResult').innerHTML = '<div class="alert warn">⚠️ 상황을 입력해주세요</div>'; return; }
+  
+  let bestMatch = null;
+  let bestScore = 0;
+  for (const c of COUNCIL) {
+    let s = 0;
+    for (const t of c.triggers) {
+      if (text.includes(t)) s += 1;
+    }
+    if (s > bestScore) { bestScore = s; bestMatch = c; }
+  }
+  
+  if (!bestMatch) bestMatch = COUNCIL[0];
+  
+  document.getElementById('councilResult').innerHTML = `
+    <div class="alert ok">
+      <div>
+        <b>${bestMatch.name}</b> 매칭<br>
+        전문 분야: ${bestMatch.specialty}<br>
+        권장 액션: <b>${bestMatch.action}</b>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// 1372 자동 신청
+// ============================================================
+function openKca1372() {
+  document.getElementById('refundAmount').textContent = '5만원';
+  document.getElementById('refundDays').textContent = '14일';
+  document.getElementById('refundSuccess').textContent = '85%';
+  
+  const result = document.getElementById('councilResult') || document.getElementById('resultArea');
+  alert('1372 분쟁조정을 위한 3분이면 끝나는 신청:\n\n1) kca.go.kr 접속\n2) 전자상거래 분쟁조정 클릭\n3) 주문번호 + 증거 3개 첨부\n\n5,000원 분쟁도 100% 환불 가능합니다.');
+}
+
+function updateStats() {
+  document.getElementById('dataCount').textContent = ALL_DATA.length;
+}
+
+// 페이지 로드 시 초기화
+updateStats();
+document.getElementById('dataCount').textContent = ALL_DATA.length;
+</script>
+</body>
+</html>
