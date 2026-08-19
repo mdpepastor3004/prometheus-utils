@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>뇌과학 기반 영단어 암기법</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style>
+:root{--bg:#f4f7fc;--glass:#ffffff;--border:#e2e8f2;--text:#1c2333;--sec:#47516b;--accent:#ff7a45}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.75;padding:20px}
+.container{max-width:720px;margin:0 auto;background:var(--glass);border:1px solid var(--border);border-radius:16px;padding:32px 28px}
+h1{font-size:1.8rem;color:var(--accent);margin:24px 0 8px;line-height:1.3}
+h2{font-size:1.35rem;color:var(--accent);margin:32px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--border)}
+h3{font-size:1.1rem;margin:20px 0 8px}
+p{margin:10px 0;color:var(--text)}
+strong{color:var(--accent)}
+li{margin:6px 0}
+hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.9rem}
+th,td{border:1px solid var(--border);padding:8px 10px;text-align:left}
+th{background:#eef1f7;color:var(--sec)}
+code{background:#eef1f7;padding:2px 6px;border-radius:4px;font-size:.85em}
+blockquote{border-left:4px solid var(--accent);padding:8px 16px;margin:12px 0;background:#fff5f0;border-radius:0 8px 8px 0}
+.header{text-align:center;padding:16px 0 24px;border-bottom:2px solid var(--border);margin-bottom:24px}
+.header .kicker{font-size:.8rem;color:var(--sec);letter-spacing:2px}
+.header h1{font-size:2rem;margin:8px 0 4px}
+.header .sub{color:var(--sec);font-size:.9rem}
+.footer{text-align:center;color:var(--sec);font-size:.75rem;margin-top:32px;padding-top:16px;border-top:1px solid var(--border)}
+@media(max-width:600px){body{padding:8px}.container{padding:20px 16px}}
+</style>
+</head>
+<body><div class="container">
+<header id="title-block-header">
+<div class="header"><div class="kicker">PROMETHEUS · BRAIN SCIENCE</div><h1>뇌과학 기반 영단어 암기법</h1><div class="sub">망각곡선·능동회상·SRS로 완성하는 30일 3,000단어</div></div>
+</header>
+<h1 id="뇌과학-기반-영단어-암기법">뇌과학 기반 영단어 암기법</h1>
+<h2
+id="당신의-뇌는-단어를-못-외우는-게-아니라-잘못된-방법으로-외우고-있다">당신의
+뇌는 단어를 못 외우는 게 아니라, 잘못된 방법으로 외우고 있다</h2>
+<hr />
+<h1 id="장.-왜-10년을-영어를-배워도-단어가-안-남는가">1장. 왜 10년을
+영어를 배워도 단어가 안 남는가</h1>
+<p>수능을 보려고, 토익을 보려고, 유학을 가려고 — 평균적인 한국인은 10년
+넘게 영어 단어를 외운다. 그런데 정작 머리에 남는 단어는 수백 개도 안
+되는 경우가 많다.</p>
+<p>문제는 기억력이 아니다. <strong>방법이다.</strong></p>
+<p>뇌과학 연구들은 한결같이 말한다. 인간의 뇌는 특정한 조건에서만
+장기기억을 형성한다. 그리고 그 조건을 만족시키는 공부법은 명확하게
+규명되어 있다. 늘 하던 방식이 과학적으로 가장 비효율적인 방식일
+뿐이다.</p>
+<h2 id="우리가-해온-가장-흔한-실수">우리가 해온 가장 흔한 실수</h2>
+<p><strong>실수 1. 반복해서 읽기만 한다</strong></p>
+<p>단어장을 펴고, 단어를 보고, 뜻을 보고, 다시 단어를 보고… 이건 뇌에게
+아무런 도전도 주지 않는다. 읽기는 뇌가 가장 무시하는 입력이다. 익숙한
+정보는 “이미 아는 것”으로 분류되어 장기기억으로 보내지지 않는다.</p>
+<p><strong>실수 2. 시험 직전에 몰아서 외운다</strong></p>
+<p>벼락치기는 단기기억에 저장될 뿐이다. 뇌는 “이 정보는 곧 버려져도
+된다”고 판단하면 파지를 위해 에너지를 쓰지 않는다. 시험장에서 잠깐
+살아남는 지식이 축적되는 경우는 거의 없다.</p>
+<p><strong>실수 3. 단어 하나하나를 분리해서 본다</strong></p>
+<p>“abandon = 버리다” 이렇게 단어와 뜻을 1:1로 묶는 방식. 이건 기억의
+황금률인 <strong>연결(association)</strong> 을 무시하는 행동이다. 연결
+없는 정보는 고립된 점과 같아서, 아무리 반복해도 쉽게 사라진다.</p>
+<p><strong>실수 4. 복습을 안 하거나, 계획 없이 한다</strong></p>
+<p>아무리 잘 외워도 시간이 지나면 잊는다. 이건 뇌의 정상 작동이다.
+문제는 이 자연스러운 망각에 대응하는 시스템이 없다는 것이다.</p>
+<h2 id="이-책의-목표">이 책의 목표</h2>
+<p>이 책은 다음 질문에 과학적으로 답한다.</p>
+<ul>
+<li>기억은 어떤 조건에서 장기기억이 되는가?</li>
+<li>왜 어떤 단어는 한 번 보고 평생 기억하고, 어떤 단어는 100번 봐도
+잊는가?</li>
+<li>하루 100단어를 넘어 <strong>30일 3,000단어</strong>가 가능한가?</li>
+</ul>
+<p>답은 가능하다다. 조건이 맞다면.</p>
+<p>이제부터 그 조건들을 하나씩 설치한다. 각 장의 끝에는 그날 당장 실행할
+수 있는 <strong>연습 과제</strong>를 붙였다. 읽기만 하지 말고, 반드시
+수행하라. 수행할 때마다 당신의 뇌는 장기기억을 위한 연결을 새로
+만든다.</p>
+<hr />
+<h1 id="장.-에빙하우스-망각곡선-기억의-물리-법칙">2장. 에빙하우스
+망각곡선 — 기억의 물리 법칙</h1>
+<p>1885년, 독일의 심리학자 헤르만 에빙하우스는 자신을 실험 대상으로 삼아
+무의미한 음절을 외우고, 시간이 지남에 따라 얼마나 잊는지 기록했다. 그
+결과가 바로 유명한 <strong>망각곡선(forgetting curve)</strong> 이다.</p>
+<h2 id="망각은-기하급수적이다">망각은 기하급수적이다</h2>
+<p>에빙하우스의 실험 결과는 충격적이다.</p>
+<ul>
+<li>20분 후: 기억의 약 42% 소실</li>
+<li>1시간 후: 약 56% 소실</li>
+<li>1일 후: 약 66% 소실</li>
+<li>1주일 후: 약 77% 소실</li>
+</ul>
+<p>즉, 아무 조치가 없으면 하루가 지나기 전에 절반 이상이 사라진다.
+중요한 것은 이게 당신의 뇌가 나빠서가 아니라, <strong>모든 인간의 뇌가
+그렇게 설계되어 있다는 것</strong>이다.</p>
+<h2
+id="망각곡선을-무효화하는-단-하나의-행동-적절한-시점의-복습">망각곡선을
+무효화하는 단 하나의 행동: 적절한 시점의 복습</h2>
+<p>에빙하우스는 두 번째 발견도 했다. <strong>복습할 때마다 망각곡선이
+다시 그려지는데, 그 기울기가 점점 완만해진다.</strong></p>
+<ul>
+<li>1차 학습 후 망각: 1일 안에 66% 소실</li>
+<li>1차 복습 후 망각: 다음 소실까지 3일 소요</li>
+<li>2차 복습 후 망각: 다음 소실까지 7일 소요</li>
+<li>3차 복습 후 망각: 다음 소실까지 14일 소요</li>
+</ul>
+<p>복습할 때마다 기억이 뇌에 “이건 중요한 정보다”로 재인식되고, 보존
+기간이 대략 2배씩 길어진다. 이것이 간격 반복(spaced repetition)의 핵심
+메커니즘이다.</p>
+<h2 id="복습-타이밍의-과학">복습 타이밍의 과학</h2>
+<p>복습이 중요하다는 건 누구나 안다. 문제는 “언제”다.</p>
+<p>가장 치명적인 실수는 <strong>거의 다 잊은 뒤에</strong> 복습하는
+것이다. 그때는 처음부터 다시 외워야 하므로 학습량이 두 배로
+늘어난다.</p>
+<p>뇌과학의 답: <strong>기억이 막 소실되기 시작하는 시점(망각 직전)에
+복습</strong>하면 최소의 노력으로 최대의 고정 효과를 얻는다.</p>
+<p>이 시기를 계산하는 공식이 SRS(Spaced Repetition System)다. 다음
+장에서 다룬다.</p>
+<h2 id="핵심-요약">핵심 요약</h2>
+<ul>
+<li>망각은 정상이고, 망각 속도는 예측 가능하다.</li>
+<li>복습할 때마다 기억 수명이 약 2배 늘어난다.</li>
+<li>최적 복습 시점은 “완전히 잊기 직전”이다.</li>
+</ul>
+<h2 id="연습-과제-2-1">연습 과제 2-1</h2>
+<p>오늘 외울 단어 20개를 정하고, 다음 일정으로 복습을 예약하라.</p>
+<ul>
+<li>20분 후 (오늘)</li>
+<li>1시간 후 (오늘)</li>
+<li>내일 아침</li>
+<li>3일 후</li>
+<li>7일 후</li>
+</ul>
+<p>이 5회 복습을 지키는 단어는 30일 뒤에도 80% 이상 남는다. 지키지 않는
+단어는 30일 뒤 10%도 남지 않는다. 이것이 전부다.</p>
+<hr />
+<h1 id="장.-능동회상-뇌를-시험에-들게-하라">3장. 능동회상 — 뇌를 시험에
+들게 하라</h1>
+<p>망각곡선이 복습의 “시기”를 정했다면, 이번 장은 복습의 “방식”을
+정한다.</p>
+<p>핵심은 하나다. <strong>보지 말고, 꺼내라.</strong></p>
+<h2 id="회상은-기억을-다시-쓰는-행위다">회상은 기억을 다시 쓰는
+행위다</h2>
+<p>뇌과학에서 기억은 저장된 파일이 아니라, 불러올 때마다
+<strong>재구성되는 과정</strong>이다. 단어를 기억해내는 순간, 뇌는 그
+기억을 다시 저장한다. 그리고 다시 저장할 때 연결이 더 단단해진다.</p>
+<p>이것을 <strong>인출 연습(retrieval practice)</strong> 이라고
+한다.</p>
+<h2 id="능동회상-vs-수동복습">능동회상 vs 수동복습</h2>
+<table>
+<thead>
+<tr>
+<th>수동 복습 (비효율)</th>
+<th>능동 회상 (효율)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>단어를 보고 뜻을 본다</td>
+<td>뜻을 먼저 떠올려 본다</td>
+</tr>
+<tr>
+<td>“아 맞다 그거”</td>
+<td>“뭐였더라… 추측해본다”</td>
+</tr>
+<tr>
+<td>익숙함에 속아 학습된 착각</td>
+<td>어려움을 극복하며 진짜 학습</td>
+</tr>
+<tr>
+<td>기억 강도 약함</td>
+<td>기억 강도 강함</td>
+</tr>
+</tbody>
+</table>
+<p>심리학자 제프리 카피크의 연구에 따르면, 같은 시간을 투자해도
+<strong>능동회상이 수동복습보다 장기 기억률이 약 2배 높다.</strong> 이
+효과는 수십 년간 수백 개의 실험에서 반복 확인되었다.</p>
+<h2 id="초의-규칙">5초의 규칙</h2>
+<p>능동회상의 실행 규칙은 단순하다.</p>
+<ol type="1">
+<li>단어를 보고 뜻을 <strong>먼저 떠올린다</strong> (최소 5초)</li>
+<li>떠올렸다면 정답과 대조한다</li>
+<li>틀렸다면 그 순간이 최고의 학습 기회다 — 한 번 더 꺼내 본다</li>
+</ol>
+<p>여기서 “틀리는 것”은 실패가 아니라 데이터다. 뇌가 “이건 아직 안
+됐다”고 알려주는 신호이고, 이 신호가 있는 단어를 다음 복습에 우선
+배정해야 한다.</p>
+<h2 id="자기-시험이-왕이다">자기-시험이 왕이다</h2>
+<p>능동회상의 가장 강력한 형태는 <strong>자기-시험</strong>이다.</p>
+<ul>
+<li>단어장을 펴고, 뜻을 가리고, 영어 단어만 보고 뜻을 써본다</li>
+<li>뜻을 보고 영어 단어를 써본다 (역방향 회상)</li>
+<li>틀린 것만 다시 모아 2차 시험을 본다</li>
+</ul>
+<p>시험을 보는 행위 그 자체가 학습이다. “시험은 학습의 결과를 확인하는
+도구”라는 생각은 버려라. 시험은 학습의 엔진이다.</p>
+<h2 id="wordforge와-능동회상">WordForge와 능동회상</h2>
+<p>이 책과 함께 제공되는 무료 도구 WordForge는 이 원리를 웹에서 바로
+실행한다.</p>
+<ul>
+<li>카드를 탭하기 전에 뜻을 먼저 떠올리도록 설계됨</li>
+<li>버튼 3개(까먹음/애매함/잘 암기)가 다음 복습 간격을 결정</li>
+<li>틀린 단어는 더 자주, 맞은 단어는 더 늦게 등장</li>
+</ul>
+<p>주소:
+https://mdpepastor3004.github.io/prometheus-utils/wordforge/</p>
+<h2 id="연습-과제-3-1">연습 과제 3-1</h2>
+<p>오늘부터 단어 복습을 “보기”가 아니라 “시험”으로 바꾼다.</p>
+<ul>
+<li>오늘 외운 20단어를 뜻 가리고 시험 본다</li>
+<li>틀린 단어는 체크해서 내일 다시 시험 본다</li>
+<li>WordForge에 20단어를 등록하고 오늘 1회 학습한다</li>
+</ul>
+<hr />
+<h1 id="장.-인출연습의-강화-시험은-공부다-testing-effect">4장.
+인출연습의 강화 — 시험은 공부다 (Testing Effect)</h1>
+<p>1900년대 초 심리학자 애비게일 로딩거와 헨리 로디거의 실험은 교육학
+역사에 길이 남는다. 학생들이 같은 자료를 같은 시간 공부했는데,
+<strong>시험을 본 그룹이 단순히 다시 읽은 그룹보다 1주일 후 기억률이 2배
+이상 높았다.</strong></p>
+<p>이것이 <strong>테스팅 효과(testing effect)</strong> 다.</p>
+<h2 id="왜-시험이-복습보다-강한가">왜 시험이 복습보다 강한가</h2>
+<p>기억을 꺼내는 과정(인출)은 뇌에서 두 가지를 동시에 한다.</p>
+<ol type="1">
+<li><strong>검색 경로를 강화한다</strong> — 그 기억으로 가는 길이 넓고
+단단해진다</li>
+<li><strong>전이를 만든다</strong> — 꺼낸 기억이 다른 상황에서도
+재사용될 수 있게 일반화된다</li>
+</ol>
+<p>비유하자면, 책장에 책을 꽂아두는 것(암기)보다, 필요할 때 책을 꺼내
+읽는 훈련(인출)이 더 중요하다. 시험은 그 꺼내는 훈련이다.</p>
+<h2 id="인출연습을-단어-암기에-적용하는-4단계">인출연습을 단어 암기에
+적용하는 4단계</h2>
+<p><strong>1단계: 생성 연습(Generation)</strong></p>
+<p>뜻을 먼저 보고 영어 단어를 스스로 만들어 본다. “줄어들다… a로
+시작하는… abate?” 정답을 보기 전에 실패하는 과정이 기억을 만든다.</p>
+<p><strong>2단계: 딜레이 시험(Delayed Test)</strong></p>
+<p>외우고 난 직후가 아니라, 한 박자 쉬었다가 시험을 본다. 5분에서 30분의
+공백을 두면 기억이 단기에서 장기로 넘어가는 중간 과정을 훈련한다.</p>
+<p><strong>3단계: 오답 재시험(Retest)</strong></p>
+<p>틀린 단어만 모아 같은 날 다시, 그리고 다음 날 또 다시 시험을 본다.
+오답은 뇌가 가장 경계하는 정보다.</p>
+<p><strong>4단계: 혼합 시험(Interleaving)</strong></p>
+<p>단어를 주제별로 묶어 시험보지 말고, 섞어서 시험 본다. 섞인 시험은
+매번 “어떤 단어가 떠오르는가”를 판단하게 만들어 더 깊은 인출을
+만든다.</p>
+<h2 id="하루-10분-시험-루틴">하루 10분 시험 루틴</h2>
+<ul>
+<li>아침 3분: 어제 틀린 단어 10개 시험</li>
+<li>점심 3분: 오늘 신규 단어 10개 시험</li>
+<li>저녁 4분: 섞은 단어 20개 시험 (아침+점심 분량)</li>
+</ul>
+<p>이 루틴은 단어장을 “읽는” 시간이 아니다. 전부 “시험 보는” 시간이다.
+같은 10분이어도 학습 효율이 완전히 다르다.</p>
+<h2 id="연습-과제-4-1">연습 과제 4-1</h2>
+<p>오늘은 시험 형식으로만 복습한다.</p>
+<ul>
+<li>아침: 어제 외운 단어 10개를 뜻 가리고 시험</li>
+<li>저녁: 아침에 틀린 단어 + 오늘 신규 단어 섞어 20개 시험</li>
+<li>결과를 기록하라: 몇 개 맞췄는지, 몇 개가 반복해서 틀리는지</li>
+</ul>
+<hr />
+<h1 id="장.-간격-반복srs-최적의-복습-시점을-계산하는-시스템">5장. 간격
+반복(SRS) — 최적의 복습 시점을 계산하는 시스템</h1>
+<p>2장에서 복습의 시기가, 3~4장에서 복습의 방식이 정해졌다. 이제 이 둘을
+결합하는 운영 시스템이 필요하다. 그것이 <strong>간격 반복(Spaced
+Repetition System, SRS)</strong> 이다.</p>
+<p>SRS는 단어마다 “마지막에 얼마나 잘 기억했는가”를 기록하고, 기억
+수준에 따라 다음 복습 간격을 자동 계산한다.</p>
+<h2 id="srs의-심장-난이도-기반-간격-조절">SRS의 심장: 난이도 기반 간격
+조절</h2>
+<table>
+<thead>
+<tr>
+<th>평가</th>
+<th>의미</th>
+<th>다음 간격</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>까먹음 (0)</td>
+<td>기억이 소실됨</td>
+<td>1분 뒤 재등장 → 초기 레벨로</td>
+</tr>
+<tr>
+<td>애매함 (1)</td>
+<td>반은 알고 반은 모름</td>
+<td>같은 간격 재등장</td>
+</tr>
+<tr>
+<td>잘 암기 (2)</td>
+<td>완벽하게 인출</td>
+<td>간격 2배 확장</td>
+</tr>
+</tbody>
+</table>
+<p>이 규칙은 에빙하우스 곡선의 “복습 시 기억 수명이 2배” 원리를 그대로
+구현한 것이다.</p>
+<h2 id="대표-간격-테이블">대표 간격 테이블</h2>
+<p>익숙한 단어면 1일 → 3일 → 7일 → 14일 → 30일 순으로 늘리고, 어려운
+단어면 1일 → 2일 → 4일 → 7일 순으로 촘촘하게 유지한다.</p>
+<table>
+<thead>
+<tr>
+<th>복습 회차</th>
+<th>잘 암기한 경우</th>
+<th>애매한 경우</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1차</td>
+<td>1일 후</td>
+<td>1일 후</td>
+</tr>
+<tr>
+<td>2차</td>
+<td>3일 후</td>
+<td>2일 후</td>
+</tr>
+<tr>
+<td>3차</td>
+<td>7일 후</td>
+<td>4일 후</td>
+</tr>
+<tr>
+<td>4차</td>
+<td>14일 후</td>
+<td>7일 후</td>
+</tr>
+<tr>
+<td>5차</td>
+<td>30일 후</td>
+<td>14일 후</td>
+</tr>
+</tbody>
+</table>
+<p>5회차를 통과한 단어는 30일 뒤에도 기억률 80% 이상이다. 이후에는 60일,
+90일 간격으로 유지 복습만 하면 된다.</p>
+<h2 id="srs를-직접-운영하는-법-앱-없이">SRS를 직접 운영하는 법 (앱
+없이)</h2>
+<p>단어장을 5개 박스로 만들고 시작한다.</p>
+<ul>
+<li>박스 1: 매일 복습</li>
+<li>박스 2: 3일마다 복습</li>
+<li>박스 3: 7일마다 복습</li>
+<li>박스 4: 14일마다 복습</li>
+<li>박스 5: 30일마다 복습</li>
+<li>규칙: 시험에서 맞히면 다음 박스로 이동, 틀리면 박스 1로 강등</li>
+</ul>
+<p>이 5-박스 시스템은 컴퓨터 없이도 돌아가는 수동 SRS다. 단, 매일 “어느
+박스를 언제 복습할지”를 스스로 관리해야 하므로, 가능하면 WordForge 같은
+자동 도구를 쓰는 것이 안정적이다.</p>
+<h2 id="wordforge의-srs-설정">WordForge의 SRS 설정</h2>
+<p>WordForge는 기본적으로 다음 간격으로 설정되어 있다.</p>
+<pre><code>1일 → 3일 → 7일 → 14일 → 30일 → 60일 → 90일</code></pre>
+<p>“잘 암기”를 누르면 다음 단계로, “애매함”을 누르면 같은 단계로,
+“까먹음”을 누르면 1일로 돌아간다. 설정에서 일일 신규 단어 수도 조절할 수
+있다.</p>
+<h2 id="연습-과제-5-1">연습 과제 5-1</h2>
+<ul>
+<li>수동 SRS를 쓸 것인지, WordForge를 쓸 것인지 결정한다</li>
+<li>WordForge 사용 시: 오늘 외운 단어를 전부 등록하고, 복습 평가를
+3버튼으로 수행한다</li>
+<li>수동 SRS 사용 시: 5-박스 단어장을 만들고 박스 1에 오늘의 단어를
+넣는다</li>
+</ul>
+<hr />
+<h1 id="장.-부호화-단어를-경험으로-저장하라">6장. 부호화 — 단어를
+경험으로 저장하라</h1>
+<p>같은 단어를 20번 봐도 안 외워지는 이유는, 그 단어가 뇌에 “의미 없는
+기호”로 입력되기 때문이다. 뇌는 의미 없는 기호를 저장하지 않는다.</p>
+<p><strong>부호화(encoding)</strong> 란 정보를 뇌가 저장하기 좋은 형태로
+변환하는 과정이다. 단어 하나를 외울 때, 뜻 하나만 저장하는 사람과
+소리·이미지·감정·문맥을 함께 저장하는 사람의 기억력은 하늘과 땅
+차이다.</p>
+<h2 id="저장-형식의-3채널">저장 형식의 3채널</h2>
+<p><strong>채널 1: 소리(음운)</strong></p>
+<p>단어를 소리 내서 읽어라. “abate”를 입으로 말할 때 뇌는 청각 피질을
+함께 활성화한다. 소리 없이 눈으로만 보는 단어는 기억의 촉감이 없다.</p>
+<p><strong>채널 2: 이미지(시각)</strong></p>
+<p>“abate”는 “폭풍이 abate한다”는 장면으로 저장하는 것이 낫다. 맹렬하던
+비바람이 잦아드는 이미지. 뇌는 추상 단어보다 구체 이미지를 압도적으로 잘
+저장한다.</p>
+<p><strong>채널 3: 감정·신체(촉각)</strong></p>
+<p>“abate”를 말할 때 손을 아래로 내리며 “줄어든다”는 몸짓을 곁들이면,
+감각 운동 피질까지 동원되어 저장 밀도가 올라간다.</p>
+<h2 id="정교화-부호화elaborative-encoding">정교화 부호화(Elaborative
+Encoding)</h2>
+<p>심리학자 퍼거스 크레이크와 로버트 록하트의 연구는 유명하다. 단어의
+“겉모양”을 보는 조건보다, 단어의 “의미”를 깊이 처리하는 조건에서
+기억률이 3배 이상 높았다.</p>
+<p>깊은 처리를 만드는 질문 3가지:</p>
+<ol type="1">
+<li>이 단어는 나와 무슨 관련이 있나? (개인화)</li>
+<li>이 단어의 반대말은 무엇인가? (대비)</li>
+<li>이 단어가 들어간 문장을 만들어 보자 (생성)</li>
+</ol>
+<p>이 세 질문 중 하나라도 거친 단어는 “깊게 부호화”된 것이다.</p>
+<h2 id="단어를-5초-안에-깊게-만드는-습관">단어를 5초 안에 깊게 만드는
+습관</h2>
+<p>외울 때마다 이 순서를 밟는다.</p>
+<ol type="1">
+<li>발음 2회</li>
+<li>이미지 1개 만들기 (떠오르는 장면)</li>
+<li>짧은 문장 1개 말하기</li>
+<li>그 문장을 소리 내어 읽기</li>
+</ol>
+<p>시간은 단어당 10초도 걸리지 않는다. 그러나 이 10초가 100번의 무의미한
+반복보다 강하다.</p>
+<h2 id="연습-과제-6-1">연습 과제 6-1</h2>
+<p>오늘 외울 단어 20개에 다음을 적용한다.</p>
+<ul>
+<li>각 단어마다 이미지 1개를 한국어로 적는다</li>
+<li>각 단어로 문장 1개를 만든다</li>
+<li>그중 5개를 골라 소리 내어 읽는다</li>
+</ul>
+<hr />
+<h1 id="장.-연상이미지스토리-뇌가-좋아하는-형식">7장. 연상·이미지·스토리
+— 뇌가 좋아하는 형식</h1>
+<p>인간의 뇌는 1만 년 동안 이야기와 이미지로 기억해왔다. 문서와 리스트는
+최근의 발명품이다. 뇌가 좋아하는 형식으로 단어를 포장하면 저장이
+자연스러워진다.</p>
+<h2 id="음운-연상-소리-연결">1. 음운 연상 (소리 연결)</h2>
+<p>영어 단어의 소리를 한국어로 바꿔 이미지를 만든다.</p>
+<ul>
+<li>abate (줄어들다) → “어, 배 떼” → 배가 빠져서 살이 줄어드는 아재</li>
+<li>sanctuary (피난처) → “생쥐어리” → 고양이에게 쫓긴 생쥐가 숨는
+성소</li>
+<li>diligent (부지런한) → “딜리전트” → 딜리버리 기사가 전국을 누비는
+부지런한 모습</li>
+</ul>
+<p>소리 연결은 이상할수록 기억에 오래 남는다. 뇌는 평범함을 버리고
+이상함을 저장한다.</p>
+<h2 id="이미지-연결">2. 이미지 연결</h2>
+<p>단어와 뜻을 하나의 그림으로 합친다.</p>
+<ul>
+<li>“abate” + “줄어들다” = 폭풍이 잦아드는 바다</li>
+<li>“sanctuary” + “피난처” = 절벽 속 은신처에 불을 켠 방</li>
+</ul>
+<p>이미지는 정지된 그림보다 <strong>움직이는 장면</strong>이 훨씬
+강하다. 단어마다 3초짜리 장면을 하나 만들면 된다.</p>
+<h2 id="스토리-체인">3. 스토리 체인</h2>
+<p>여러 단어를 하나의 이야기로 엮는다.</p>
+<p>예: abate, sanctuary, diligent 세 단어라면 —</p>
+<p>“부지런한(diligent) 등산가가 폭풍을 피해 산장(피난처, sanctuary)에
+들어갔다. 폭풍이 잦아들자(abate) 다시 길을 나섰다.”</p>
+<p>스토리 체인으로 엮은 단어들은 서로가 서로의 단서가 되어, 하나가
+떠오르면 나머지도 함께 떠오른다.</p>
+<h2 id="방법의-장소-기법method-of-loci">4. 방법의 장소 기법(Method of
+Loci)</h2>
+<p>유명한 기억술이다. 집 안의 장소(현관, 거실, 주방, 방, 욕실)를 기억의
+좌판으로 쓰고, 단어 이미지를 각 장소에 배치한다.</p>
+<ul>
+<li>현관: abate — 현관에 비바람이 몰아치다 잦아드는 장면</li>
+<li>거실: sanctuary — 거실 소파가 피난처가 되는 장면</li>
+</ul>
+<p>장소를 따라 걷는 것만으로 단어를 순서대로 꺼낼 수 있게 된다.
+시험장에서는 “거실을 떠올리면” 그 자리에 배치한 단어들이 떠오른다.</p>
+<h2 id="기억술이-중요한-이유">기억술이 중요한 이유</h2>
+<p>이런 기법들은 단순히 재미가 아니라, <strong>여러 감각 채널을 동시에
+열어 깊은 부호화를 만든다.</strong> 6장에서 본 것과 같은 원리다. 단어
+50개를 리스트로 외우는 것과, 50개의 이상한 장면을 만드는 것은 같은
+시간이지만 저장 품질이 다르다.</p>
+<h2 id="연습-과제-7-1">연습 과제 7-1</h2>
+<ul>
+<li>오늘의 단어 중 가장 어려운 10개를 골라 음운 연상을 만든다</li>
+<li>그중 5개를 묶어 3문장짜리 스토리를 만든다</li>
+<li>스토리를 소리 내어 읽고, 저녁에 스토리 없이 단어만 시험 본다</li>
+</ul>
+<hr />
+<h1 id="장.-맥락-의존-기억-문장과-상황으로-외우기">8장. 맥락 의존 기억 —
+문장과 상황으로 외우기</h1>
+<p>수영장에서 배운 것을 바다에서 바로 쓸 수 없다고 말한다. 기억도
+비슷하다. 뇌는 정보를 “어떤 맥락에서 배웠는가”와 함께 저장한다. 이것을
+<strong>맥락 의존 기억(context-dependent memory)</strong> 이라고
+한다.</p>
+<h2 id="단어장은-최악의-맥락이다">단어장은 최악의 맥락이다</h2>
+<p>단어장은 모든 단어가 같은 형식(단어-뜻)으로, 같은 장소(책상), 같은
+감각(눈)으로 입력된다. 맥락이 단 하나뿐이라 기억의 단서가 빈약하다.</p>
+<p>반면 문장 속 단어는 주어·동사·목적어가 함께 움직이며, 상황·어감·연결
+관계까지 저장된다.</p>
+<h2 id="맥락을-풍부하게-만드는-3가지">맥락을 풍부하게 만드는 3가지</h2>
+<p><strong>1. 문장으로 외운다</strong></p>
+<ul>
+<li>“The storm finally abated.” — 폭풍이 마침내 잦아들었다</li>
+<li>단어를 문장에서 꺼내는 연습을 하면, 시험에서도 단어가 문장 단위로
+떠오른다</li>
+</ul>
+<p><strong>2. 같은 단어를 다른 문장 2개로</strong></p>
+<ul>
+<li>“His anger abated after a deep breath.” — 화가 가라앉다</li>
+<li>같은 단어를 서로 다른 상황에서 두 번 보면 “abate = 줄어들다”라는
+추상 규칙이 뇌에 형성된다</li>
+</ul>
+<p><strong>3. 실제 사용처를 정한다</strong></p>
+<ul>
+<li>이 단어를 앞으로 1주일 안에 어디서 쓸 것인가? (에세이, 말하기,
+메신저)</li>
+<li>사용 예정일을 정하면 뇌가 “곧 쓸 정보”로 분류해 저장 우선순위를
+올린다</li>
+</ul>
+<h2 id="의미-단위로-그룹핑">의미 단위로 그룹핑</h2>
+<p>비슷한 뜻의 단어는 묶어서 학습하되, <strong>시험 때는 섞어서</strong>
+확인한다.</p>
+<ul>
+<li>묶음: decrease / diminish / dwindle / abate (모두 “줄어들다”)</li>
+<li>학습: 묶음으로 1회 학습</li>
+<li>시험: 뒤섞어 2회 시험</li>
+</ul>
+<p>묶음 학습은 차이(뉘앙스)를 인식하게 하고, 섞은 시험은 그 차이를
+기억으로 굳힌다.</p>
+<h2 id="연습-과제-8-1">연습 과제 8-1</h2>
+<ul>
+<li>오늘의 단어 20개로 문장 20개를 만든다</li>
+<li>비슷한 뜻끼리 묶어 3~4개 그룹으로 정리한다</li>
+<li>저녁에는 그룹을 섞어 시험 본다</li>
+</ul>
+<hr />
+<h1 id="장.-수면과-운동-기억-고정의-숨은-열쇠">9장. 수면과 운동 — 기억
+고정의 숨은 열쇠</h1>
+<p>암기법을 아무리 고도화해도, 뇌가 기억을 고정시키는 시간을 주지 않으면
+소용없다. 장기기억의 90%는 잠자는 동안 만들어진다.</p>
+<h2 id="수면-중-기억-고정">수면 중 기억 고정</h2>
+<p>뇌과학 연구에 따르면, 학습 직후의 수면은 기억의 해마-피질
+전이(transfer)를 촉진한다. 하룻밤 자고 나서 오히려 기억이 좋아지는 것은
+착각이 아니라 실제다.</p>
+<p><strong>핵심 규칙:</strong></p>
+<ul>
+<li>단어를 외우고 6시간 안에 잠을 자면 고정률이 크게 오른다</li>
+<li>밤샘 공부 후 시험 보는 것은 기억 고정 시간을 빼앗는 행동이다</li>
+<li>낮잠 20~90분도 기억 고정에 도움이 된다</li>
+</ul>
+<h2 id="운동과-기억">운동과 기억</h2>
+<p>운동은 뇌유래신경영양인자(BDNF) 분비를 촉진한다. BDNF는 해마의
+신경세포 생성과 시냅스 강화를 돕는 물질이다.</p>
+<ul>
+<li>20분 유산소 운동 후 학습하면 학습 효율이 높아진다</li>
+<li>학습 후 20분 운동해도 기억 고정이 강화된다</li>
+<li>정적 스트레칭보다 빠르게 걷기·자전거 같은 유산소가 효과적</li>
+</ul>
+<h2 id="스트레스와-단기기억">스트레스와 단기기억</h2>
+<p>급성 스트레스는 학습 직후 뇌가 정보를 저장하는 과정을 방해한다. 시험
+불안, 촉박한 일정 속 암기는 최악의 조건이다.</p>
+<ul>
+<li>암기는 하루 중 스트레스가 가장 낮은 시간대에</li>
+<li>숨고르기(복식호흡) 2분 후 시작하면 인출 효율이 올라간다</li>
+</ul>
+<h2 id="일-루틴에-수면을-설계한다">30일 루틴에 수면을 설계한다</h2>
+<ul>
+<li>저녁 복습(하루 마지막 학습)은 잠들기 1시간 전에 끝낸다</li>
+<li>잠들기 직전 10분은 그날 배운 단어를 머릿속으로 훑는 “리뷰 타임”</li>
+<li>아침 기상 후 10분은 어제 단어를 시험 본다 (수면 고정 확인)</li>
+</ul>
+<h2 id="연습-과제-9-1">연습 과제 9-1</h2>
+<ul>
+<li>오늘 학습을 잠들기 1시간 전에 끝낸다</li>
+<li>잠들기 직전 10분, 오늘 단어를 머릿속으로 훑는다</li>
+<li>내일 아침 10분, 오늘 단어를 시험 본다</li>
+</ul>
+<hr />
+<h1 id="장.-30일-3000단어-실행-루틴">10장. 30일 3,000단어 실행 루틴</h1>
+<p>이제 모든 원리를 하나의 실전 루틴으로 조립한다. 목표는 30일 안에
+3,000단어다. 하루 100단어, 신규 50 + 복습 50으로 설계한다.</p>
+<h2 id="하루-구성-총-50분">하루 구성 (총 50분)</h2>
+<p><strong>아침 15분 — 어제 복습 + 시험</strong></p>
+<ul>
+<li>어제 신규 단어 50개를 뜻 가리고 시험 (10분)</li>
+<li>틀린 단어만 다시 시험 (5분)</li>
+</ul>
+<p><strong>점심 10분 — 오늘 신규 단어 1차 노출</strong></p>
+<ul>
+<li>신규 50개를 6장~8장 방식으로 학습 (단어당 약 12초)</li>
+<li>이미지 1개 + 문장 1개 + 소리 내 읽기</li>
+<li>WordForge 또는 5-박스에 등록</li>
+</ul>
+<p><strong>저녁 25분 — 복습 + 고정</strong></p>
+<ul>
+<li>오늘 신규 50개 시험 (10분)</li>
+<li>SRS 복습 예정 단어 시험 (10분)</li>
+<li>틀린 단어 3회 재시험 (5분)</li>
+</ul>
+<p><strong>잠들기 전 10분 — 리뷰 타임</strong></p>
+<ul>
+<li>오늘 단어를 머릿속으로 훑기</li>
+<li>내일 아침 시험 단어를 정해두기</li>
+</ul>
+<h2 id="주간-구조">주간 구조</h2>
+<ul>
+<li>월~금: 위 루틴 그대로 (하루 신규 50)</li>
+<li>토: 주간 총복습 — 그 주 신규 250개 전수 시험</li>
+<li>일: 휴식 + 가벼운 SRS 복습만 (신규 0)</li>
+</ul>
+<h2 id="단어의-단계-계획">3,000단어의 단계 계획</h2>
+<table>
+<thead>
+<tr>
+<th>주차</th>
+<th>일일 신규</th>
+<th>주간 누적</th>
+<th>누적 복습량</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1주</td>
+<td>50</td>
+<td>250</td>
+<td>50/day</td>
+</tr>
+<tr>
+<td>2주</td>
+<td>50</td>
+<td>500</td>
+<td>100/day</td>
+</tr>
+<tr>
+<td>3주</td>
+<td>50</td>
+<td>750</td>
+<td>150/day</td>
+</tr>
+<tr>
+<td>4주</td>
+<td>50</td>
+<td>1,000</td>
+<td>200/day</td>
+</tr>
+</tbody>
+</table>
+<p>30일 신규 1,000 + 기존 단어 재학습 2,000 = 총 3,000단어. 이미 알고
+있는 단어는 시험에서 통과 시 즉시 먼 박스로 보내면 된다.</p>
+<h2 id="실패-방지-설계">실패 방지 설계</h2>
+<p><strong>하루를 놓치면 어떻게 하나</strong></p>
+<ul>
+<li>놓친 날의 신규 단어는 무조건 이틀 뒤로 미룬다 (절대 같은 날 2배로
+몰지 않기)</li>
+<li>복습은 신규보다 먼저다 — 복습이 밀리면 신규를 줄인다</li>
+<li>3일 연속 밀리면 신규를 0으로 하고 복습만 돌린다</li>
+</ul>
+<p><strong>동기부여 지표</strong></p>
+<ul>
+<li>매일 “복습 정답률”을 기록한다</li>
+<li>정답률 80% 이상 유지가 목표 — 더 높이려 하지 말 것 (실패 단어가
+없으면 복습이 너무 쉬운 것)</li>
+<li>일주일 정답률이 90%를 넘으면 신규 수를 60으로 올린다</li>
+</ul>
+<h2 id="마지막-조언">마지막 조언</h2>
+<p>이 책의 모든 기법은 뇌과학 실험에서 반복 검증된 원리다. 그런데 기법
+그 자체보다 중요한 것은 <strong>“매일 실행하는가”</strong> 다.</p>
+<ul>
+<li>단어를 100번 보는 사람 vs 10번 꺼내는 사람 — 후자가 이긴다</li>
+<li>완벽한 계획을 세우고 3일 하는 사람 vs 대충 시작해서 300일 하는 사람
+— 후자가 이긴다</li>
+</ul>
+<p>오늘부터 하루 50개를 꺼내는 훈련을 시작하라. 30일 뒤, 당신의 뇌는
+달라져 있을 것이다.</p>
+<hr />
+<h1 id="부록-a.-30일-3000단어-체크리스트">부록 A. 30일 3,000단어
+체크리스트</h1>
+<h2 id="매일-복사-후-매일-체크">매일 (복사 후 매일 체크)</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />아침: 어제 신규 단어 50개
+시험</label></li>
+<li><label><input type="checkbox" />점심: 오늘 신규 단어 50개 학습
+(이미지+문장+발음)</label></li>
+<li><label><input type="checkbox" />저녁: 신규 50개 시험 + SRS
+복습</label></li>
+<li><label><input type="checkbox" />저녁: 틀린 단어 3회
+재시험</label></li>
+<li><label><input type="checkbox" />잠들기 전: 머릿속 리뷰
+10분</label></li>
+<li><label><input type="checkbox" />기록: 정답률 %, 신규 50개 완료
+여부</label></li>
+</ul>
+<h2 id="주말">주말</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />토요일: 주간 신규 250개 전수
+시험</label></li>
+<li><label><input type="checkbox" />일요일: 복습만 (신규 0)</label></li>
+</ul>
+<hr />
+<h1 id="부록-b.-srs-복습-간격표">부록 B. SRS 복습 간격표</h1>
+<table>
+<thead>
+<tr>
+<th>레벨</th>
+<th>간격</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1일</td>
+<td>첫 학습 후 다음 날</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3일</td>
+<td>2차 복습</td>
+</tr>
+<tr>
+<td>3</td>
+<td>7일</td>
+<td>3차 복습</td>
+</tr>
+<tr>
+<td>4</td>
+<td>14일</td>
+<td>4차 복습</td>
+</tr>
+<tr>
+<td>5</td>
+<td>30일</td>
+<td>5차 복습 (장기 고정 완료)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>60일</td>
+<td>유지 복습</td>
+</tr>
+<tr>
+<td>7</td>
+<td>90일</td>
+<td>유지 복습</td>
+</tr>
+</tbody>
+</table>
+<p>평가 규칙:</p>
+<ul>
+<li>잘 암기 → 레벨 +1</li>
+<li>애매함 → 같은 레벨 유지</li>
+<li>까먹음 → 레벨 1로 강등</li>
+</ul>
+<hr />
+<h1 id="부록-c.-5분-단어장-만들기-템플릿">부록 C. 5분 단어장 만들기
+템플릿</h1>
+<pre><code>[단어]          [발음]      [뜻]           [이미지/문장]        [레벨]
+abate           /əˈbeɪt/   줄어들다        폭풍이 잦아드는 장면   3
+sanctuary       /ˈsæŋktʃueri/ 피난처       생쥐가 숨는 성소       2</code></pre>
+<p>이 템플릿으로 50개를 채우는 데 약 10분이 걸린다. 채우는 과정 자체가
+부호화다.</p>
+<hr />
+<h1 id="부록-d.-꼭-알아야-할-수능토익-필수-단어-100선">부록 D. 꼭 알아야
+할 수능·토익 필수 단어 100선</h1>
+<h2 id="동사-30-고빈도">동사 30 (고빈도)</h2>
+<p>abate (줄어들다), alleviate (완화하다), ameliorate (개선하다),
+augment (늘리다), bolster (뒷받침하다), curb (억제하다), curtail
+(줄이다), dwindle (줄어들다), elicit (이끌어내다), endorse (지지하다),
+exacerbate (악화시키다), fabricate (날조하다), hamper (방해하다), hinder
+(방해하다), impede (지체시키다), incur (초래하다), inhibit (억제하다),
+mitigate (완화하다), negate (무효화하다), obstruct (막다), persevere
+(끈기있게 해내다), preclude (배제하다), rectify (시정하다), relinquish
+(포기하다), scrutinize (면밀히 조사하다), stifle (억압하다), subsidize
+(보조하다), terminate (종료하다), undermine (침식하다), vindicate
+(입증하다)</p>
+<h2 id="명사-30-고빈도">명사 30 (고빈도)</h2>
+<p>adversary (상대), advocate (옹호자), affinity (친화력), ambiguity
+(모호함), anomaly (변칙), apathy (무관심), autonomy (자율성), catalyst
+(촉매), consensus (합의), constraint (제약), criterion (기준), dichotomy
+(이분법), doctrine (교리), efficacy (효능), eloquence (웅변), empathy
+(공감), fallacy (오류), fiasco (대실패), flaw (결함), impetus (추진력),
+incentive (인센티브), integrity (정직성), jurisdiction (관할권),
+legitimacy (정당성), mandate (명령), nuance (뉘앙스), paradigm
+(패러다임), precedence (우선권), reciprocity (상호성), scrutiny (정밀
+조사)</p>
+<h2 id="형용사-25-고빈도">형용사 25 (고빈도)</h2>
+<p>ambiguous (모호한), arduous (힘겨운), benevolent (자비로운), candid
+(솔직한), coherent (일관된), complacent (안일한), conspicuous (눈에
+띄는), detrimental (해로운), diligent (부지런한), dubious (의심스러운),
+elusive (잡기 어려운), eminent (저명한), feasible (실행 가능한), frugal
+(검소한), impartial (공정한), imminent (절박한), innate (선천적인),
+meticulous (세심한), notorious (악명 높은), obsolete (구식의), orthodox
+(정통의), precarious (불안정한), prudent (신중한), resilient (회복력
+있는), tangible (유형의)</p>
+<h2 id="부사접속사-15-고빈도">부사·접속사 15 (고빈도)</h2>
+<p>accordingly (그에 따라), albeit (비록 ~일지라도), consequently
+(결과적으로), conversely (반대로), deliberately (의도적으로), diligently
+(부지런히), explicitly (명시적으로), hence (따라서), inevitably
+(필연적으로), nevertheless (그럼에도), notably (특히), ostensibly
+(표면상으로는), predominantly (주로), subsequently (그 후에), thereby
+(그렇게 함으로써)</p>
+<hr />
+<h1 id="부록-e.-30일-로그-시트">부록 E. 30일 로그 시트</h1>
+<table>
+<thead>
+<tr>
+<th>날짜</th>
+<th>신규</th>
+<th>복습</th>
+<th>정답률</th>
+<th>틀린 단어 수</th>
+<th>메모</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1일</td>
+<td>50</td>
+<td>0</td>
+<td>%</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2일</td>
+<td>50</td>
+<td>50</td>
+<td>%</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>…</td>
+<td>50</td>
+<td>100</td>
+<td>%</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>30일</td>
+<td>50</td>
+<td>200</td>
+<td>%</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>© 자룡봇 AI Research · Prometheus v2.0 · 뇌과학 기반 영단어 암기법
+2026</p>
+<div class="footer">© 자룡봇 AI Research · Prometheus v2.0 · 2026</div></div></body>
+</html>
