@@ -269,16 +269,16 @@ calc();
 function gId(id){return document.getElementById(id);}
 function syncSld(id,max){
   const s=gId(id);let n;
-  if(id==='noHouse')n=gId('noHouseNum');else if(id==='dependents')n=gId('depNum');else n=gId(id.slice(0,2)+'Num');
+  if(id==='noHouse')n=gId('noHouseNum');else if(id==='dependents')n=gId('depNum');else if(id==='account')n=gId('accNum');
   n.value=s.value;fl(id,max);calc();sv();
 }
 function syncNum(id,max){
   let v=0;
   if(id==='noHouse')v=parseInt(gId('noHouseNum').value)||0;
   else if(id==='dependents')v=parseInt(gId('depNum').value)||0;
-  else v=parseInt(gId(id.slice(0,2)+'Num').value)||0;
+  else if(id==='account')v=parseInt(gId('accNum').value)||0;
   const s=gId(id);v=Math.max(0,Math.min(v,max));
-  if(id==='noHouse')gId('noHouseNum').value=v;else if(id==='dependents')gId('depNum').value=v;else gId(id.slice(0,2)+'Num').value=v;
+  if(id==='noHouse')gId('noHouseNum').value=v;else if(id==='dependents')gId('depNum').value=v;else if(id==='account')gId('accNum').value=v;
   s.value=v;fl(id,max);calc();sv();
 }
 function fl(id,max){const s=document.getElementById(id);const p=(s.value/max)*100;const map={noHouse:'fillNo',dependents:'fillDep',account:'fillAcc'};document.getElementById(map[id]).style.width=p+'%';}
