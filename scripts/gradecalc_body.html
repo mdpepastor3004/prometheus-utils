@@ -1,0 +1,129 @@
+<!-- Input Card -->
+<div class="card">
+<h2>📝 원점수 입력 <span class="badge">실시간</span></h2>
+<div class="slider-group">
+<div class="slider-header">
+<label>국어 (원점수)</label>
+<div class="value-group">
+<input type="number" id="korNum" min="0" max="100" value="0" oninput="syncNumGS('kor',100)">
+<span class="unit">점</span>
+<span class="score-badge gs-badge" id="gsKor">등급 -</span>
+</div>
+</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillKor" style="width:0%"></div>
+<input type="range" id="kor" min="0" max="100" value="0" step="1" oninput="syncSldGS('kor',100)">
+</div>
+<div class="hint"><span>0점</span><span>100점 만점</span></div>
+</div>
+<div class="slider-group">
+<div class="slider-header">
+<label>수학 (원점수)</label>
+<div class="value-group">
+<input type="number" id="mathNum" min="0" max="100" value="0" oninput="syncNumGS('math',100)">
+<span class="unit">점</span>
+<span class="score-badge gs-badge" id="gsMath">등급 -</span>
+</div>
+</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillMath" style="width:0%"></div>
+<input type="range" id="math" min="0" max="100" value="0" step="1" oninput="syncSldGS('math',100)">
+</div>
+<div class="hint"><span>0점</span><span>100점 만점</span></div>
+</div>
+<div class="slider-group">
+<div class="slider-header">
+<label>영어 (원점수)</label>
+<div class="value-group">
+<input type="number" id="engNum" min="0" max="100" value="0" oninput="syncNumGS('eng',100)">
+<span class="unit">점</span>
+<span class="score-badge gs-badge" id="gsEng">등급 -</span>
+</div>
+</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillEng" style="width:0%"></div>
+<input type="range" id="eng" min="0" max="100" value="0" step="1" oninput="syncSldGS('eng',100)">
+</div>
+<div class="hint"><span>0점</span><span>100점 만점</span></div>
+</div>
+<div class="slider-group">
+<div class="slider-header">
+<label>탐구 (원점수 평균)</label>
+<div class="value-group">
+<input type="number" id="sciNum" min="0" max="50" value="0" oninput="syncNumGS('sci',50)">
+<span class="unit">점</span>
+<span class="score-badge gs-badge" id="gsSci">등급 -</span>
+</div>
+</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillSci" style="width:0%"></div>
+<input type="range" id="sci" min="0" max="50" value="0" step="1" oninput="syncSldGS('sci',50)">
+</div>
+<div class="hint"><span>0점</span><span>50점 만점</span></div>
+</div>
+<div class="slider-group">
+<div class="slider-header">
+<label>한국사 (원점수)</label>
+<div class="value-group">
+<input type="number" id="histNum" min="0" max="50" value="0" oninput="syncNumGS('hist',50)">
+<span class="unit">점</span>
+<span class="score-badge gs-badge" id="gsHist">등급 -</span>
+</div>
+</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillHist" style="width:0%"></div>
+<input type="range" id="hist" min="0" max="50" value="0" step="1" oninput="syncSldGS('hist',50)">
+</div>
+<div class="hint"><span>0점</span><span>50점 만점</span></div>
+</div>
+</div>
+
+<!-- Score Dashboard -->
+<div class="card dashboard">
+<div class="score-ring">
+<svg viewBox="0 0 140 140">
+<circle class="bg-circle" cx="70" cy="70" r="60"/>
+<circle class="fg-circle" id="gsArc" cx="70" cy="70" r="60" stroke-dasharray="377" stroke-dashoffset="377"/>
+</svg>
+<div class="center-text">
+<div id="gsTotal" class="num">0</div>
+<div class="denom">점</div>
+<div class="grade" id="gsGradeTxt">입력 필요</div>
+</div>
+</div>
+<div class="breakdown">
+<div class="break-item" style="border-color:var(--accent)"><div class="lbl">국어</div><div class="val" id="gsBkor">0</div><div class="lbl" id="gsBkorG">등급 -</div></div>
+<div class="break-item" style="border-color:var(--cyan)"><div class="lbl">수학</div><div class="val" id="gsBmath">0</div><div class="lbl" id="gsBmathG">등급 -</div></div>
+<div class="break-item" style="border-color:var(--muted)"><div class="lbl">영어</div><div class="val" id="gsBeng">0</div><div class="lbl" id="gsBengG">등급 -</div></div>
+</div>
+<div class="breakdown" style="grid-template-columns:1fr 1fr;margin-top:4px">
+<div class="break-item" style="border-color:var(--purple)"><div class="lbl">탐구</div><div class="val" id="gsBsci">0</div><div class="lbl" id="gsBsciG">등급 -</div></div>
+<div class="break-item" style="border-color:var(--warn)"><div class="lbl">한국사</div><div class="val" id="gsBhist">0</div><div class="lbl" id="gsBhistG">등급 -</div></div>
+</div>
+<div class="verdict-banner" id="gsBanner">
+⚡ 점수를 입력하세요
+<div class="detail">모든 과목의 등급을 확인하세요</div>
+</div>
+</div>
+
+<!-- Target Universities Card -->
+<div class="card">
+<h2>🏛️ 주요 대학 지원 가능성</h2>
+<div id="gsUnivTable">
+<div class="region-table">
+<div class="r-header"><span>대학</span><span>권장 등급</span><span>예상</span></div>
+<div id="gsUnivBody"></div>
+</div>
+</div>
+<div class="share-bar">
+<button onclick="cpLink()">🔗 링크 복사</button>
+<button onclick="screenShot()">📸 캡처</button>
+<button onclick="shareKakao()">💬 카톡</button>
+</div>
+</div>
+
+<!-- Extra bubble for detailed subject analysis -->
+<div class="card" id="gsDetailCard" style="display:none">
+<h2>📊 상세 분석</h2>
+<div id="gsDetailContent"></div>
+</div>

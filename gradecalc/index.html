@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+<title>수능 등급 계산기 2027 | Prometheus</title>
+<meta name="description" content="2027학년도 수능 등급컷 계산기. 국어, 수학, 탐구 과목별 원점수를 입력하면 예상 표준점수, 백분위, 등급을 실시간으로 확인하고, 주요 대학 지원 가능성을 예측합니다.">
+<meta name="keywords" content="수능등급계산기, 등급컷, 2027수능, 표준점수, 백분위, 정시">
+<meta property="og:title" content="{{OG_TITLE}}">
+<meta property="og:description" content="{{OG_DESC}}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mdpepastor3004.github.io/prometheus-utils/gradecalc/">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<style>
+/* === PROMETHEUS CORE STYLES === */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0e0e18;--bg2:#12121e;--glass:#151520;--glass2:#1a1a28;--border:#1e1e30;
+  --text:#d8d8e8;--sec:#b0b0c8;--muted:#8888a0;
+  --accent:#e8a040;--accent-l:#f0c860;--accent-d:#b07830;
+  --danger:#e84040;--warn:#e8a040;--ok:#48b8a0;
+  --vhigh:#a78bfa;--high:#48b8a0;--mid:#e8a040;--low:#e84040;
+  --cyan:#48b8a0;--purple:#a78bfa;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.6;min-height:100vh;padding:0}
+.container{max-width:580px;margin:0 auto;padding:20px 16px 60px}
+
+/* Header */
+.header{text-align:center;padding:20px 0 16px;position:relative}
+.header h1{font-size:1.4rem;color:var(--accent-l)}
+.header .sub{color:var(--muted);font-size:.8rem;margin-top:4px}
+.header .back-link{position:absolute;left:0;top:50%;transform:translateY(-50%);color:var(--muted);text-decoration:none;font-size:.85rem}
+.header .back-link:hover{color:var(--accent-l)}
+
+/* Cards */
+.card{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px}
+.card h2{font-size:1rem;color:var(--sec);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card h2 .badge{background:var(--accent);color:#0e0e18;font-size:.65rem;padding:2px 6px;border-radius:4px;font-weight:700;margin-left:auto}
+
+/* Slider + Number Dual Input */
+.slider-group{margin-bottom:14px}
+.slider-group:last-child{margin-bottom:0}
+.slider-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.slider-header label{font-size:.85rem;color:var(--sec)}
+.slider-header .value-group{display:flex;align-items:center;gap:4px}
+.slider-header .value-group input[type=number]{width:50px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 6px;color:var(--accent-l);font-size:.85rem;font-weight:700;text-align:center;outline:none;-moz-appearance:textfield}
+.slider-header .value-group input[type=number]::-webkit-inner-spin-button,.slider-header .value-group input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.slider-header .value-group input:focus{border-color:var(--accent)}
+.slider-header .value-group .unit{color:var(--muted);font-size:.75rem}
+.slider-header .value-group .score-badge{background:rgba(232,160,64,.15);color:var(--accent-l);font-size:.75rem;padding:2px 7px;border-radius:4px;font-weight:700}
+.slider-track{position:relative;width:100%;height:6px;background:var(--bg2);border-radius:3px;margin-top:2px}
+.slider-track input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;background:transparent;outline:none;position:absolute;top:0;left:0;z-index:2}
+.slider-track input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 2px 8px rgba(232,160,64,.4);border:2px solid var(--glass)}
+.slider-track input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--glass)}
+.slider-track input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12)}
+.slider-fill{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,var(--accent-d),var(--accent-l));border-radius:3px;pointer-events:none;transition:width .15s ease}
+.hint{font-size:.65rem;color:var(--muted);margin-top:4px;display:flex;justify-content:space-between}
+
+/* Score Ring Gauge */
+.score-ring{width:140px;height:140px;margin:0 auto 12px;position:relative}
+.score-ring svg{transform:rotate(-90deg);width:140px;height:140px}
+.score-ring .bg-circle{fill:none;stroke:var(--bg2);stroke-width:8}
+.score-ring .fg-circle{fill:none;stroke:var(--accent-l);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .4s ease,stroke .3s}
+.score-ring .center-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.score-ring .center-text .num{font-size:2.2rem;font-weight:800;color:var(--accent-l);line-height:1}
+.score-ring .center-text .denom{font-size:.7rem;color:var(--muted)}
+.score-ring .center-text .grade{font-size:.85rem;font-weight:700;margin-top:2px}
+.grade-god{color:var(--vhigh)}.grade-high{color:var(--high)}.grade-mid{color:var(--mid)}.grade-low{color:var(--low)}
+
+/* Breakdown Grid */
+.breakdown{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
+.break-item{background:var(--bg2);border-radius:10px;padding:10px 6px;text-align:center;border:1px solid transparent}
+.break-item .lbl{font-size:.65rem;color:var(--muted);margin-bottom:2px}
+.break-item .val{font-size:1.2rem;font-weight:700}
+
+/* Bar Chart */
+.bar-chart{margin-top:12px}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.bar-row .bar-lbl{font-size:.7rem;color:var(--muted);width:40px;flex-shrink:0}
+.bar-row .bar{height:14px;border-radius:7px;transition:width .3s ease;min-width:2px}
+.bar-row .bar.bar-ok{background:linear-gradient(90deg,var(--high),var(--ok))}
+.bar-row .bar.bar-mid{background:linear-gradient(90deg,var(--mid),var(--accent-l))}
+.bar-row .bar.bar-low{background:linear-gradient(90deg,var(--danger),var(--warn))}
+.bar-row .bar-val{font-size:.7rem;color:var(--sec);width:30px;flex-shrink:0}
+
+/* Region Table */
+.region-table{margin-top:12px}
+.region-table .r-header{display:flex;justify-content:space-between;padding:6px 0;font-size:.7rem;color:var(--muted);border-bottom:1px solid var(--border)}
+.region-table .r-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:.8rem}
+.region-table .r-row:last-child{border-bottom:none}
+.region-table .r-row .r-name{color:var(--sec)}
+.region-table .r-row .r-cut{color:var(--muted);font-size:.7rem}
+.region-table .r-row .r-result{font-weight:700;font-size:.75rem;padding:2px 8px;border-radius:4px}
+.region-table .r-row .r-result.pass{background:rgba(72,184,160,.15);color:var(--high)}
+.region-table .r-row .r-result.fail{background:rgba(232,64,64,.1);color:var(--low)}
+
+/* Verdict Banner */
+.verdict-banner{padding:16px;border-radius:12px;margin-top:14px;text-align:center;font-size:.9rem;font-weight:700}
+.verdict-banner.god{background:rgba(167,139,250,.12);border:1px solid var(--vhigh);color:var(--vhigh)}
+.verdict-banner.high{background:rgba(72,184,160,.12);border:1px solid var(--high);color:var(--high)}
+.verdict-banner.mid{background:rgba(232,160,64,.12);border:1px solid var(--mid);color:var(--mid)}
+.verdict-banner.low{background:rgba(232,64,64,.08);border:1px solid var(--low);color:var(--low)}
+.verdict-banner .detail{font-weight:400;font-size:.75rem;margin-top:4px;color:var(--sec)}
+
+/* Share Bar */
+.share-bar{display:flex;gap:8px;margin-top:14px}
+.share-bar button{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--sec);cursor:pointer;font-size:.75rem;text-align:center;transition:all .1s}
+.share-bar button:hover{border-color:var(--accent);color:var(--accent-l)}
+
+/* Funnel / Lead Capture */
+.funnel{margin-top:20px;background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.funnel .tag{display:inline-block;background:rgba(232,160,64,.12);color:var(--accent-l);font-size:.7rem;padding:2px 10px;border-radius:4px;margin-bottom:10px}
+.funnel p{font-size:.85rem;color:var(--sec);margin-bottom:14px}
+.funnel .lead-btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(232,160,64,.25)}
+.funnel .lead-btn:hover{transform:translateY(-1px)}
+.funnel .lead-sub{font-size:.7rem;color:var(--muted);margin-top:8px}
+.disclaimer{font-size:.65rem;color:var(--muted);text-align:center;margin-top:16px}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;justify-content:center;align-items:center}
+.modal-overlay.active{display:flex}
+.modal{background:var(--glass);border:1px solid var(--accent);border-radius:16px;padding:28px;max-width:400px;width:90%;position:relative}
+.modal .close{position:absolute;top:12px;right:16px;color:var(--muted);cursor:pointer;font-size:1.2rem;background:none;border:none}
+.modal h2{color:var(--accent-l);font-size:1.15rem;text-align:center;margin-bottom:6px}
+.modal .desc{color:var(--sec);font-size:.8rem;text-align:center;margin-bottom:16px}
+.modal .benefit{background:rgba(72,184,160,.08);border:1px solid var(--high);border-radius:10px;padding:14px;margin-bottom:16px;font-size:.8rem;color:var(--high)}
+.modal .benefit b{display:block;font-size:.85rem;margin-bottom:6px}
+.modal .field{margin-bottom:12px}
+.modal input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;outline:none}
+.modal input:focus{border-color:var(--accent)}
+.modal .error-msg{color:var(--danger);font-size:.8rem;display:none;text-align:center;margin-bottom:8px}
+.modal .btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:12px;font-size:.95rem;font-weight:700;cursor:pointer;width:100%}
+.modal .success{display:none;text-align:center}
+.modal .success.active{display:block}
+.modal .success .icon{font-size:2.5rem;margin-bottom:6px}
+.modal .success h3{color:var(--high);font-size:1.05rem;margin-bottom:6px}
+.modal .success p{color:var(--sec);font-size:.8rem;margin-bottom:14px}
+.modal .success .dl-btn{display:inline-block;background:var(--accent);color:#0e0e18;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--high);color:#0e0e18;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:2000;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.toast.error{background:var(--danger)}
+.toast.show{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* Dropdown / Select */
+select.t-d{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:.9rem;outline:none;cursor:pointer}
+select.t-d:focus{border-color:var(--accent)}
+</style>
+
+</head>
+<body>
+<div class="container">
+<div class="header">
+<a class="back-link" href="../">←</a>
+<h1>🎓 수능 등급컷 계산기</h1>
+<p class="sub">원점수 입력시 예상 등급컷, 백분위, 표준점수 확인</p>
+</div>
+
+<!-- Input Card -->
+<div class="card">
+<h2>📝 원점수 입력 <span class="badge">실시간</span></h2>
+<div class="slider-group">
+<div class="slider-header">
+<label>국어 (원점수)</label>
+<div class="value-group">
+<input type="number" id="korNum" min="0" max="100" value="0" oninput="syncNumGS('kor',100)">
+<span class="unit">점</span>
+<span class="score-badge gs-badge" id="gsKor">등급 -</span>
+</div>
+</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillKor" style="width:0%"></div>
+<input type="range" id="kor" min="0" max="100" value="0" step="1" oninput="syncSldGS('kor',100)">
+</div>
+<div class="hint"><span>0점</span><span>100점 만점</span></div>
+</div>
+<div class="slider-group">
+<div class="slider-header">
+<label>수학 (원점수)</label>
+<div class="value-group">
+<input type="number" id="mathNum" min="0" max="100" value="0" oninput="syncNumGS('math',100)">
+<span class="unit">점</span>
+<span class="score-badge gs-badge" id="gsMath">등급 -</span>
+</div>
+</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillMath" style="width:0%"></div>
+<input type="range" id="math" min="0" max="100" value="0" step="1" oninput="syncSldGS('math',100)">
+</div>
+<div class="hint"><span>0점</span><span>100점 만점</span></div>
+</div>
+<div class="slider-group">
+<div class="slider-header">
+<label>영어 (원점수)</label>
+<div class="value-group">
+<input type="number" id="engNum" min="0" max="100" value="0" oninput="syncNumGS('eng',100)">
+<span class="unit">점</span>
+<span class="score-badge gs-badge" id="gsEng">등급 -</span>
+</div>
+</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillEng" style="width:0%"></div>
+<input type="range" id="eng" min="0" max="100" value="0" step="1" oninput="syncSldGS('eng',100)">
+</div>
+<div class="hint"><span>0점</span><span>100점 만점</span></div>
+</div>
+<div class="slider-group">
+<div class="slider-header">
+<label>탐구 (원점수 평균)</label>
+<div class="value-group">
+<input type="number" id="sciNum" min="0" max="50" value="0" oninput="syncNumGS('sci',50)">
+<span class="unit">점</span>
+<span class="score-badge gs-badge" id="gsSci">등급 -</span>
+</div>
+</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillSci" style="width:0%"></div>
+<input type="range" id="sci" min="0" max="50" value="0" step="1" oninput="syncSldGS('sci',50)">
+</div>
+<div class="hint"><span>0점</span><span>50점 만점</span></div>
+</div>
+<div class="slider-group">
+<div class="slider-header">
+<label>한국사 (원점수)</label>
+<div class="value-group">
+<input type="number" id="histNum" min="0" max="50" value="0" oninput="syncNumGS('hist',50)">
+<span class="unit">점</span>
+<span class="score-badge gs-badge" id="gsHist">등급 -</span>
+</div>
+</div>
+<div class="slider-track">
+<div class="slider-fill" id="fillHist" style="width:0%"></div>
+<input type="range" id="hist" min="0" max="50" value="0" step="1" oninput="syncSldGS('hist',50)">
+</div>
+<div class="hint"><span>0점</span><span>50점 만점</span></div>
+</div>
+</div>
+
+<!-- Score Dashboard -->
+<div class="card dashboard">
+<div class="score-ring">
+<svg viewBox="0 0 140 140">
+<circle class="bg-circle" cx="70" cy="70" r="60"/>
+<circle class="fg-circle" id="gsArc" cx="70" cy="70" r="60" stroke-dasharray="377" stroke-dashoffset="377"/>
+</svg>
+<div class="center-text">
+<div id="gsTotal" class="num">0</div>
+<div class="denom">점</div>
+<div class="grade" id="gsGradeTxt">입력 필요</div>
+</div>
+</div>
+<div class="breakdown">
+<div class="break-item" style="border-color:var(--accent)"><div class="lbl">국어</div><div class="val" id="gsBkor">0</div><div class="lbl" id="gsBkorG">등급 -</div></div>
+<div class="break-item" style="border-color:var(--cyan)"><div class="lbl">수학</div><div class="val" id="gsBmath">0</div><div class="lbl" id="gsBmathG">등급 -</div></div>
+<div class="break-item" style="border-color:var(--muted)"><div class="lbl">영어</div><div class="val" id="gsBeng">0</div><div class="lbl" id="gsBengG">등급 -</div></div>
+</div>
+<div class="breakdown" style="grid-template-columns:1fr 1fr;margin-top:4px">
+<div class="break-item" style="border-color:var(--purple)"><div class="lbl">탐구</div><div class="val" id="gsBsci">0</div><div class="lbl" id="gsBsciG">등급 -</div></div>
+<div class="break-item" style="border-color:var(--warn)"><div class="lbl">한국사</div><div class="val" id="gsBhist">0</div><div class="lbl" id="gsBhistG">등급 -</div></div>
+</div>
+<div class="verdict-banner" id="gsBanner">
+⚡ 점수를 입력하세요
+<div class="detail">모든 과목의 등급을 확인하세요</div>
+</div>
+</div>
+
+<!-- Target Universities Card -->
+<div class="card">
+<h2>🏛️ 주요 대학 지원 가능성</h2>
+<div id="gsUnivTable">
+<div class="region-table">
+<div class="r-header"><span>대학</span><span>권장 등급</span><span>예상</span></div>
+<div id="gsUnivBody"></div>
+</div>
+</div>
+<div class="share-bar">
+<button onclick="cpLink()">🔗 링크 복사</button>
+<button onclick="screenShot()">📸 캡처</button>
+<button onclick="shareKakao()">💬 카톡</button>
+</div>
+</div>
+
+<!-- Extra bubble for detailed subject analysis -->
+<div class="card" id="gsDetailCard" style="display:none">
+<h2>📊 상세 분석</h2>
+<div id="gsDetailContent"></div>
+</div>
+
+
+<div class="funnel">
+<span class="tag">📖 🚀 정시 합격 예측</span>
+<p>내 점수로 갈 수 있는 대학은? 상세 분석 리포트 받기</p>
+<button class="lead-btn" onclick="openLead()">📩 지금 바로 확인하기</button>
+<div class="lead-sub">✔ 주요 15개 대학 합격선 포함</div>
+</div>
+<div class="disclaimer">© 자룡봇 AI Research · Prometheus v2.0 · 2026년 기준</div>
+</div>
+
+<!-- Lead Capture Modal (Generic) -->
+<div class="modal-overlay" id="leadM">
+<div class="modal">
+<button class="close" onclick="closeLead()">✕</button>
+<div id="mf">
+<h2>📩 프리미엄 리포트</h2>
+<p class="desc">정보 입력 후 무료 다운로드</p>
+<div class="benefit"><b>🎁 혜택</b>✅ 2027 수능 완벽 분석 리포트<br>✅ 주요 대학 정시 합격선 예측<br>✅ 과목별 만점 전략 가이드</div>
+<div class="field"><input type="text" id="lName" placeholder="이름"></div>
+<div class="field"><input type="tel" id="lPhone" placeholder="전화번호"></div>
+<div class="field"><input type="email" id="lEmail" placeholder="이메일"></div>
+<div class="error-msg" id="lErr">모든 항목을 입력해주세요</div>
+<button class="btn" onclick="sLead()">📩 받기 (무료)</button>
+</div>
+<div class="success" id="ms">
+<div class="icon">🎉</div>
+<h3>신청 완료!</h3>
+<p>프리미엄 리포트를 보내드렸습니다</p>
+<a class="dl-btn" href="../ebook/2027_grade_report.pdf" target="_blank">📕 다운로드</a>
+</div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- Core Prometheus JS -->
+<script>
+// === CORE UTILITIES ===
+function gId(id){return document.getElementById(id)}
+function st(msg,t){const el=gId('toast');el.textContent=msg;el.className='toast'+(t==='error'?' error':'')+' show';setTimeout(()=>el.className='toast',3000)}
+
+// === LEAD CAPTURE ===
+const BT='8268734337:AAEwMDqDzv6J4QtEGpeat6sShv-rdI0k2k0';
+const CI='730152102';
+function openLead(){gId('leadM').classList.add('active')}
+function closeLead(){gId('leadM').classList.remove('active')}
+gId('leadM').addEventListener('click',function(e){if(e.target===this)closeLead()});
+async function sLead(){
+const n=gId('lName').value.trim(),p=gId('lPhone').value.trim(),em=gId('lEmail').value.trim();
+gId('lErr').style.display='none';
+if(!n||!p||!em){gId('lErr').style.display='block';return;}
+const btn=document.querySelector('.modal .btn');btn.disabled=true;btn.textContent='처리 중...';
+const sc=typeof leadScore==='function'?leadScore():'';
+const dv=/Mobi|Android/i.test(navigator.userAgent)?'mobile':'pc';
+const pay={name:n,phone:p,email:em,source:'gradecalc',score:sc,device:dv};
+let ok=false;
+try{
+const r=await fetch('https://delughjxtvjvdjxwjzwe.supabase.co/rest/v1/leads',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Authorization':'Bearer sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Prefer':'return=minimal'},body:JSON.stringify(pay)});
+ok=r.ok||r.status===201;
+}catch(e1){ok=false;}
+if(!ok){
+try{
+const tg='🆕 [리드] gradecalc\n━━━\n👤 '+n+'\n📞 '+p+'\n📧 '+em+'\n🎯 '+sc+'\n📱 '+dv+'\n🕐 '+new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+'\n#리드 #gradecalc';
+const r2=await fetch('https://api.telegram.org/bot'+BT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CI,text:tg})});
+const d2=await r2.json();ok=d2.ok;
+}catch(e2){ok=false;}
+}
+if(ok){gId('mf').style.display='none';gId('ms').classList.add('active');st('✅ 신청 완료!');}else{st('⚠️ 오류','error');btn.disabled=false;btn.textContent='📩 받기 (무료)';}
+}
+
+// === SHARE UTILITIES ===
+function cpLink(){navigator.clipboard.writeText(window.location.href).then(()=>st('🔗 복사 완료!')).catch(()=>st('🔗 수동 복사: '+window.location.href))}
+function screenShot(){st('📸 캡처 후 공유하세요!')}
+function shareKakao(){st('💬 친구에게 공유해보세요!')}
+
+// === LOCAL STORAGE HELPERS ===
+function svls(key,obj){try{localStorage.setItem(key,JSON.stringify(obj))}catch(e){}}
+function ldls(key,def){try{const d=localStorage.getItem(key);return d?JSON.parse(d):def}catch(e){return def}}
+</script>
+
+<!-- Utility-Specific Script -->
+<script>
+// GradeCalc — 수능 등급 계산 엔진
+// 2027학년도 기준 예상 컷 (실제와 다를 수 있음, 참고용)
+
+const GRADE_TABLE = {
+  // [원점수 하한]: { std: 표준점수, pct: 백분위, grade: 등급 }
+  // 국어/수학 (100점 만점)
+  kor: {
+    100:{std:142,pct:99,g:1},97:{std:138,pct:96,g:1},95:{std:136,pct:95,g:1},
+    92:{std:133,pct:91,g:2},88:{std:129,pct:88,g:2},85:{std:127,pct:85,g:2},
+    80:{std:123,pct:80,g:3},75:{std:120,pct:75,g:3},70:{std:117,pct:70,g:3},
+    65:{std:114,pct:65,g:4},60:{std:111,pct:60,g:4},55:{std:108,pct:55,g:4},
+    50:{std:105,pct:50,g:5},45:{std:102,pct:45,g:5},40:{std:98,pct:40,g:5},
+    35:{std:95,pct:35,g:6},30:{std:92,pct:30,g:6},25:{std:88,pct:25,g:7},
+    20:{std:85,pct:20,g:7},15:{std:82,pct:15,g:8},10:{std:78,pct:10,g:8},
+    5:{std:75,pct:5,g:9},0:{std:70,pct:1,g:9}
+  },
+  math: {
+    100:{std:148,pct:99,g:1},97:{std:144,pct:96,g:1},95:{std:142,pct:95,g:1},
+    92:{std:139,pct:91,g:2},88:{std:135,pct:88,g:2},84:{std:131,pct:84,g:2},
+    80:{std:127,pct:80,g:3},75:{std:123,pct:75,g:3},70:{std:120,pct:70,g:3},
+    65:{std:116,pct:65,g:4},60:{std:113,pct:60,g:4},55:{std:109,pct:55,g:4},
+    50:{std:105,pct:50,g:5},45:{std:101,pct:45,g:5},40:{std:97,pct:40,g:5},
+    35:{std:93,pct:35,g:6},30:{std:89,pct:30,g:6},25:{std:85,pct:25,g:7},
+    20:{std:81,pct:20,g:7},15:{std:77,pct:15,g:8},10:{std:73,pct:10,g:8},
+    5:{std:69,pct:5,g:9},0:{std:65,pct:1,g:9}
+  },
+  // 영어 (100점 만점, 절대평가)
+  eng: {
+    90:{std:140,pct:90,g:1},80:{std:130,pct:80,g:2},70:{std:120,pct:70,g:3},
+    60:{std:110,pct:60,g:4},50:{std:100,pct:50,g:5},40:{std:90,pct:40,g:6},
+    30:{std:80,pct:30,g:7},20:{std:70,pct:20,g:8},0:{std:60,pct:1,g:9}
+  },
+  // 탐구 (50점 만점)
+  sci: {
+    50:{std:70,pct:99,g:1},47:{std:67,pct:96,g:1},45:{std:65,pct:94,g:1},
+    42:{std:63,pct:90,g:2},40:{std:61,pct:87,g:2},37:{std:59,pct:83,g:2},
+    35:{std:57,pct:79,g:3},32:{std:55,pct:74,g:3},30:{std:53,pct:70,g:3},
+    27:{std:51,pct:65,g:4},25:{std:49,pct:60,g:4},22:{std:47,pct:54,g:4},
+    20:{std:45,pct:50,g:5},17:{std:43,pct:44,g:5},15:{std:41,pct:39,g:5},
+    12:{std:39,pct:33,g:6},10:{std:37,pct:28,g:6},7:{std:35,pct:22,g:7},
+    5:{std:33,pct:17,g:7},2:{std:31,pct:11,g:8},0:{std:30,pct:5,g:9}
+  },
+  // 한국사 (50점 만점, 절대평가)
+  hist: {
+    40:{std:50,pct:80,g:1},35:{std:47,pct:70,g:2},30:{std:45,pct:60,g:3},
+    25:{std:43,pct:50,g:4},20:{std:40,pct:40,g:5},15:{std:37,pct:30,g:6},
+    10:{std:35,pct:20,g:7},5:{std:32,pct:10,g:8},0:{std:30,pct:1,g:9}
+  }
+};
+
+// 대학별 권장 등급표 (정시 기준 예시)
+const UNIV_TABLE = [
+  {n:"서울대 인문",r:1.2},{n:"서울대 자연",r:1.3},
+  {n:"연세대 인문",r:1.5},{n:"연세대 자연",r:1.7},
+  {n:"고려대 인문",r:1.5},{n:"고려대 자연",r:1.7},
+  {n:"서강대 인문",r:2.0},{n:"서강대 자연",r:2.3},
+  {n:"성균관대 인문",r:2.0},{n:"성균관대 자연",r:2.3},
+  {n:"한양대 인문",r:2.3},{n:"한양대 자연",r:2.5},
+  {n:"중앙대 인문",r:2.5},{n:"중앙대 자연",r:3.0},
+  {n:"경희대 인문",r:3.0},{n:"경희대 자연",r:3.3},
+  {n:"한국외대",r:3.0},{n:"시립대",r:2.7},
+  {n:"건국대 인문",r:3.5},{n:"건국대 자연",r:3.7},
+  {n:"동국대",r:3.5},{n:"홍익대",r:3.7},
+  {n:"숭실대",r:3.7},{n:"국민대",r:4.0},
+  {n:"인하대",r:4.0},{n:"아주대",r:4.0},
+  {n:"세종대",r:4.3},{n:"단국대",r:4.5}
+];
+
+function getGradeForScore(subject, score) {
+  const table = GRADE_TABLE[subject];
+  if (!table) return {std:0,pct:0,g:9};
+  const keys = Object.keys(table).map(Number).sort((a,b)=>b-a);
+  for (const k of keys) {
+    if (score >= k) return table[k];
+  }
+  return table[0];
+}
+
+function computeGrade() {
+  const kor = parseInt(gId('kor').value)||0;
+  const math = parseInt(gId('math').value)||0;
+  const eng = parseInt(gId('eng').value)||0;
+  const sci = parseInt(gId('sci').value)||0;
+  const hist = parseInt(gId('hist').value)||0;
+
+  const rKor = getGradeForScore('kor', kor);
+  const rMath = getGradeForScore('math', math);
+  const rEng = getGradeForScore('eng', eng);
+  const rSci = getGradeForScore('sci', sci);
+  const rHist = getGradeForScore('hist', hist);
+
+  // Badge updates
+  gId('gsKor').textContent = rKor.g + '등급';
+  gId('gsMath').textContent = rMath.g + '등급';
+  gId('gsEng').textContent = rEng.g + '등급';
+  gId('gsSci').textContent = rSci.g + '등급';
+  gId('gsHist').textContent = rHist.g + '등급';
+
+  // Breakdown
+  gId('gsBkor').textContent = kor;
+  gId('gsBmath').textContent = math;
+  gId('gsBeng').textContent = eng;
+  gId('gsBsci').textContent = sci;
+  gId('gsBhist').textContent = hist;
+  gId('gsBkorG').textContent = rKor.g+'등급';
+  gId('gsBmathG').textContent = rMath.g+'등급';
+  gId('gsBengG').textContent = rEng.g+'등급';
+  gId('gsBsciG').textContent = rSci.g+'등급';
+  gId('gsBhistG').textContent = rHist.g+'등급';
+
+  // Average grade (for ring + banner)
+  const avgG = (rKor.g + rMath.g + rEng.g + rSci.g + rHist.g) / 5;
+  const gsTotal = gId('gsTotal');
+  const gsArc = gId('gsArc');
+  const gsGradeTxt = gId('gsGradeTxt');
+  const gsBanner = gId('gsBanner');
+
+  const arcCirc = 377;
+  const pct = Math.max(5, Math.min(100, 100 - (avgG-1)*12));
+  const off = arcCirc - (pct/100)*arcCirc;
+  gsArc.setAttribute('stroke-dashoffset', off);
+
+  // Color
+  let color='var(--low)', gradeLabel='', bannerClass='low';
+  if (avgG <= 1.5) { color='var(--vhigh)'; gradeLabel='최상위권'; bannerClass='god'; }
+  else if (avgG <= 2.5) { color='var(--high)'; gradeLabel='상위권'; bannerClass='high'; }
+  else if (avgG <= 4.0) { color='var(--mid)'; gradeLabel='중위권'; bannerClass='mid'; }
+  else if (avgG <= 6.0) { color='var(--warn)'; gradeLabel='하위권'; bannerClass='mid'; }
+  else { color='var(--low)'; gradeLabel='기초 부족'; bannerClass='low'; }
+  gsArc.style.stroke = color;
+  gsGradeTxt.textContent = gradeLabel;
+  gsGradeTxt.className = 'grade grade-'+bannerClass;
+
+  gsTotal.textContent = avgG.toFixed(1);
+  gsTotal.style.color = color;
+
+  gsBanner.className = 'verdict-banner '+bannerClass;
+  gsBanner.innerHTML = '<span>'+gradeLabel+': 평균 '+avgG.toFixed(1)+'등급</span><div class="detail">국어:'+rKor.g+' 수학:'+rMath.g+' 영어:'+rEng.g+' 탐구:'+rSci.g+' 한국사:'+rHist.g+'</div>';
+
+  // University table
+  const univBody = gId('gsUnivBody');
+  let h = '';
+  UNIV_TABLE.forEach(u => {
+    const pass = avgG <= u.r;
+    const gradeDiff = (avgG - u.r).toFixed(1);
+    h += '<div class="r-row"><span class="r-name">'+u.n+'</span><span class="r-cut">'+u.r.toFixed(1)+'등급↑</span><span class="r-result '+(pass?'pass':'fail')+'">'+(pass?'✅ 가능':'❌ '+(gradeDiff>0?'+'+gradeDiff:gradeDiff)+'등급차')+'</span></div>';
+  });
+  univBody.innerHTML = h;
+
+  // Save to localStorage
+  svls('gradecalc', {kor,math,eng,sci,hist});
+}
+
+function leadScore() {
+  const kor = parseInt(gId('kor').value)||0;
+  const math = parseInt(gId('math').value)||0;
+  const eng = parseInt(gId('eng').value)||0;
+  const sci = parseInt(gId('sci').value)||0;
+  const hist = parseInt(gId('hist').value)||0;
+  return kor+'점|'+math+'점|'+eng+'점|'+sci+'점|'+hist+'점';
+}
+
+const subjMapGS = {kor:'kor',math:'math',eng:'eng',sci:'sci',hist:'hist'};
+const subjMaxGS = {kor:100,math:100,eng:100,sci:50,hist:50};
+
+function syncNumGS(id, max) {
+  let v = parseInt(gId(id+'Num').value)||0;
+  v = Math.max(0, Math.min(v, max));
+  gId(id+'Num').value = v;
+  gId(id).value = v;
+  fillGS(id, max);
+  computeGrade();
+}
+function syncSldGS(id, max) {
+  const s = gId(id);
+  gId(id+'Num').value = s.value;
+  fillGS(id, max);
+  computeGrade();
+}
+function fillGS(id, max) {
+  const p = (parseInt(gId(id).value)/max)*100;
+  gId('fill'+id.charAt(0).toUpperCase()+id.slice(1)).style.width = p+'%';
+}
+
+// Load saved
+window.addEventListener('DOMContentLoaded', () => {
+  const d = ldls('gradecalc', null);
+  if (d) {
+    Object.keys(subjMapGS).forEach(k => {
+      if (d[k] !== undefined) {
+        gId(k).value = d[k];
+        gId(k+'Num').value = d[k];
+        fillGS(k, subjMaxGS[k]);
+      }
+    });
+    computeGrade();
+  }
+});
+
+</script>
+</body>
+</html>

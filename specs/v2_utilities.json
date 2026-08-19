@@ -1,0 +1,35 @@
+
+[
+  {
+    "slug": "gradecalc",
+    "title": "수능 등급 계산기 2027",
+    "title_short": "수능 등급컷 계산기",
+    "emoji": "🎓",
+    "subtitle": "원점수 입력시 예상 등급컷, 백분위, 표준점수 확인",
+    "desc": "2027학년도 수능 등급컷 계산기. 국어, 수학, 탐구 과목별 원점수를 입력하면 예상 표준점수, 백분위, 등급을 실시간으로 확인하고, 주요 대학 지원 가능성을 예측합니다.",
+    "keywords": "수능등급계산기, 등급컷, 2027수능, 표준점수, 백분위, 정시",
+    "lead_source": "gradecalc",
+    "lead_benefits": "✅ 2027 수능 완벽 분석 리포트<br>✅ 주요 대학 정시 합격선 예측<br>✅ 과목별 만점 전략 가이드",
+    "lead_pdf": "../ebook/2027_grade_report.pdf",
+    "funnel_tag": "🚀 정시 합격 예측",
+    "funnel_text": "내 점수로 갈 수 있는 대학은? 상세 분석 리포트 받기",
+    "funnel_btn": "지금 바로 확인하기",
+    "funnel_sub": "✔ 주요 15개 대학 합격선 포함"
+  },
+  {
+    "slug": "wordforge",
+    "title": "망각곡선 영단어 암기",
+    "title_short": "영단어 암기",
+    "emoji": "🧠",
+    "subtitle": "에빙하우스 망각곡선 기반 효율적 단어 암기",
+    "desc": "에빙하우스의 망각곡선 이론에 기반한 스마트 영단어 암기 도구. 최적의 복습 주기에 맞춰 단어를 암기하고 장기 기억으로 전환하세요.",
+    "keywords": "영단어, 망각곡선, 에빙하우스, 단어암기, 영어공부",
+    "lead_source": "wordforge",
+    "lead_benefits": "✅ 10배 빠른 영단어 암기 비법서<br>✅ 수능/토익/토플 필독 단어 500선<br>✅ 뇌과학 기반 암기 전략 가이드",
+    "lead_pdf": "../ebook/wordforge_guide.pdf",
+    "funnel_tag": "💡 10배 빠른 암기",
+    "funnel_text": "뇌과학 기반 영단어 암기법, 지금 확인하세요",
+    "funnel_btn": "비법서 받기 (무료)",
+    "funnel_sub": "✔ 5,000단어 30일 완성 플랜"
+  }
+]

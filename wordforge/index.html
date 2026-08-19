@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+<title>망각곡선 영단어 암기 | Prometheus</title>
+<meta name="description" content="에빙하우스의 망각곡선 이론에 기반한 스마트 영단어 암기 도구. 최적의 복습 주기에 맞춰 단어를 암기하고 장기 기억으로 전환하세요.">
+<meta name="keywords" content="영단어, 망각곡선, 에빙하우스, 단어암기, 영어공부">
+<meta property="og:title" content="{{OG_TITLE}}">
+<meta property="og:description" content="{{OG_DESC}}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mdpepastor3004.github.io/prometheus-utils/wordforge/">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<style>
+/* === PROMETHEUS CORE STYLES === */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0e0e18;--bg2:#12121e;--glass:#151520;--glass2:#1a1a28;--border:#1e1e30;
+  --text:#d8d8e8;--sec:#b0b0c8;--muted:#8888a0;
+  --accent:#e8a040;--accent-l:#f0c860;--accent-d:#b07830;
+  --danger:#e84040;--warn:#e8a040;--ok:#48b8a0;
+  --vhigh:#a78bfa;--high:#48b8a0;--mid:#e8a040;--low:#e84040;
+  --cyan:#48b8a0;--purple:#a78bfa;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.6;min-height:100vh;padding:0}
+.container{max-width:580px;margin:0 auto;padding:20px 16px 60px}
+
+/* Header */
+.header{text-align:center;padding:20px 0 16px;position:relative}
+.header h1{font-size:1.4rem;color:var(--accent-l)}
+.header .sub{color:var(--muted);font-size:.8rem;margin-top:4px}
+.header .back-link{position:absolute;left:0;top:50%;transform:translateY(-50%);color:var(--muted);text-decoration:none;font-size:.85rem}
+.header .back-link:hover{color:var(--accent-l)}
+
+/* Cards */
+.card{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px}
+.card h2{font-size:1rem;color:var(--sec);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card h2 .badge{background:var(--accent);color:#0e0e18;font-size:.65rem;padding:2px 6px;border-radius:4px;font-weight:700;margin-left:auto}
+
+/* Slider + Number Dual Input */
+.slider-group{margin-bottom:14px}
+.slider-group:last-child{margin-bottom:0}
+.slider-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.slider-header label{font-size:.85rem;color:var(--sec)}
+.slider-header .value-group{display:flex;align-items:center;gap:4px}
+.slider-header .value-group input[type=number]{width:50px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 6px;color:var(--accent-l);font-size:.85rem;font-weight:700;text-align:center;outline:none;-moz-appearance:textfield}
+.slider-header .value-group input[type=number]::-webkit-inner-spin-button,.slider-header .value-group input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.slider-header .value-group input:focus{border-color:var(--accent)}
+.slider-header .value-group .unit{color:var(--muted);font-size:.75rem}
+.slider-header .value-group .score-badge{background:rgba(232,160,64,.15);color:var(--accent-l);font-size:.75rem;padding:2px 7px;border-radius:4px;font-weight:700}
+.slider-track{position:relative;width:100%;height:6px;background:var(--bg2);border-radius:3px;margin-top:2px}
+.slider-track input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;background:transparent;outline:none;position:absolute;top:0;left:0;z-index:2}
+.slider-track input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 2px 8px rgba(232,160,64,.4);border:2px solid var(--glass)}
+.slider-track input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--glass)}
+.slider-track input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12)}
+.slider-fill{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,var(--accent-d),var(--accent-l));border-radius:3px;pointer-events:none;transition:width .15s ease}
+.hint{font-size:.65rem;color:var(--muted);margin-top:4px;display:flex;justify-content:space-between}
+
+/* Score Ring Gauge */
+.score-ring{width:140px;height:140px;margin:0 auto 12px;position:relative}
+.score-ring svg{transform:rotate(-90deg);width:140px;height:140px}
+.score-ring .bg-circle{fill:none;stroke:var(--bg2);stroke-width:8}
+.score-ring .fg-circle{fill:none;stroke:var(--accent-l);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .4s ease,stroke .3s}
+.score-ring .center-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.score-ring .center-text .num{font-size:2.2rem;font-weight:800;color:var(--accent-l);line-height:1}
+.score-ring .center-text .denom{font-size:.7rem;color:var(--muted)}
+.score-ring .center-text .grade{font-size:.85rem;font-weight:700;margin-top:2px}
+.grade-god{color:var(--vhigh)}.grade-high{color:var(--high)}.grade-mid{color:var(--mid)}.grade-low{color:var(--low)}
+
+/* Breakdown Grid */
+.breakdown{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
+.break-item{background:var(--bg2);border-radius:10px;padding:10px 6px;text-align:center;border:1px solid transparent}
+.break-item .lbl{font-size:.65rem;color:var(--muted);margin-bottom:2px}
+.break-item .val{font-size:1.2rem;font-weight:700}
+
+/* Bar Chart */
+.bar-chart{margin-top:12px}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.bar-row .bar-lbl{font-size:.7rem;color:var(--muted);width:40px;flex-shrink:0}
+.bar-row .bar{height:14px;border-radius:7px;transition:width .3s ease;min-width:2px}
+.bar-row .bar.bar-ok{background:linear-gradient(90deg,var(--high),var(--ok))}
+.bar-row .bar.bar-mid{background:linear-gradient(90deg,var(--mid),var(--accent-l))}
+.bar-row .bar.bar-low{background:linear-gradient(90deg,var(--danger),var(--warn))}
+.bar-row .bar-val{font-size:.7rem;color:var(--sec);width:30px;flex-shrink:0}
+
+/* Region Table */
+.region-table{margin-top:12px}
+.region-table .r-header{display:flex;justify-content:space-between;padding:6px 0;font-size:.7rem;color:var(--muted);border-bottom:1px solid var(--border)}
+.region-table .r-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:.8rem}
+.region-table .r-row:last-child{border-bottom:none}
+.region-table .r-row .r-name{color:var(--sec)}
+.region-table .r-row .r-cut{color:var(--muted);font-size:.7rem}
+.region-table .r-row .r-result{font-weight:700;font-size:.75rem;padding:2px 8px;border-radius:4px}
+.region-table .r-row .r-result.pass{background:rgba(72,184,160,.15);color:var(--high)}
+.region-table .r-row .r-result.fail{background:rgba(232,64,64,.1);color:var(--low)}
+
+/* Verdict Banner */
+.verdict-banner{padding:16px;border-radius:12px;margin-top:14px;text-align:center;font-size:.9rem;font-weight:700}
+.verdict-banner.god{background:rgba(167,139,250,.12);border:1px solid var(--vhigh);color:var(--vhigh)}
+.verdict-banner.high{background:rgba(72,184,160,.12);border:1px solid var(--high);color:var(--high)}
+.verdict-banner.mid{background:rgba(232,160,64,.12);border:1px solid var(--mid);color:var(--mid)}
+.verdict-banner.low{background:rgba(232,64,64,.08);border:1px solid var(--low);color:var(--low)}
+.verdict-banner .detail{font-weight:400;font-size:.75rem;margin-top:4px;color:var(--sec)}
+
+/* Share Bar */
+.share-bar{display:flex;gap:8px;margin-top:14px}
+.share-bar button{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--sec);cursor:pointer;font-size:.75rem;text-align:center;transition:all .1s}
+.share-bar button:hover{border-color:var(--accent);color:var(--accent-l)}
+
+/* Funnel / Lead Capture */
+.funnel{margin-top:20px;background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.funnel .tag{display:inline-block;background:rgba(232,160,64,.12);color:var(--accent-l);font-size:.7rem;padding:2px 10px;border-radius:4px;margin-bottom:10px}
+.funnel p{font-size:.85rem;color:var(--sec);margin-bottom:14px}
+.funnel .lead-btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(232,160,64,.25)}
+.funnel .lead-btn:hover{transform:translateY(-1px)}
+.funnel .lead-sub{font-size:.7rem;color:var(--muted);margin-top:8px}
+.disclaimer{font-size:.65rem;color:var(--muted);text-align:center;margin-top:16px}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;justify-content:center;align-items:center}
+.modal-overlay.active{display:flex}
+.modal{background:var(--glass);border:1px solid var(--accent);border-radius:16px;padding:28px;max-width:400px;width:90%;position:relative}
+.modal .close{position:absolute;top:12px;right:16px;color:var(--muted);cursor:pointer;font-size:1.2rem;background:none;border:none}
+.modal h2{color:var(--accent-l);font-size:1.15rem;text-align:center;margin-bottom:6px}
+.modal .desc{color:var(--sec);font-size:.8rem;text-align:center;margin-bottom:16px}
+.modal .benefit{background:rgba(72,184,160,.08);border:1px solid var(--high);border-radius:10px;padding:14px;margin-bottom:16px;font-size:.8rem;color:var(--high)}
+.modal .benefit b{display:block;font-size:.85rem;margin-bottom:6px}
+.modal .field{margin-bottom:12px}
+.modal input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;outline:none}
+.modal input:focus{border-color:var(--accent)}
+.modal .error-msg{color:var(--danger);font-size:.8rem;display:none;text-align:center;margin-bottom:8px}
+.modal .btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#0e0e18;border:none;border-radius:8px;padding:12px;font-size:.95rem;font-weight:700;cursor:pointer;width:100%}
+.modal .success{display:none;text-align:center}
+.modal .success.active{display:block}
+.modal .success .icon{font-size:2.5rem;margin-bottom:6px}
+.modal .success h3{color:var(--high);font-size:1.05rem;margin-bottom:6px}
+.modal .success p{color:var(--sec);font-size:.8rem;margin-bottom:14px}
+.modal .success .dl-btn{display:inline-block;background:var(--accent);color:#0e0e18;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--high);color:#0e0e18;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:2000;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.toast.error{background:var(--danger)}
+.toast.show{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* Dropdown / Select */
+select.t-d{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:.9rem;outline:none;cursor:pointer}
+select.t-d:focus{border-color:var(--accent)}
+</style>
+
+</head>
+<body>
+<div class="container">
+<div class="header">
+<a class="back-link" href="../">←</a>
+<h1>🧠 영단어 암기</h1>
+<p class="sub">에빙하우스 망각곡선 기반 효율적 단어 암기</p>
+</div>
+
+<!-- Today's Stats -->
+<div class="card" style="text-align:center">
+<div style="display:flex;justify-content:space-around;gap:8px">
+<div><div style="font-size:1.5rem;font-weight:800;color:var(--accent-l)" id="wfDue">0</div><div style="font-size:.7rem;color:var(--muted)">복습 예정</div></div>
+<div><div style="font-size:1.5rem;font-weight:800;color:var(--high)" id="wfDone">0</div><div style="font-size:.7rem;color:var(--muted)">오늘 학습</div></div>
+<div><div style="font-size:1.5rem;font-weight:800;color:var(--sec)" id="wfTotal">0</div><div style="font-size:.7rem;color:var(--muted)">전체 단어</div></div>
+</div>
+<div class="bar-chart" style="margin-top:10px">
+<div class="bar-row"><span class="bar-lbl">진도율</span><div class="bar bar-ok" id="wfProgBar" style="width:0%"></div><span class="bar-val" id="wfProgLbl">0%</span></div>
+</div>
+</div>
+
+<!-- Card Area -->
+<div class="card" style="text-align:center;min-height:240px;position:relative" id="wfCardArea">
+<div id="wfEmpty" style="display:none;padding:40px 0">
+<div style="font-size:2.5rem;margin-bottom:12px">🎉</div>
+<h3 style="color:var(--high);margin-bottom:8px">오늘의 복습 완료!</h3>
+<p style="color:var(--sec);font-size:.85rem">새 단어를 추가해보세요</p>
+</div>
+<div id="wfCard" style="display:none">
+<div style="font-size:.75rem;color:var(--muted);margin-bottom:8px" id="wfCardInfo">단어 1/1</div>
+<div style="background:var(--bg2);border:2px solid var(--border);border-radius:16px;padding:24px 16px;margin-bottom:12px;cursor:pointer;transition:all .2s;user-select:none;min-height:140px;display:flex;flex-direction:column;justify-content:center;align-items:center" id="wfCardBody" onclick="flipCard()">
+<div style="font-size:1.6rem;font-weight:700;color:var(--accent-l);margin-bottom:4px" id="wfFront">Word</div>
+<div style="font-size:.8rem;color:var(--muted)" id="wfFrontSub">뜻을 보려면 탭하세요</div>
+<div style="display:none;width:100%" id="wfBack">
+<div style="font-size:1.1rem;color:var(--sec);margin-bottom:4px" id="wfMeaning">의미</div>
+<div style="font-size:.85rem;color:var(--muted)" id="wfExample">예문</div>
+</div>
+</div>
+<div style="display:flex;gap:8px">
+<button style="flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--low);cursor:pointer;font-size:.85rem;font-weight:600" onclick="rateCard(0)">😰 까먹음</button>
+<button style="flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--mid);cursor:pointer;font-size:.85rem;font-weight:600" onclick="rateCard(1)">🤔 애매함</button>
+<button style="flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--high);cursor:pointer;font-size:.85rem;font-weight:600" onclick="rateCard(2)">✅ 잘 암기</button>
+</div>
+</div>
+</div>
+
+<!-- Add New Words -->
+<div class="card">
+<h2>➕ 새 단어 추가</h2>
+<div class="field" style="margin-bottom:8px">
+<input type="text" id="wfNewWord" placeholder="영단어 (e.g. abate)" style="display:block;width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;outline:none;margin-bottom:6px">
+<input type="text" id="wfNewMean" placeholder="의미 (e.g. 줄어들다, 약해지다)" style="display:block;width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;outline:none;margin-bottom:6px">
+<input type="text" id="wfNewEx" placeholder="예문 (선택)" style="display:block;width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;outline:none;margin-bottom:6px">
+</div>
+<div style="display:flex;gap:8px;margin-top:8px">
+<button style="flex:1;background:var(--accent);color:#0e0e18;border:none;border-radius:8px;padding:12px;font-size:.9rem;font-weight:700;cursor:pointer" onclick="addWord()">추가</button>
+<button style="flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--sec);cursor:pointer;font-size:.85rem" onclick="addSampleWords()">샘플 5개</button>
+</div>
+</div>
+
+<!-- Settings -->
+<div class="card">
+<h2>⚙️ 설정</h2>
+<div class="field" style="margin-bottom:8px">
+<label style="font-size:.8rem;color:var(--sec);margin-bottom:4px;display:block">일일 신규 단어</label>
+<input type="number" id="wfDailyNew" value="10" min="1" max="50" style="width:80px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:var(--accent-l);font-size:.9rem;font-weight:700;text-align:center;outline:none" onchange="updateSettings()">
+</div>
+<div class="share-bar" style="margin-top:12px">
+<button onclick="exportWords()">💾 내보내기</button>
+<button onclick="document.getElementById('wfImport').click()">📥 가져오기</button>
+<button onclick="if(confirm('모든 데이터를 초기화할까요?'))resetAll()">🗑️ 초기화</button>
+</div>
+<input type="file" id="wfImport" accept=".json" style="display:none" onchange="importWords(event)">
+</div>
+
+
+<div class="funnel">
+<span class="tag">📖 💡 10배 빠른 암기</span>
+<p>뇌과학 기반 영단어 암기법, 지금 확인하세요</p>
+<button class="lead-btn" onclick="openLead()">📩 비법서 받기 (무료)</button>
+<div class="lead-sub">✔ 5,000단어 30일 완성 플랜</div>
+</div>
+<div class="disclaimer">© 자룡봇 AI Research · Prometheus v2.0 · 2026년 기준</div>
+</div>
+
+<!-- Lead Capture Modal (Generic) -->
+<div class="modal-overlay" id="leadM">
+<div class="modal">
+<button class="close" onclick="closeLead()">✕</button>
+<div id="mf">
+<h2>📩 프리미엄 리포트</h2>
+<p class="desc">정보 입력 후 무료 다운로드</p>
+<div class="benefit"><b>🎁 혜택</b>✅ 10배 빠른 영단어 암기 비법서<br>✅ 수능/토익/토플 필독 단어 500선<br>✅ 뇌과학 기반 암기 전략 가이드</div>
+<div class="field"><input type="text" id="lName" placeholder="이름"></div>
+<div class="field"><input type="tel" id="lPhone" placeholder="전화번호"></div>
+<div class="field"><input type="email" id="lEmail" placeholder="이메일"></div>
+<div class="error-msg" id="lErr">모든 항목을 입력해주세요</div>
+<button class="btn" onclick="sLead()">📩 받기 (무료)</button>
+</div>
+<div class="success" id="ms">
+<div class="icon">🎉</div>
+<h3>신청 완료!</h3>
+<p>프리미엄 리포트를 보내드렸습니다</p>
+<a class="dl-btn" href="../ebook/wordforge_guide.pdf" target="_blank">📕 다운로드</a>
+</div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- Core Prometheus JS -->
+<script>
+// === CORE UTILITIES ===
+function gId(id){return document.getElementById(id)}
+function st(msg,t){const el=gId('toast');el.textContent=msg;el.className='toast'+(t==='error'?' error':'')+' show';setTimeout(()=>el.className='toast',3000)}
+
+// === LEAD CAPTURE ===
+const BT='8268734337:AAEwMDqDzv6J4QtEGpeat6sShv-rdI0k2k0';
+const CI='730152102';
+function openLead(){gId('leadM').classList.add('active')}
+function closeLead(){gId('leadM').classList.remove('active')}
+gId('leadM').addEventListener('click',function(e){if(e.target===this)closeLead()});
+async function sLead(){
+const n=gId('lName').value.trim(),p=gId('lPhone').value.trim(),em=gId('lEmail').value.trim();
+gId('lErr').style.display='none';
+if(!n||!p||!em){gId('lErr').style.display='block';return;}
+const btn=document.querySelector('.modal .btn');btn.disabled=true;btn.textContent='처리 중...';
+const sc=typeof leadScore==='function'?leadScore():'';
+const dv=/Mobi|Android/i.test(navigator.userAgent)?'mobile':'pc';
+const pay={name:n,phone:p,email:em,source:'wordforge',score:sc,device:dv};
+let ok=false;
+try{
+const r=await fetch('https://delughjxtvjvdjxwjzwe.supabase.co/rest/v1/leads',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Authorization':'Bearer sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Prefer':'return=minimal'},body:JSON.stringify(pay)});
+ok=r.ok||r.status===201;
+}catch(e1){ok=false;}
+if(!ok){
+try{
+const tg='🆕 [리드] wordforge\n━━━\n👤 '+n+'\n📞 '+p+'\n📧 '+em+'\n🎯 '+sc+'\n📱 '+dv+'\n🕐 '+new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+'\n#리드 #wordforge';
+const r2=await fetch('https://api.telegram.org/bot'+BT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CI,text:tg})});
+const d2=await r2.json();ok=d2.ok;
+}catch(e2){ok=false;}
+}
+if(ok){gId('mf').style.display='none';gId('ms').classList.add('active');st('✅ 신청 완료!');}else{st('⚠️ 오류','error');btn.disabled=false;btn.textContent='📩 받기 (무료)';}
+}
+
+// === SHARE UTILITIES ===
+function cpLink(){navigator.clipboard.writeText(window.location.href).then(()=>st('🔗 복사 완료!')).catch(()=>st('🔗 수동 복사: '+window.location.href))}
+function screenShot(){st('📸 캡처 후 공유하세요!')}
+function shareKakao(){st('💬 친구에게 공유해보세요!')}
+
+// === LOCAL STORAGE HELPERS ===
+function svls(key,obj){try{localStorage.setItem(key,JSON.stringify(obj))}catch(e){}}
+function ldls(key,def){try{const d=localStorage.getItem(key);return d?JSON.parse(d):def}catch(e){return def}}
+</script>
+
+<!-- Utility-Specific Script -->
+<script>
+// WordForge — 망각곡선 기반 영단어 암기 (SRS)
+// 에빙하우스 간격: 10분 → 1일 → 3일 → 7일 → 14일 → 30일
+
+const SRS_INTERVALS = [0, 1/1440, 1, 3, 7, 14, 30]; // days: 0=just added, 1/1440=~1min (first review same session)
+
+// Priority-based sample words
+const SAMPLE_WORDS = [
+  {w:"ephemeral",m:"덧없는, 일시적인",e:"The beauty of cherry blossoms is ephemeral."},
+  {w:"ubiquitous",m:"어디에나 있는",e:"Smartphones have become ubiquitous in modern life."},
+  {w:"pragmatic",m:"실용적인, 현실적인",e:"We need a pragmatic approach to this problem."},
+  {w:"ambiguous",m:"모호한, 애매한",e:"His answer was deliberately ambiguous."},
+  {w:"resilient",m:"회복력 있는, 강한",e:"Children are remarkably resilient."},
+  {w:"meticulous",m:"세심한, 꼼꼼한",e:"She is meticulous about her work."},
+  {w:"eloquent",m:"웅변적인, 달변의",e:"He gave an eloquent speech."},
+  {w:"tenacious",m:"집요한, 끈질긴",e:"Her tenacious spirit led to success."},
+  {w:"candid",m:"솔직한, 숨김없는",e:"I appreciate your candid opinion."},
+  {w:"paradox",m:"역설, 모순",e:"It's a paradox that less is more."},
+  {w:"complacent",m:"자기만족에 빠진",e:"We cannot become complacent about our success."},
+  {w:"scrutiny",m:"정밀 조사, 면밀한 검토",e:"The plan came under intense scrutiny."},
+  {w:"conundrum",m:"난문제, 수수께끼",e:"This is a real conundrum."},
+  {w:"exacerbate",m:"악화시키다",e:"The drought exacerbated the food shortage."},
+  {w:"alleviate",m:"완화하다, 경감시키다",e:"This medicine will alleviate the pain."},
+];
+
+function wordForgeInit() {
+  let data = ldls('wordforge', null);
+  if (!data || !data.words) {
+    // Fresh start
+    data = {
+      words: [],
+      dailyNew: 10,
+      lastReviewDate: '',
+      todayCount: 0
+    };
+  }
+  window.wfData = data;
+  
+  // Check day reset
+  const today = new Date().toDateString();
+  if (data.lastReviewDate !== today) {
+    data.lastReviewDate = today;
+    data.todayCount = 0;
+  }
+  
+  updateWFStats();
+  showNextCard();
+}
+
+function getDueWords() {
+  const now = Date.now();
+  return window.wfData.words.filter(w => {
+    if (w.srsLevel >= SRS_INTERVALS.length) return false;
+    const nextReview = w.lastReview + SRS_INTERVALS[w.srsLevel] * 86400000;
+    return nextReview <= now;
+  });
+}
+
+function showNextCard() {
+  const due = getDueWords();
+  const emptyEl = gId('wfEmpty');
+  const cardEl = gId('wfCard');
+  
+  if (due.length === 0) {
+    emptyEl.style.display = 'block';
+    cardEl.style.display = 'none';
+    updateWFStats();
+    saveWF();
+    return;
+  }
+  
+  emptyEl.style.display = 'none';
+  cardEl.style.display = 'block';
+  
+  window.wfCurrentCard = due[0];
+  window.wfCurrentIdx = window.wfData.words.indexOf(due[0]);
+  window.wfFlipped = false;
+  
+  gId('wfCardInfo').textContent = '단어 ' + (due.indexOf(due[0])+1) + '/' + due.length;
+  gId('wfFront').textContent = due[0].w;
+  gId('wfFrontSub').textContent = '뜻을 보려면 탭하세요';
+  gId('wfMeaning').textContent = due[0].m;
+  gId('wfExample').textContent = due[0].e || '—';
+  gId('wfBack').style.display = 'none';
+  gId('wfCardBody').style.borderColor = 'var(--border)';
+}
+
+function flipCard() {
+  if (window.wfFlipped) return;
+  window.wfFlipped = true;
+  gId('wfFrontSub').textContent = '';
+  gId('wfBack').style.display = 'block';
+  gId('wfCardBody').style.borderColor = 'var(--accent)';
+}
+
+function rateCard(quality) {
+  // quality: 0=forgot, 1=hard, 2=good
+  if (window.wfCurrentIdx < 0) return;
+  const w = window.wfData.words[window.wfCurrentIdx];
+  if (!w) return;
+  
+  const now = Date.now();
+  w.lastReview = now;
+  w.reviewCount = (w.reviewCount || 0) + 1;
+  
+  if (quality === 0) {
+    // Forgot: reset to level 1
+    w.srsLevel = 1;
+  } else if (quality === 1) {
+    // Hard: keep same level but reset timer
+    if (w.srsLevel < 1) w.srsLevel = 1;
+  } else {
+    // Good: advance
+    w.srsLevel = Math.min(w.srsLevel + 1, SRS_INTERVALS.length - 1);
+  }
+  
+  // Today count (only count first review of the day for each word)
+  const today = new Date().toDateString();
+  if (w.lastReviewDate !== today) {
+    w.lastReviewDate = today;
+    window.wfData.todayCount++;
+  }
+  
+  saveWF();
+  updateWFStats();
+  showNextCard();
+}
+
+function addWord() {
+  const word = gId('wfNewWord').value.trim();
+  const meaning = gId('wfNewMean').value.trim();
+  if (!word || !meaning) { st('단어와 의미를 입력하세요'); return; }
+  
+  const exist = window.wfData.words.find(w => w.w.toLowerCase() === word.toLowerCase());
+  if (exist) { st('이미 있는 단어입니다'); return; }
+  
+  window.wfData.words.push({
+    w: word,
+    m: meaning,
+    e: gId('wfNewEx').value.trim(),
+    srsLevel: 0,
+    lastReview: 0,
+    reviewCount: 0,
+    lastReviewDate: '',
+    added: Date.now()
+  });
+  
+  gId('wfNewWord').value = '';
+  gId('wfNewMean').value = '';
+  gId('wfNewEx').value = '';
+  saveWF();
+  updateWFStats();
+  st('✅ ' + word + ' 추가 완료!');
+}
+
+function addSampleWords() {
+  // Add up to 5 sample words that don't exist yet
+  let count = 0;
+  for (const sw of SAMPLE_WORDS) {
+    if (count >= 5) break;
+    const exist = window.wfData.words.find(w => w.w.toLowerCase() === sw.w.toLowerCase());
+    if (exist) continue;
+    window.wfData.words.push({
+      w: sw.w,
+      m: sw.m,
+      e: sw.e,
+      srsLevel: 0,
+      lastReview: Date.now() - 86400000, // Due immediately (was added yesterday)
+      reviewCount: 0,
+      lastReviewDate: '',
+      added: Date.now()
+    });
+    count++;
+  }
+  saveWF();
+  updateWFStats();
+  st('✅ 샘플 ' + count + '개 추가됨');
+}
+
+function updateWFStats() {
+  const due = getDueWords();
+  const total = window.wfData.words.length;
+  
+  gId('wfDue').textContent = due.length;
+  gId('wfDone').textContent = window.wfData.todayCount || 0;
+  gId('wfTotal').textContent = total;
+  
+  const pct = total > 0 ? Math.round((window.wfData.todayCount / Math.max(total, window.wfData.dailyNew)) * 100) : 0;
+  gId('wfProgBar').style.width = Math.min(pct, 100) + '%';
+  gId('wfProgLbl').textContent = Math.min(pct, 100) + '%';
+}
+
+function updateSettings() {
+  const v = parseInt(gId('wfDailyNew').value) || 10;
+  window.wfData.dailyNew = Math.max(1, Math.min(50, v));
+  gId('wfDailyNew').value = window.wfData.dailyNew;
+  saveWF();
+  st('✅ 설정 저장됨');
+}
+
+function exportWords() {
+  const blob = new Blob([JSON.stringify(window.wfData, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'wordforge_backup_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  st('💾 내보내기 완료');
+}
+
+function importWords(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!data.words || !Array.isArray(data.words)) throw new Error('Invalid format');
+      // Merge: overwrite existing by word
+      data.words.forEach(nw => {
+        const idx = window.wfData.words.findIndex(w => w.w.toLowerCase() === nw.w.toLowerCase());
+        if (idx >= 0) {
+          window.wfData.words[idx] = nw;
+        } else {
+          window.wfData.words.push(nw);
+        }
+      });
+      saveWF();
+      updateWFStats();
+      st('✅ ' + data.words.length + '개 단어 가져오기 완료');
+    } catch(err) {
+      st('⚠️ 파일 형식 오류');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetAll() {
+  window.wfData = { words: [], dailyNew: 10, lastReviewDate: '', todayCount: 0 };
+  saveWF();
+  updateWFStats();
+  gId('wfEmpty').style.display = 'block';
+  gId('wfCard').style.display = 'none';
+  st('🗑️ 초기화 완료');
+}
+
+function saveWF() {
+  svls('wordforge', window.wfData);
+}
+
+function leadScore() {
+  return gId('wfDue').textContent + '개 복습중';
+}
+
+// Init
+window.addEventListener('DOMContentLoaded', wordForgeInit);
+
+</script>
+</body>
+</html>
