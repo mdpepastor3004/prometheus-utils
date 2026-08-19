@@ -349,6 +349,8 @@ const btn=document.querySelector('.modal .btn');btn.disabled=true;btn.textConten
 const sc=typeof leadScore==='function'?leadScore():'';
 const dv=/Mobi|Android/i.test(navigator.userAgent)?'mobile':'pc';
 const pay={name:n,phone:p,email:em,source:'gradecalc',score:sc,device:dv,consent:ok_consent?'Y':'N'};
+// 📧 Resend 자동 발송 (fire-and-forget)
+(async()=>{try{await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Authorization':'Bearer '+atob('cmVfSEpKQUZ1UEJfRGpYdFlmWjU1SzNlVWNRM1lEMlpLR3hTCg==')+'','Content-Type':'application/json'},body:JSON.stringify({from:'Prometheus Utils <onboarding@resend.dev>',to:[em],subject:'📘 [3개월 만에 수능 대박 난 학습비법] 무료 전자책 도착',html:'<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px"><h2 style="color:#ff7a45">📘 3개월 만에 수능 대박 난 학습비법</h2><p>안녕하세요 '+n+'님, 요청하신 전자책이 첨부되었습니다.</p><a href="https://mdpepastor3004.github.io/prometheus-utils/ebook/sungjeok_study.pdf" style="display:inline-block;background:#ff7a45;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;margin:16px 0">📥 PDF 다운로드</a><p style="color:#666;font-size:.75rem;margin-top:24px">발신: Prometheus Utils · 정보 수신 동의에 따라 발송</p></div>',attachments:[{filename:'sungjeok_study.pdf',path:'https://mdpepastor3004.github.io/prometheus-utils/ebook/sungjeok_study.pdf'}]})})}catch(e){}})();
 let ok=false;
 try{
 const r=await fetch('https://delughjxtvjvdjxwjzwe.supabase.co/rest/v1/leads',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Authorization':'Bearer sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Prefer':'return=minimal'},body:JSON.stringify(pay)});
