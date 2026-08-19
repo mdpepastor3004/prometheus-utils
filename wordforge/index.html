@@ -245,7 +245,9 @@ select.t-d:focus{border-color:var(--accent)}
 <div class="benefit"><b>🎁 혜택</b>✅ 10배 빠른 영단어 암기 비법서<br>✅ 수능/토익/토플 필독 단어 500선<br>✅ 뇌과학 기반 암기 전략 가이드</div>
 <div class="field"><input type="text" id="lName" placeholder="이름"></div>
 <div class="field"><input type="tel" id="lPhone" placeholder="전화번호"></div>
-<div class="field"><input type="email" id="lEmail" placeholder="이메일"></div>
+<div class="field"><input type="email" id="lEmail" placeholder="📧 이메일 (필수) — 리포트 발송처" required></div>
+<div class="field"><input type="tel" id="lPhone" placeholder="전화번호 (선택) — 카카오 발송 시"></div>
+<div class="field consent"><label style="font-size:.7rem;color:var(--sec);display:flex;align-items:flex-start;gap:6px;line-height:1.4"><input type="checkbox" id="lConsent" required style="margin-top:2px;flex-shrink:0"><span>(필수) 개인정보 수집 및 마케팅 정보 수신 동의</span></label></div>
 <div class="error-msg" id="lErr">모든 항목을 입력해주세요</div>
 <button class="btn" onclick="sLead()">📩 받기 (무료)</button>
 </div>
@@ -274,11 +276,15 @@ gId('leadM').addEventListener('click',function(e){if(e.target===this)closeLead()
 async function sLead(){
 const n=gId('lName').value.trim(),p=gId('lPhone').value.trim(),em=gId('lEmail').value.trim();
 gId('lErr').style.display='none';
-if(!n||!p||!em){gId('lErr').style.display='block';return;}
+if(!n||!em){document.getElementById('lErr').textContent='⚠️ 이름과 이메일은 필수입니다';document.getElementById('lErr').style.display='block';return;}
+const ok_consent=document.getElementById('lConsent')?document.getElementById('lConsent').checked:true;
+if(!ok_consent){document.getElementById('lErr').textContent='⚠️ 개인정보 수집·마케팅 동의는 필수입니다';document.getElementById('lErr').style.display='block';return;}
+const email_re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if(!email_re.test(em)){document.getElementById('lErr').textContent='⚠️ 올바른 이메일 형식이 아닙니다';document.getElementById('lErr').style.display='block';return;}
 const btn=document.querySelector('.modal .btn');btn.disabled=true;btn.textContent='처리 중...';
 const sc=typeof leadScore==='function'?leadScore():'';
 const dv=/Mobi|Android/i.test(navigator.userAgent)?'mobile':'pc';
-const pay={name:n,phone:p,email:em,source:'wordforge',score:sc,device:dv};
+const pay={name:n,phone:p,email:em,source:'wordforge',score:sc,device:dv,consent:ok_consent?'Y':'N'};
 let ok=false;
 try{
 const r=await fetch('https://delughjxtvjvdjxwjzwe.supabase.co/rest/v1/leads',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Authorization':'Bearer sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Prefer':'return=minimal'},body:JSON.stringify(pay)});
