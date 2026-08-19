@@ -43,6 +43,8 @@ TITLES = {
     "pain_finance": "\U0001F4B3 \ube49 \uc6b0\uc120\uc0c1\ud68c \uc21c\uc11c \u2014 \uc2e0\uc6a9\uc810\uc218 \uc601\ud5a5 \uacc4\uc0b0"
 }
 
+from _forms_block import render_micro_html
+
 SEEDS = {k: k for k in TITLES.keys()}
 
 
@@ -86,55 +88,26 @@ def save_signals(signals):
             f.write(json.dumps(s, ensure_ascii=False) + "\n")
     return fp
 
-
 def forge_micro_service(signal):
     cat = signal["category"]
     score = signal["score"]
     if score < 60:
         return None
     seed = signal["micro_service_seed"]
-    title = TITLES.get(seed, f"\U0001F52C {cat} \uc9c4\ub2e8\uae30")
-    kws_html = " ".join(f'<span class="kw">#{k}</span>' for k in signal["keywords"])
-    NL = "\n"
-    html_parts = []
-    html_parts.append('<!DOCTYPE html>')
-    html_parts.append('<html lang="ko">')
-    html_parts.append('<head>')
-    html_parts.append('<meta charset="UTF-8">')
-    html_parts.append('<meta name="viewport" content="width=device-width,initial-scale=1">')
-    html_parts.append(f'<title>{title} | Prometheus Utils</title>')
-    html_parts.append('</head>')
-    html_parts.append('<body>')
-    html_parts.append(f'<h1>{title}</h1>')
-    html_parts.append(f'<p>score: {score:.1f} / 100</p>')
-    html_parts.append(f'<div class="signal">\U0001F52C \uc2e0\ud638 \ub514\ud15c\ud2b8 \u00b7 {cat} \u00b7 \ud0d0\uc9c1\uc18c: {signal["platform"]}</div>')
-    html_parts.append(f'<div class="kwbox">{kws_html}</div>')
-    html_parts.append('<form id="qForm">')
-    html_parts.append('<div class="q"><label>1. \uc9c0\uae08 \uac00\uc7a5 \uae34\ud55c \uc0c1\ud669\uc740?</label>')
-    html_parts.append('<label class="opt"><input type="radio" name="q1" value="3" required> \uc9c0\uae08 \ub2f9\uc7a5 \uacb0\uc815</label>')
-    html_parts.append('<label class="opt"><input type="radio" name="q1" value="2"> \uc774\ubc88 \uc8fc \uc548\uc5d0</label>')
-    html_parts.append('<label class="opt"><input type="radio" name="q1" value="1"> 1\ub2ec \uc774\ub0b4</label></div>')
-    html_parts.append('<div class="q"><label>2. \uc783\uc744 \uc218 \uc5c6\ub294 \uac8c?</label>')
-    html_parts.append('<label class="opt"><input type="radio" name="q2" value="3" required> \ub3c8</label>')
-    html_parts.append('<label class="opt"><input type="radio" name="q2" value="2"> \uc2dc\uac04</label>')
-    html_parts.append('<label class="opt"><input type="radio" name="q2" value="1"> \uba58\ud138/\uad00\uacc4</label></div>')
-    html_parts.append('<div class="q"><label>3. \uc804\ubb38\uac00 \uc0c1\ub2f4?</label>')
-    html_parts.append('<label class="opt"><input type="radio" name="q3" value="1" required> \uc788\uc74c</label>')
-    html_parts.append('<label class="opt"><input type="radio" name="q3" value="2"> \uc5c6\uc74c</label></div>')
-    html_parts.append('<button type="button" class="btn" onclick="calc()">\U0001F3AF \uc9c4\ub2e8\ud558\uae30</button></form>')
-    html_parts.append('<div id="res" class="result"><div class="score" id="score">0</div><div class="advice" id="advice"></div></div>')
-    html_parts.append('<script>function calc(){var v=[].slice.call(document.querySelectorAll("input:checked")).map(function(i){return +i.value});if(v.length<3){alert("\ubaa8\ub4e0 \uc9c8\ubb38\uc5d0 \ub2f5\ud574\uc8fc\uc138\uc694");return}var s=Math.min(100,Math.round((v[0]*10+v[1]*12+v[2]*8+'+str(int(score))+'.0*0.3)*1.1));document.getElementById("score").textContent=s;var a=s>=80?"\U0001F534 \uc989\uc2dc \ud589\ub3d9 \ud544\uc694.":s>=50?"\U0001F7E1 \uc774\ubc88 \uc8fc \ub0b4 \uc815\ub9ac.":"\U0001F7E2 \uc5ec\uc720 \uc788\uc74c.";document.getElementById("advice").textContent=a;document.getElementById("res").classList.add("show")}</script>')
-    html_parts.append(f'<footer>\u00a9 Prometheus Utils \u00b7 HEPHAESTUS v2.1 \u00b7 {TODAY} {TIME_SLOT}</footer>')
-    html_parts.append('</body></html>')
-    html = "\n".join(html_parts)
+    title = TITLES.get(seed, f"💎 {cat} 진단기")
+    html = render_micro_html(cat, title)
+    if not html:
+        return None
     slug = f"micro_{cat}_{TIME_SLOT}"
     out = SRV_DIR / f"{slug}.html"
     out.write_text(html, encoding="utf-8")
     meta = {
-        "slug": slug, "title": title, "category": cat, "score": score,
-        "platform": signal["platform"], "keywords": signal["keywords"],
+        "slug": slug,
+        "title": title,
+        "category": cat,
+        "score": score,
+        "url": f"https://mdpepastor3004.github.io/prometheus-utils/micro_signals/services/{slug}.html",
         "created": NOW.isoformat(),
-        "url": f"https://mdpepastor3004.github.io/prometheus-utils/micro_signals/services/{slug}.html"
     }
     (SRV_DIR / f"{slug}.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
     manifest_fp = SRV_DIR / "manifest.json"
@@ -144,11 +117,12 @@ def forge_micro_service(signal):
             manifest = json.loads(manifest_fp.read_text(encoding="utf-8"))
         except Exception:
             manifest = []
-    seen = {(m.get("category"), m.get("slot")) for m in manifest}
-    if (meta["category"], meta["slug"].split("_")[-1]) not in seen:
+    if not any(m.get("slug") == slug for m in manifest):
         manifest.append(meta)
         manifest_fp.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     return meta
+
+
 
 def build_dashboard(signals, services):
     sig_rows = []
