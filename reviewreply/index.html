@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+<title>1점 리뷰 AI 답글 생성기 | Prometheus</title>
+<meta name="description" content="네이버 플레이스·배민·쿠팡 1점 리뷰에 3초 만에 답글 작성. CS응대·구성품누락 5가지 유형별 맞춤 템플릿">
+<meta name="keywords" content="1점리뷰, 리뷰답글, 네이버플레이스, 사장님, CS응대, 소상공인, AI답글">
+<meta property="og:title" content="1점 리뷰 AI 답글 생성기 | 사장님용">
+<meta property="og:description" content="네이버 플레이스·배민·쿠팡 1점 리뷰에 3초 답글. CS응대·구성품누락 5가지 유형별 맞춤 템플릿">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tools.hogang-vaccine.kr/reviewreply/">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f4f7fc;--bg2:#e9eef7;--glass:#ffffff;--glass2:#f8fafd;--border:#e2e8f2;
+  --text:#1c2333;--sec:#47516b;--muted:#8b93a8;
+  --accent:#ff7a45;--accent-l:#ffa066;--accent-d:#e85d2a;
+  --danger:#ff5b5b;--warn:#ff9f43;--ok:#2fb3a0;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.6;min-height:100vh;padding:0}
+.container{max-width:580px;margin:0 auto;padding:20px 16px 60px}
+.header{text-align:center;padding:20px 0 16px;position:relative}
+.header h1{font-size:1.4rem;color:var(--accent-l)}
+.header .sub{color:var(--muted);font-size:.8rem;margin-top:4px}
+.header .back-link{position:absolute;left:0;top:50%;transform:translateY(-50%);color:var(--muted);text-decoration:none;font-size:.85rem}
+.header .back-link:hover{color:var(--accent-l)}
+.card{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px}
+.card h2{font-size:1rem;color:var(--sec);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card h2 .badge{background:var(--accent);color:#fff;font-size:.65rem;padding:2px 6px;border-radius:4px;font-weight:700;margin-left:auto}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:.8rem;color:var(--sec);margin-bottom:6px;font-weight:600}
+.field textarea,.field select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;outline:none;font-family:inherit}
+.field textarea{min-height:80px;line-height:1.5;resize:vertical}
+.field textarea:focus,.field select:focus{border-color:var(--accent)}
+.tone-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.tone-btn{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--sec);cursor:pointer;font-size:.8rem;font-weight:600;transition:all .15s}
+.tone-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tone-btn:hover:not(.active){border-color:var(--accent)}
+.primary-btn{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;border:none;border-radius:10px;padding:14px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(255,122,69,.25);margin-top:4px}
+.primary-btn:hover{transform:translateY(-1px)}
+.primary-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.review-box{background:rgba(255,91,91,.06);border:1px solid var(--danger);border-radius:10px;padding:12px;margin-bottom:14px;font-size:.85rem;color:var(--sec);line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.review-box .lbl{font-size:.7rem;color:var(--danger);font-weight:700;margin-bottom:6px;display:block}
+.reply-card{background:var(--glass2);border:2px solid var(--accent);border-radius:12px;padding:16px;margin-bottom:12px;position:relative}
+.reply-card.alt{border-color:var(--border);background:var(--bg2)}
+.reply-card .best-badge{position:absolute;top:-10px;left:14px;background:var(--accent);color:#fff;font-size:.65rem;padding:3px 8px;border-radius:4px;font-weight:700}
+.reply-text{font-size:.92rem;color:var(--text);line-height:1.6;margin-bottom:10px;white-space:pre-wrap;word-break:break-word}
+.reply-meta{display:flex;justify-content:space-between;align-items:center;font-size:.7rem;color:var(--muted);margin-bottom:8px}
+.reply-meta .len{color:var(--accent-l);font-weight:700}
+.copy-btn{width:100%;background:var(--bg2);border:1px solid var(--accent);color:var(--accent-l);border-radius:8px;padding:10px;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .15s}
+.copy-btn:hover{background:var(--accent);color:#fff}
+.copy-btn.copied{background:var(--ok);border-color:var(--ok);color:#fff}
+.section-title{font-size:.85rem;color:var(--sec);font-weight:700;margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.section-title::before{content:"";width:3px;height:14px;background:var(--accent);border-radius:2px}
+.tip{background:rgba(47,179,160,.08);border:1px solid var(--ok);border-radius:10px;padding:12px;margin-top:12px;font-size:.78rem;color:var(--sec);line-height:1.5}
+.tip b{color:var(--ok);display:block;margin-bottom:4px}
+.funnel{margin-top:20px;background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.funnel .tag{display:inline-block;background:rgba(255,122,69,.12);color:var(--accent-l);font-size:.7rem;padding:2px 10px;border-radius:4px;margin-bottom:10px}
+.funnel p{font-size:.85rem;color:var(--sec);margin-bottom:14px}
+.funnel .lead-btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;border:none;border-radius:8px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(255,122,69,.25)}
+.funnel .lead-btn:hover{transform:translateY(-1px)}
+.funnel .lead-sub{font-size:.7rem;color:var(--muted);margin-top:8px}
+.disclaimer{font-size:.65rem;color:var(--muted);text-align:center;margin-top:16px}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;justify-content:center;align-items:center}
+.modal-overlay.active{display:flex}
+.modal{background:var(--glass);border:1px solid var(--accent);border-radius:16px;padding:28px;max-width:400px;width:90%;position:relative}
+.modal .close{position:absolute;top:12px;right:16px;color:var(--muted);cursor:pointer;font-size:1.2rem;background:none;border:none}
+.modal h2{color:var(--accent-l);font-size:1.15rem;text-align:center;margin-bottom:6px}
+.modal .desc{color:var(--sec);font-size:.8rem;text-align:center;margin-bottom:16px}
+.modal .benefit{background:rgba(72,184,160,.08);border:1px solid var(--ok);border-radius:10px;padding:14px;margin-bottom:16px;font-size:.8rem;color:var(--ok);line-height:1.5}
+.modal .benefit b{display:block;font-size:.85rem;margin-bottom:6px}
+.modal .field{margin-bottom:12px}
+.modal input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;outline:none}
+.modal input:focus{border-color:var(--accent)}
+.modal .error-msg{color:var(--danger);font-size:.8rem;display:none;text-align:center;margin-bottom:8px}
+.modal .btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;border:none;border-radius:8px;padding:12px;font-size:.95rem;font-weight:700;cursor:pointer;width:100%}
+.modal .success{display:none;text-align:center}
+.modal .success.active{display:block}
+.modal .success .icon{font-size:2.5rem;margin-bottom:6px}
+.modal .success h3{color:var(--ok);font-size:1.05rem;margin-bottom:6px}
+.modal .success p{color:var(--sec);font-size:.8rem;margin-bottom:14px}
+.modal .success .dl-btn{display:inline-block;background:var(--accent);color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ok);color:#fff;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:2000;display:none;box-shadow:0 4px 12px rgba(28,35,51,.08)}
+.toast.error{background:var(--danger)}
+.toast.show{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+select.t-d{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:.9rem;outline:none;cursor:pointer}
+select.t-d:focus{border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<a class="back-link" href="../">←</a>
+<h1>💬 1점 리뷰 AI 답글 생성기</h1>
+<p class="sub">사장님을 위한 3초 답글 · 5가지 유형별 맞춤 템플릿</p>
+</div>
+
+<div class="card">
+<h2>📝 리뷰 입력 <span class="badge">STEP 1</span></h2>
+<div class="field">
+<label>리뷰 유형</label>
+<select id="rvType" class="t-d">
+<option value="cs">😡 CS응대 불만 (상담 지연, 자동응답)</option>
+<option value="missing">📦 구성품 누락 / 분실</option>
+<option value="ad">💸 광고와 다름 / 가격 착취</option>
+<option value="hygiene">🧼 위생 / 상품 불량</option>
+<option value="refund">🚫 환불 거부 / CS 실패</option>
+</select>
+</div>
+<div class="field">
+<label>업종</label>
+<select id="bizType" class="t-d">
+<option value="food">🍽️ 음식점</option>
+<option value="cafe">☕ 카페</option>
+<option value="beauty">💇 미용/네일</option>
+<option value="academy">📚 학원/교육</option>
+<option value="etc">🏪 기타</option>
+</select>
+</div>
+<div class="field">
+<label>고객 리뷰 원문</label>
+<textarea id="rvText" placeholder="예: 1:1 문의 3일째 자동응답만 반복, 사람 상담사 연결이 안 됨"></textarea>
+</div>
+<div class="field">
+<label>답글 분위기</label>
+<div class="tone-row" id="toneRow">
+<button class="tone-btn active" data-tone="formal">정중한</button>
+<button class="tone-btn" data-tone="empathy">공감하는</button>
+<button class="tone-btn" data-tone="honest">솔직한</button>
+<button class="tone-btn" data-tone="light">유머있는</button>
+</div>
+</div>
+<button class="primary-btn" id="genBtn" onclick="generate()">✨ AI 답글 3개 생성</button>
+</div>
+
+<div id="resultArea" style="display:none">
+<div class="card">
+<h2>🎯 추천 답글 <span class="badge">BEST</span></h2>
+<div class="review-box">
+<span class="lbl">📌 고객 리뷰 원문</span>
+<span id="userReview"></span>
+</div>
+<div class="section-title">⭐ 추천 답글</div>
+<div class="reply-card">
+<span class="best-badge">⭐ 추천</span>
+<div class="reply-text" id="bestText"></div>
+<div class="reply-meta"><span>글자 수</span><span class="len" id="bestLen"></span></div>
+<button class="copy-btn" onclick="copyText('bestText', this)">📋 복사하기</button>
+</div>
+<div class="section-title">💡 대안 답글 2개</div>
+<div class="reply-card alt">
+<div class="reply-text" id="alt1Text"></div>
+<div class="reply-meta"><span>글자 수</span><span class="len" id="alt1Len"></span></div>
+<button class="copy-btn" onclick="copyText('alt1Text', this)">📋 복사하기</button>
+</div>
+<div class="reply-card alt">
+<div class="reply-text" id="alt2Text"></div>
+<div class="reply-meta"><span>글자 수</span><span class="len" id="alt2Len"></span></div>
+<button class="copy-btn" onclick="copyText('alt2Text', this)">📋 복사하기</button>
+</div>
+<div class="tip">
+<b>💡 사장님 필독 팁</b>
+• 답글은 24시간 이내 작성 (플레이스 알고리즘 가점)<br>
+• 사과 → 원인 → 해결 → 재방문 유도 4단 구조<br>
+• 욕설·감정적 표현 절대 금지
+</div>
+</div>
+</div>
+
+<div class="funnel">
+<span class="tag">📖 사장님 필독서</span>
+<p>1점 리뷰 100개를 4.8점으로 끌어올린 비밀</p>
+<button class="lead-btn" onclick="openLead()">📩 리뷰 마스터 가이드 받기 (무료)</button>
+<div class="lead-sub">✔ 5가지 유형별 템플릿 50개 · ✔ 답글 작성 시간 80% 단축 · ✔ 악성 리뷰 법적 대응</div>
+</div>
+<div class="disclaimer">© 자룡봇 AI Research · Prometheus v2.0 · 2026년 기준</div>
+</div>
+
+<!-- Lead Capture Modal -->
+<div class="modal-overlay" id="leadM">
+<div class="modal">
+<button class="close" onclick="closeLead()">✕</button>
+<div id="mf">
+<h2>📩 사장님 필독서</h2>
+<p class="desc">이메일 입력 후 무료 다운로드</p>
+<div class="benefit"><b>🎁 즉시 받는 혜택</b>✅ 5가지 유형별 답글 템플릿 50선<br>✅ 악성 리뷰 법적 대응 매뉴얼<br>✅ 플레이스 알고리즘 최적화 가이드<br>✅ 재방문 고객 만드는 후기 요청법</div>
+<div class="field"><input type="text" id="lName" placeholder="이름 (필수)" required></div>
+<div class="field"><input type="email" id="lEmail" placeholder="📧 이메일 (필수) — 가이드 발송처" required></div>
+<div class="field"><input type="tel" id="lPhone" placeholder="전화번호 (선택)"></div>
+<div class="field consent"><label style="font-size:.7rem;color:var(--sec);display:flex;align-items:flex-start;gap:6px;line-height:1.4"><input type="checkbox" id="lConsent" required style="margin-top:2px;flex-shrink:0"><span>(필수) 개인정보 수집 및 마케팅 정보 수신 동의</span></label></div>
+<div class="error-msg" id="lErr">⚠️ 이름·이메일·동의는 필수입니다</div>
+<button class="btn" onclick="sLead()">📩 받기 (무료)</button>
+</div>
+<div class="success" id="ms">
+<div class="icon">🎉</div>
+<h3>신청 완료!</h3>
+<p>사장님 필독서를 보내드렸습니다</p>
+<a class="dl-btn" href="../ebook/review_master_guide.pdf" target="_blank">📕 다운로드</a>
+</div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+function gId(id){return document.getElementById(id)}
+function st(msg,t){const el=gId('toast');el.textContent=msg;el.className='toast'+(t==='error'?' error':'')+' show';setTimeout(()=>el.className='toast',3000)}
+
+const BT='8268734337:AAEwMDqDzv6J4QtEGpeat6sShv-rdI0k2k0';
+const CI='730152102';
+function openLead(){gId('leadM').classList.add('active')}
+function closeLead(){gId('leadM').classList.remove('active')}
+gId('leadM').addEventListener('click',function(e){if(e.target===this)closeLead()});
+async function sLead(){
+const n=gId('lName').value.trim(),p=gId('lPhone').value.trim(),em=gId('lEmail').value.trim();
+const ok_consent=gId('lConsent')?gId('lConsent').checked:true;
+gId('lErr').style.display='none';
+const email_re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if(!n||!em){gId('lErr').textContent='⚠️ 이름과 이메일은 필수입니다';gId('lErr').style.display='block';return;}
+if(!email_re.test(em)){gId('lErr').textContent='⚠️ 올바른 이메일 형식이 아닙니다';gId('lErr').style.display='block';return;}
+if(!ok_consent){gId('lErr').textContent='⚠️ 개인정보 수집·마케팅 동의는 필수입니다';gId('lErr').style.display='block';return;}
+const btn=document.querySelector('.modal .btn');btn.disabled=true;btn.textContent='처리 중...';
+const dv=/Mobi|Android/i.test(navigator.userAgent)?'mobile':'pc';
+const pay={name:n,phone:p,email:em,source:'reviewreply',score:'',device:dv,consent:ok_consent?'Y':'N'};
+let ok=false;
+try{
+const r=await fetch('https://delughjxtvjvdjxwjzwe.supabase.co/rest/v1/leads',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Authorization':'Bearer sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Prefer':'return=minimal'},body:JSON.stringify(pay)});
+ok=r.ok||r.status===201;
+}catch(e1){ok=false;}
+if(!ok){
+try{
+const tg='🆕 [리드] reviewreply\n━━━\n👤 '+n+'\n📞 '+p+'\n📧 '+em+'\n📱 '+dv+'\n🕐 '+new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+'\n#리드 #reviewreply';
+const r2=await fetch('https://api.telegram.org/bot'+BT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CI,text:tg})});
+const d2=await r2.json();ok=d2.ok;
+}catch(e2){ok=false;}
+}
+if(ok){gId('mf').style.display='none';gId('ms').classList.add('active');st('✅ 신청 완료!');}else{st('⚠️ 오류','error');btn.disabled=false;btn.textContent='📩 받기 (무료)';}
+}
+
+// === UTILITY LOGIC ===
+let currentTone='formal';
+document.querySelectorAll('.tone-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.tone-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    currentTone=b.dataset.tone;
+  });
+});
+
+const T={
+  cs:{
+    formal:[
+      '{name} 고객님, 불편을 드려 죄송합니다. 문의 응대가 지연된 점 깊이 사과드립니다. 고객센터 운영 시간을 강화하고 있으며, 1:1 응대 시간을 평균 2시간 이내로 단축하겠습니다. 다음 방문 시 음료 한 잔 서비스 드리겠습니다.',
+      '안녕하세요, {name}님. 답변이 늦어진 점 사과의 말씀 드립니다. 현재 문의량이 많았던 시기로, 응대 프로세스를 재점검하고 있습니다. 직접 전화드리거나 쪽지로 후속 안내드릴 수 있도록 하겠습니다.',
+      '고객님, 불편을 끼쳐드려 진심으로 죄송합니다. 자동응답으로 불편을 드린 부분 즉시 개선하겠습니다. 평일 10~18시에는 전담 상담사가 바로 연결되도록 인력 보강했습니다. 다음에 꼭 만족스러운 경험을 선사하겠습니다.'
+    ],
+    empathy:[
+      '{name}님 정말 답답하셨겠어요. 기다리셨을 마음 짐작이 됩니다. 직접 확인하고 바로 연락드릴 수 있게 사장님 번호 남겨주시면 100% 보답하겠습니다. 이번 일로 멀어지시면 너무 아쉬워요.',
+      '3일이나 기다리셨다니 정말 죄송해요. 그 답답한 마음, 저도 사장으로서 충분히 이해합니다. 같은 일이 다시 없게 응대 규칙을 다시 짜고 있어요. 한 번만 더 기회를 주세요.',
+      '{name}님의 그 답답함 제가 다 느낍니다. 자동응답만 반복됐을 거 짐작해요. 앞으로는 1시간 안에 사람 답변이 가도록 팀을 재구성했습니다. 꼭 다시 오셔서 달라진 모습 보여드릴게요.'
+    ],
+    honest:[
+      '{name}님, 솔직히 말해서 우리 응대가 부족했습니다. 1:1 문의가 몰린 시기에 시스템이 무너졌어요. 다음 주부터 전담 인력을 2배로 늘리고, 24시간 안에 첫 답변 드리겠습니다.',
+      '솔직히 부끄럽습니다. 자동응답만 돌린 건 저도 인정합니다. 그래서 이번 주부터 상담 시간을 2시간 늘리고, 전담 매니저를 새로 뽑았어요. {name}님 실망시킨 만큼 다음엔 꼭 보답하겠습니다.',
+      '사실대로 말씀드리면, 문의 폭주에 인력이 턱없이 부족했습니다. 그래서 지금 외부 CS 아웃소싱까지 검토 중입니다. {name}님 한 분이 멀어져도 괜찮다고 안 지겠습니다.'
+    ],
+    light:[
+      '{name}님, 자동응답 봇이 너무 졸렬했죠? 저도 그거 만들고 나서 한숨 쉬었어요. 사람으로 바꾸는 중이니 한 번만 더 기회를 주시면 갓생 답글 보여드릴게요.',
+      '3일 기다리게 한 건 인정합니다. 제 머리보다는 AI가 더 빠르게 답하더라고요. 앞으로는 사람 답글로만 채우겠습니다. 다음엔 진심 가득한 답장 기대하셔도 좋아요.',
+      '{name}님 답장 기다리시느라 스트레스 받으셨죠. 저도 "왜 자동응답만 돌지?" 하면서 한 대 때리고 싶었어요. 사람 답변으로 전면 교체 중입니다.'
+    ]
+  },
+  missing:{
+    formal:[
+      '{name}님, 구성품이 누락된 점 죄송합니다. 택배사 확인 결과 분실이 확인되어, 오늘 중 새 제품으로 재발송 처리하겠습니다. 배송비는 전액 저희 부담이며, 다음 주문 시 10% 할인 쿠폰 함께 드리겠습니다.',
+      '고객님, 정성껏 포장했는데 분실되어 정말 죄송합니다. 즉시 택배사에 클레임 접수했고, 새 제품 발송은 내일 오전까지 완료됩니다. 책임지고 보상해드리겠습니다.',
+      '{name}님, 큰 실수 저질렀습니다. 구성품 누락이 재차 발생하지 않도록 포장 검수 프로세스를 2중으로 강화했습니다. 재발송 일정 곧 문자 드리겠습니다.'
+    ],
+    empathy:[
+      '{name}님, 분명 기분 나쁘셨을 거예요. 택배 박스 열었을 때 그 허탈한 마음 충분히 이해합니다. 오늘 중 새 제품 보내드릴게요. 포장도 2번 검수해서 보내드리겠습니다.',
+      '정말 죄송해요, {name}님. 기다리셨을 텐데 구성품이 빠진 채 도착하셨네요. 바로 새 제품으로 발송 처리했고, 배송 조회 번호 문자 드릴게요.',
+      '아 그 상황 너무 짜증나셨을 거예요. 저도 사장인데 같은 경험 있어서 압니다. 새 제품 보내드리고, 포장 검수 2번으로 다시 빡세게 잡았습니다.'
+    ],
+    honest:[
+      '{name}님, 포장 검수에서 누락이 발생한 거 정말 부끄럽습니다. 검수 인원을 1명에서 2명으로 늘리고, 무게 체크까지 추가했습니다. 새 제품 오늘 발송 처리 완료했습니다.',
+      '솔직히 포장 실수입니다. 검수 단계를 건너뛴 게 화근이었어요. 오늘부터 전수 검수로 바꾸고, 누락 시 전액 보상 정책 추가했습니다. {name}님 피해 100% 복구해드릴게요.',
+      '팩트 말씀드리면, 검수관이 빠진 거예요. 그래서 일주일간 검수 매뉴얼 전 부원 재교육 실시했습니다. 재발송은 지금 처리 들어갔고, 도착 시 확인 부탁드립니다.'
+    ],
+    light:[
+      '{name}님, 구성품이 숨바꼭질 했나 봐요. 사장님이 직접 찾아서 재발송 처리했습니다. 다음엔 도망 못 가게 박스 테이프 3중으로 붙여서 보낼게요.',
+      '아 이런, 택배가 중간에 슬쩍 한 개 먹었나 봐요. 새 제품 재발송 완료! 다음엔 박스에 "여기 꼭 도착!" 스티커 붙여서 보내드릴게요.',
+      '{name}님 박스 열었을 때 허탈하셨을 텐데, 사장도 한 대 맞았습니다. 새 제품으로 복구했고, 포장 검수 빡세게 다시 잡았어요.'
+    ]
+  },
+  ad:{
+    formal:[
+      '{name}님, 광고와 다른 점에 실망을 드려 죄송합니다. 약속드린 품질 기준을 다시 점검하고, 사진·설명을 실제와 더 가깝게 보강하겠습니다. 다음 방문 시 사용하신 금액의 20%를 적립금으로 돌려드리겠습니다.',
+      '고객님, 광고 표현이 과장된 부분 사과드립니다. 즉시 프로모션 페이지를 실제와 일치하도록 수정했습니다. {name}님께는 소정의 보상 쿠폰 발송해드렸습니다.',
+      '{name}님, 기대하셨을 만큼 채워드리지 못해 죄송합니다. 광고 검수 기준을 강화하고, 모든 상품 사진을 실제 컷으로 전면 교체하겠습니다.'
+    ],
+    empathy:[
+      '광고 보시고 기대하고 오셨을 텐데, 그 기대 아래로 실망하셨을 {name}님 마음이 짐작됩니다. 100% 환불 처리해드릴게요. 다음엔 절대 광고와 다르게 가지 않도록 점검하겠습니다.',
+      '{name}님, 광고는 좋은데 실물은 그보다 못한 그런 경우 진짜 화나죠. 저도 사장이라 압니다. 오늘 결제하신 금액 환불 처리했고, 다음엔 100% 그대로 보여드릴게요.',
+      '기대 이하의 경험 드려서 정말 미안해요, {name}님. 사진 그대로, 설명 그대로 보여드리는 게 사장된 자의 도리인데 어겼습니다.'
+    ],
+    honest:[
+      '{name}님, 솔직히 저희가 광고 표현을 과하게 했어요. 그래서 오늘부터 전 상품 카탈로그 재촬영 들어갔습니다. 촬영 전에 직접 먹어보고 인증샷만 올리겠습니다.',
+      '팩트로 인정합니다, 광고가 실물보다 좋았어요. 이번 달 안에 전 상품 다시 찍고, 메뉴 설명도 솔직하게 다시 씁니다. {name}님 보상도 함께 챙겨드릴게요.',
+      '{name}님, 사장이 욕심 부린 거 솔직히 인정합니다. 촬영팀 새로 섭외하고, 실제 조리 후 사진으로 전면 교체 중입니다.'
+    ],
+    light:[
+      '{name}님, 광고가 거짓말쟁이라서 사과드려요. 이번 주는 사진 보정 안 하고 진짜 그대로만 찍어서 올리겠습니다. 사장 얼굴도 같이 실물로 보여드려도 될까요?',
+      '광고는 화려한데 실물은 그저 그런 거 인정합니다, {name}님. 반성해서 다음 주부터는 핸드폰 셀카로만 찍어서 올릴게요.',
+      '{name}님, 광고팀이 너무 잘해서 사장이 욕심 부린 거예요. 이번 주부터는 사진 보정 OFF, 과장 멘버 OFF, 진심만 ON으로 갑니다.'
+    ]
+  },
+  hygiene:{
+    formal:[
+      '{name}님, 위생 상태에 실망을 드려 죄송합니다. 오늘 즉시 전 직원 대상으로 위생 교육 실시하고, 주 1회 외부 위생 점검을 받겠습니다. 다음 방문 시 검증된 위생 인증서 보여드릴 수 있도록 하겠습니다.',
+      '고객님, 지적해주신 부분 즉시 확인하고 해당 부서 위생 점검 완료했습니다. 장갑·마스크·손소독제 전면 교체하고, 위생 매뉴얼 v2로 업데이트했습니다.',
+      '{name}님, 위생 이슈는 저희가 절대 양보할 수 없는 부분인데 그 부분에서 실망을 드렸습니다. 즉시 현장 점검 완료, 관련 직원 재교육, 매일 위생 체크리스트 작성 시작했습니다.'
+    ],
+    empathy:[
+      '음식 먹으러 오셨는데 위생 의심되시면 그 얼마나 찝찝하셨을까요, {name}님. 오늘 바로 관련 부서 점검 들어갔고, 결과 문자 드리겠습니다.',
+      '{name}님 그 찝찝한 마음 저도 사장으로서 충분히 이해합니다. 바로 점검 들어갔고, 위생 매뉴얼 다시 짰습니다. 다음에 오실 때 위생 점검표 보여드릴게요.',
+      '음식점은 위생이 기본인데 기본도 못 지킨 거 부끄럽습니다. {name}님 걱정 사라지도록 매일 점검표 공개하겠습니다.'
+    ],
+    honest:[
+      '{name}님, 솔직히 위생 점검을 우리가 소홀히 한 거 인정합니다. 오늘부터 매일 점검표 작성, 매주 1회 외부 점검으로 바꾸겠습니다.',
+      '솔직히 말해서 위생이 가장 큰 리스크인데 거기서 무너진 거 부끄럽습니다. 전 부원 재교육 + 외부 위생 컨설팅 받아서 재인증 받겠습니다.',
+      '팩트입니다, 점검을 대충 한 게 화근이에요. 매일 점검 사진 SNS 공개하고, 외부 위생 컨설팅 받겠습니다. {name}님 덕분에 제대로 점검하게 됐어요.'
+    ],
+    light:[
+      '{name}님, 위생의신이 노려보셨네요. 오늘부터 매니저 손 안 대고 직원 손으로만 세팅합니다. 다음엔 사장이 위생 점검표 들고 직접 인사드릴게요.',
+      '사장님도 오늘 아침부터 위생 점검 빡세게 돌리고 있습니다. 다음에 오시면 요리사 손부터 보여드릴게요. 깨끗함 보장합니다.',
+      '{name}님, 위생이 부족했죠. 오늘부터 주방 CCTV 공개하고 매일 점검 인증샷 올립니다. 다음엔 의심 없이 편하게 오실 수 있도록요.'
+    ]
+  },
+  refund:{
+    formal:[
+      '{name}님, 환불 요청이 지연된 점 진심으로 사과드립니다. 환불 절차를 재확인하여 오늘 중 처리해드리겠습니다. 처리 완료 시 SMS 발송드리며, 다음 주문 시 추가 10% 할인 적용해드리겠습니다.',
+      '고객님, 환불 처리가 늦어진 부분 사과의 말씀 드립니다. 즉시 환불 담당자에게 우선 처리 지시했습니다. 영업일 기준 3일 내 입금 완료될 예정입니다.',
+      '{name}님, CS 응대가 부족했던 점 깊이 반성합니다. 환불 정책 매뉴얼을 전면 개정하고, 모든 환불 요청은 24시간 내 1차 답변 드리겠습니다.'
+    ],
+    empathy:[
+      '{name}님, 환불 받는 데 이렇게까지 힘드셨을 거 상상도 못 했어요. 지금 바로 환불 처리 들어갑니다. 3영업일 내 입금 완료될 거예요.',
+      '돈 돌려받는 게 이렇게까지 스트레스일 줄 몰랐어요, {name}님. 오늘 중 처리 완료하고 SMS 드릴게요. 다음엔 이런 일 없도록 하겠습니다.',
+      '환불 때문에 마음 쓰셨을 {name}님, 충분히 이해합니다. 바로 환불 처리 들어갔고, 처리되면 바로 문자 드릴게요.'
+    ],
+    honest:[
+      '{name}님, 솔직히 우리 CS가 환불 처리를 미루고 있었습니다. 반성합니다. 오늘 즉시 환불 처리하고, 48시간 내 입금 보장 정책 새로 만들었습니다.',
+      '팩트로 인정합니다, 환불이 지연된 건 저희 CS 인력 부족 때문이에요. 전담 인력을 2배로 늘리고, 자동 환불 시스템도 도입 중입니다.',
+      '{name}님, 환불 거절이 아니라 처리가 늦었던 거예요. 오늘 처리 완료하고, 다음엔 24시간 내 자동 처리되도록 시스템 개편합니다.'
+    ],
+    light:[
+      '{name}님, 환불 때문에 스트레스 받으셨죠. 오늘 바로 처리 들어갑니다. 다음엔엔 1시간 안에 끝내드릴게요.',
+      '환불 받으시느라 그랬을 {name}님, 죄송해요. 바로 처리 완료하고, 다음에 또 오실 땐 좋은 경험만 선사하겠습니다.',
+      '{name}님, 오늘 안에 환불 처리 끝내고 SMS 드릴게요. 다음엔 진심 가득한 답글과 서비스로 보답하겠습니다.'
+    ]
+  }
+};
+
+function fillTpl(t,name){
+  if(!name||name.length<1) name='고객';
+  return t.replace(/\{name\}/g,name);
+}
+
+function extractName(text){
+  // Look for 닉네임/이름 patterns: "~님" or quotes
+  if(!text) return '고객';
+  const m1=text.match(/([\w가-힣]{2,8})\s*님/);
+  if(m1) return m1[1];
+  const m2=text.match(/"([^"]{2,8})"/);
+  if(m2) return m2[1];
+  return '고객';
+}
+
+function pickThree(arr){
+  // Return 3 distinct items in original order (or shuffled)
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a.slice(0,3);
+}
+
+function generate(){
+  const type=gId('rvType').value;
+  const text=gId('rvText').value.trim();
+  if(!text){
+    st('리뷰 원문을 입력해주세요','error');
+    gId('rvText').focus();
+    return;
+  }
+  const btn=gId('genBtn');
+  btn.disabled=true;btn.textContent='생성 중...';
+  setTimeout(()=>{
+    const name=extractName(text);
+    const pool=(T[type]&&T[type][currentTone])||T.cs.formal;
+    const three=pickThree(pool);
+    const bestIdx=Math.floor(Math.random()*3);
+    const ordered=[three[bestIdx],three[(bestIdx+1)%3],three[(bestIdx+2)%3]];
+    gId('userReview').textContent=text;
+    gId('bestText').textContent=fillTpl(ordered[0],name);
+    gId('alt1Text').textContent=fillTpl(ordered[1],name);
+    gId('alt2Text').textContent=fillTpl(ordered[2],name);
+    gId('bestLen').textContent=fillTpl(ordered[0],name).length+'자';
+    gId('alt1Len').textContent=fillTpl(ordered[1],name).length+'자';
+    gId('alt2Len').textContent=fillTpl(ordered[2],name).length+'자';
+    gId('resultArea').style.display='block';
+    btn.disabled=false;btn.textContent='✨ 다시 생성하기';
+    setTimeout(()=>gId('resultArea').scrollIntoView({behavior:'smooth',block:'start'}),100);
+  },500);
+}
+
+function copyText(id,btn){
+  const txt=gId(id).textContent;
+  const cleaned=txt.replace(/^\s*\S+\s*/,'').trim()||txt;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(cleaned).then(()=>{
+      const orig=btn.textContent;
+      btn.textContent='✅ 복사 완료!';
+      btn.classList.add('copied');
+      st('📋 답글 복사됨!');
+      setTimeout(()=>{btn.textContent=orig;btn.classList.remove('copied')},1800);
+    }).catch(()=>fallbackCopy(cleaned,btn));
+  }else{
+    fallbackCopy(cleaned,btn);
+  }
+}
+function fallbackCopy(text,btn){
+  const ta=document.createElement('textarea');
+  ta.value=text;document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');st('📋 복사됨!');btn.textContent='✅ 복사 완료';btn.classList.add('copied');setTimeout(()=>{btn.textContent='📋 복사하기';btn.classList.remove('copied')},1800);}catch(e){st('⚠️ 수동 복사: '+text,'error')}
+  document.body.removeChild(ta);
+}
+
+function cpLink(){navigator.clipboard.writeText(window.location.href).then(()=>st('🔗 복사 완료!')).catch(()=>st('🔗 '+window.location.href))}
+</script>
+</body>
+</html>
