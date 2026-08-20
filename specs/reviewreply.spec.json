@@ -1,0 +1,50 @@
+{
+  "spec_id": "UTIL_005",
+  "friction_id": "CS_001",
+  "name": "reviewreply",
+  "name_ko": "1점 리뷰 AI 답글 생성기",
+  "tagline": "1점 리뷰 3초 답글",
+  "problem": "소상공인이 네이버 플레이스/배달의민족/쿠팡 등 1점 리뷰에 매일 뭐라고 답글 달지 몰라 스트레스 받는다",
+  "target_audience": "네이버 플레이스 운영 소상공인, 자영업자, 사장님",
+  "tech_stack": ["단일 HTML", "CSS", "Vanilla JavaScript"],
+  "dependencies": 0,
+  "features": [
+    "리뷰 유형 선택 (CS응대/구성품누락/광고기만/위생/환불거부 5종)",
+    "리뷰 텍스트 입력",
+    "분위기 선택 (정중/공감/솔직/유머)",
+    "AI 답글 3가지 옵션 즉시 생성 (템플릿 기반 패턴 매칭)",
+    "원클릭 복사 버튼",
+    "길이 가이드 (40~120자)",
+    "BEST 답글 추천 (상단 강조)"
+  ],
+  "ui_spec": {
+    "layout": "모바일 퍼스트 싱글 페이지",
+    "inputs": [
+      "리뷰 유형 셀렉트",
+      "리뷰 원문 텍스트에어리어",
+      "분위기 라디오 버튼",
+      "업종 셀렉트 (음식점/카페/미용/학원/기타)"
+    ],
+    "outputs": [
+      "추천 답글 카드 (큰 박스)",
+      "대안 답글 2개 (작은 박스)",
+      "복사 버튼",
+      "글자 수 카운터"
+    ],
+    "max_width": "600px",
+    "theme": "glass-light-v2"
+  },
+  "seo": {
+    "title": "1점 리뷰 AI 답글 생성기 | 사장님용",
+    "description": "네이버 플레이스·배민·쿠팡 1점 리뷰에 3초 만에 답글 작성. CS응대·구성품누락 5가지 유형별 맞춤 템플릿",
+    "keywords": "1점리뷰, 리뷰답글, 네이버플레이스, 사장님, CS응대, 소상공인, AI답글"
+  },
+  "funnel": {
+    "free_utility": "https://tools.hogang-vaccine.kr/reviewreply/",
+    "upsell": "../ebook/review_master_guide.pdf"
+  },
+  "estimated_dev_time": "3h",
+  "estimated_size": "12KB",
+  "pain_index": 80.85,
+  "source_vpd": "vpd001 (CS응대)"
+}
