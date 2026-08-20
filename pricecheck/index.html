@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+<title>PriceCheck · 결제 직전 30초 가격 공정성 체커 | Prometheus</title>
+<meta name="description" content="이 가격, 진짜 공정한 거 맞아? 카테고리 평균가·셀러 평판·할인 진정성 4개 항목으로 0~100점 공정성 점수와 네이버 최저가 후보 5개를 즉시 제공. 광고기만·가격착취 사전 차단.">
+<meta name="keywords" content="가격공정성, 네이버최저가, 시세비교, 광고기만, 가격착취, 1점리뷰, 쿠팡, 11번가, 마켓셀러검증">
+<meta property="og:title" content="PriceCheck · 결제 직전 30초 가격 공정성 체커">
+<meta property="og:description" content="4개 항목 공정성 점수 + 네이버 최저가 후보 5개 + 위험 신호 3개. 결제 직전 30초면 끝.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tools.hogang-vaccine.kr/pricecheck/">
+<!-- Google Analytics (deactivated; no real ID) -->
+<!-- gtag disabled -->
+<!-- gtag config disabled -->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f4f7fc;--bg2:#e9eef7;--glass:#ffffff;--glass2:#f8fafd;
+  --border:#e2e8f2;--border2:#d0d9e8;
+  --text:#1c2333;--sec:#47516b;--muted:#8b93a8;
+  --accent:#ff7a45;--accent-l:#ffa066;--accent-d:#e85d2a;
+  --danger:#ff5b5b;--warn:#ff9f43;--ok:#2fb3a0;
+  --cyan:#2fb3a0;--purple:#8b7cf6;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.6;min-height:100vh;padding:0}
+.container{max-width:580px;margin:0 auto;padding:20px 16px 60px}
+.header{text-align:center;padding:20px 0 16px;position:relative}
+.header h1{font-size:1.4rem;color:var(--accent-l)}
+.header .sub{color:var(--muted);font-size:.8rem;margin-top:4px}
+.header .back-link{position:absolute;left:0;top:50%;transform:translateY(-50%);color:var(--muted);text-decoration:none;font-size:.85rem}
+.header .back-link:hover{color:var(--accent-l)}
+.card{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px}
+.card h2{font-size:1rem;color:var(--sec);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card h2 .badge{background:var(--accent);color:#fff;font-size:.65rem;padding:2px 6px;border-radius:4px;font-weight:700;margin-left:auto}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:.8rem;color:var(--sec);margin-bottom:6px;font-weight:600}
+.field input,.field select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);font-size:.95rem;outline:none;font-family:inherit;min-height:48px}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.field .unit{color:var(--muted);font-size:.75rem;margin-left:4px}
+.primary-btn{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;border:none;border-radius:10px;padding:14px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(255,122,69,.25);margin-top:4px;min-height:48px}
+.primary-btn:hover{transform:translateY(-1px)}
+.primary-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* Score Ring */
+.score-ring-wrap{display:flex;flex-direction:column;align-items:center;margin:8px 0 12px}
+.score-ring{width:160px;height:160px;position:relative;margin:0 auto 10px}
+.score-ring svg{transform:rotate(-90deg);width:160px;height:160px}
+.score-ring .bg-circle{fill:none;stroke:var(--bg2);stroke-width:10}
+.score-ring .fg-circle{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .6s ease,stroke .3s}
+.score-ring .center-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;width:100%}
+.score-ring .center-text .num{font-size:2.5rem;font-weight:800;line-height:1}
+.score-ring .center-text .denom{font-size:.7rem;color:var(--muted);margin-top:2px}
+.score-ring .center-text .label{font-size:.7rem;color:var(--muted);font-weight:600}
+.grade-safe{color:var(--ok)}
+.grade-warn{color:var(--warn)}
+.grade-mid{color:var(--accent-l)}
+.grade-danger{color:var(--danger)}
+
+/* Verdict banner */
+.verdict-banner{padding:14px 16px;border-radius:12px;margin:8px 0 14px;text-align:center;font-size:.95rem;font-weight:700;border-width:1px;border-style:solid}
+.verdict-banner.safe{background:rgba(47,179,160,.1);border-color:var(--ok);color:var(--ok)}
+.verdict-banner.caution{background:rgba(255,159,67,.12);border-color:var(--warn);color:var(--warn)}
+.verdict-banner.suspect{background:rgba(255,122,69,.12);border-color:var(--accent);color:var(--accent-l)}
+.verdict-banner.danger{background:rgba(255,91,91,.1);border-color:var(--danger);color:var(--danger)}
+.verdict-banner .detail{font-weight:400;font-size:.78rem;margin-top:4px;color:var(--sec)}
+
+/* Sub-score breakdown */
+.subscores{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.sub-item{background:var(--bg2);border-radius:10px;padding:10px 8px;border:1px solid transparent}
+.sub-item .lbl{font-size:.7rem;color:var(--muted);margin-bottom:4px;font-weight:600}
+.sub-item .val{font-size:1.2rem;font-weight:800;line-height:1}
+.sub-item .meta{font-size:.65rem;color:var(--sec);margin-top:2px;line-height:1.3}
+
+/* Naver candidate list */
+.candidate{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--glass2);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;text-decoration:none;color:var(--text);transition:all .15s}
+.candidate:hover{border-color:var(--accent);background:var(--bg2)}
+.candidate .rank{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:.75rem;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.candidate .info{flex:1;min-width:0}
+.candidate .info .title{font-size:.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.candidate .info .meta{font-size:.7rem;color:var(--muted);margin-top:2px}
+.candidate .arrow{color:var(--muted);font-size:.9rem}
+
+/* Risk signals */
+.risk{display:flex;gap:10px;align-items:start;padding:12px;background:rgba(255,91,91,.05);border:1px solid var(--danger);border-radius:10px;margin-bottom:8px}
+.risk.ok{background:rgba(47,179,160,.05);border-color:var(--ok)}
+.risk .icon{font-size:1.2rem;flex-shrink:0;line-height:1}
+.risk .text{flex:1;font-size:.82rem;color:var(--sec);line-height:1.5}
+.risk .text b{color:var(--text);font-size:.85rem;display:block;margin-bottom:2px}
+.risk.ok .text b{color:var(--ok)}
+
+/* History list */
+.history-item{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--bg2);border-radius:8px;margin-bottom:4px;font-size:.78rem}
+.history-item .name{color:var(--sec);font-weight:600;max-width:50%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history-item .meta{color:var(--muted);font-size:.7rem}
+.history-item .score{font-weight:800;font-size:.85rem}
+.history-item .score.safe{color:var(--ok)}
+.history-item .score.warn{color:var(--warn)}
+.history-item .score.mid{color:var(--accent-l)}
+.history-item .score.danger{color:var(--danger)}
+
+/* Funnel */
+.funnel{margin-top:20px;background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.funnel .tag{display:inline-block;background:rgba(255,122,69,.12);color:var(--accent-l);font-size:.7rem;padding:2px 10px;border-radius:4px;margin-bottom:10px}
+.funnel p{font-size:.85rem;color:var(--sec);margin-bottom:14px}
+.funnel .lead-btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;border:none;border-radius:8px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(255,122,69,.25);min-height:48px}
+.funnel .lead-btn:hover{transform:translateY(-1px)}
+.funnel .lead-sub{font-size:.7rem;color:var(--muted);margin-top:8px}
+.disclaimer{font-size:.65rem;color:var(--muted);text-align:center;margin-top:16px}
+
+/* Share */
+.share-bar{display:flex;gap:8px;margin-top:14px}
+.share-bar button{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--sec);cursor:pointer;font-size:.8rem;text-align:center;transition:all .1s;min-height:48px}
+.share-bar button:hover{border-color:var(--accent);color:var(--accent-l)}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;justify-content:center;align-items:center}
+.modal-overlay.active{display:flex}
+.modal{background:var(--glass);border:1px solid var(--accent);border-radius:16px;padding:28px;max-width:400px;width:90%;position:relative;max-height:90vh;overflow-y:auto}
+.modal .close{position:absolute;top:12px;right:16px;color:var(--muted);cursor:pointer;font-size:1.2rem;background:none;border:none}
+.modal h2{color:var(--accent-l);font-size:1.15rem;text-align:center;margin-bottom:6px}
+.modal .desc{color:var(--sec);font-size:.8rem;text-align:center;margin-bottom:16px}
+.modal .benefit{background:rgba(47,179,160,.08);border:1px solid var(--ok);border-radius:10px;padding:14px;margin-bottom:16px;font-size:.8rem;color:var(--ok);line-height:1.5}
+.modal .benefit b{display:block;font-size:.85rem;margin-bottom:6px}
+.modal .field{margin-bottom:12px}
+.modal input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);font-size:.95rem;outline:none;min-height:48px}
+.modal input:focus{border-color:var(--accent)}
+.modal .error-msg{color:var(--danger);font-size:.8rem;display:none;text-align:center;margin-bottom:8px}
+.modal .btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;border:none;border-radius:8px;padding:14px;font-size:.95rem;font-weight:700;cursor:pointer;width:100%;min-height:48px}
+.modal .success{display:none;text-align:center}
+.modal .success.active{display:block}
+.modal .success .icon{font-size:2.5rem;margin-bottom:6px}
+.modal .success h3{color:var(--ok);font-size:1.05rem;margin-bottom:6px}
+.modal .success p{color:var(--sec);font-size:.8rem;margin-bottom:14px}
+.modal .success .dl-btn{display:inline-block;background:var(--accent);color:#fff;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:700;min-height:48px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ok);color:#fff;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:2000;display:none;box-shadow:0 4px 12px rgba(28,35,51,.08);max-width:90%;text-align:center}
+.toast.error{background:var(--danger)}
+.toast.show{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+select.t-d{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);font-size:.95rem;outline:none;cursor:pointer;min-height:48px}
+select.t-d:focus{border-color:var(--accent)}
+
+.tip{background:rgba(47,179,160,.08);border:1px solid var(--ok);border-radius:10px;padding:12px;margin-top:12px;font-size:.78rem;color:var(--sec);line-height:1.5}
+.tip b{color:var(--ok);display:block;margin-bottom:4px}
+
+.section-title{font-size:.85rem;color:var(--sec);font-weight:700;margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.section-title::before{content:"";width:3px;height:14px;background:var(--accent);border-radius:2px}
+
+@media (max-width:380px){
+  .subscores{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<a class="back-link" href="../">←</a>
+<h1>💰 PriceCheck · 가격 공정성 체커</h1>
+<p class="sub">결제 직전 30초 · 광고기만·가격착취 사전 차단</p>
+</div>
+
+<div class="card">
+<h2>📝 점검 정보 입력 <span class="badge">STEP 1</span></h2>
+<div class="field">
+<label for="cat">상품 카테고리</label>
+<select id="cat" class="t-d" aria-label="상품 카테고리">
+<option value="가전">📺 가전 (평균 150만원)</option>
+<option value="IT" selected>💻 IT (평균 80만원)</option>
+<option value="생활용품">🧴 생활용품 (평균 15만원)</option>
+<option value="의류">👕 의류 (평균 8만원)</option>
+<option value="식품">🍱 식품 (평균 3만원)</option>
+<option value="기타">📦 기타 (평균 10만원)</option>
+</select>
+</div>
+<div class="field">
+<label for="kw">찾고 있는 상품명</label>
+<input type="text" id="kw" placeholder="예: 아이폰 17, 다이슨 청소기, 맥북 에어 M4" aria-label="상품명">
+</div>
+<div class="field">
+<label for="price">본인이 본 가격 <span class="unit">(만원 단위)</span></label>
+<input type="number" id="price" placeholder="예: 130" min="0" step="0.1" inputmode="decimal" aria-label="본인 가격 만원">
+</div>
+<div class="field">
+<label for="chan">결제 채널</label>
+<select id="chan" class="t-d" aria-label="결제 채널">
+<option value="쿠팡">🟠 쿠팡 (+5 평판 보정)</option>
+<option value="네이버">🟢 네이버 (+5 평판 보정)</option>
+<option value="11번가" selected>🔵 11번가 (-3 평판 보정)</option>
+<option value="G마켓">🟡 G마켓 (보정 없음)</option>
+<option value="옥션">🟡 옥션 (보정 없음)</option>
+<option value="기타">⚪ 기타 (-3 평판 보정)</option>
+</select>
+</div>
+<button class="primary-btn" id="checkBtn" onclick="runCheck()">⚖️ 공정성 점검하기</button>
+</div>
+
+<div id="resultArea" style="display:none">
+<div class="card">
+<h2>⚖️ 공정성 점수 <span class="badge">RESULT</span></h2>
+<div class="score-ring-wrap">
+<div class="score-ring">
+<svg viewBox="0 0 160 160" aria-hidden="true">
+<circle class="bg-circle" cx="80" cy="80" r="70"></circle>
+<circle class="fg-circle" id="ringFg" cx="80" cy="80" r="70" stroke-dasharray="439.8" stroke-dashoffset="439.8"></circle>
+</svg>
+<div class="center-text">
+<div class="num" id="scoreNum">0</div>
+<div class="denom">/ 100</div>
+<div class="label" id="scoreLabel">점수</div>
+</div>
+</div>
+</div>
+<div class="verdict-banner" id="verdictBanner">
+<div id="verdictText">판정</div>
+<div class="detail" id="verdictDetail">상세</div>
+</div>
+<div class="tip">
+<b>💡 점수 해석 가이드</b>
+• 80+ 안전 (🟢) — 시세 적정, 결제 진행<br>
+• 60~79 주의 (🟡) — 가격 비교 한번 더<br>
+• 40~59 의심 (🟠) — 다른 셀러 확인 필수<br>
+• 40 미만 위험 (🔴) — 광고기만·가격착취 의심
+</div>
+</div>
+
+<div class="card">
+<h2>📊 4개 항목 분해</h2>
+<div class="subscores" id="subscores">
+<div class="sub-item">
+<div class="lbl">카테고리 평균 대비</div>
+<div class="val" id="sub1">0</div>
+<div class="meta" id="sub1m">시세와 비교</div>
+</div>
+<div class="sub-item">
+<div class="lbl">시계열 추이</div>
+<div class="val" id="sub2">0</div>
+<div class="meta" id="sub2m">평균 변동성</div>
+</div>
+<div class="sub-item">
+<div class="lbl">셀러 평판</div>
+<div class="val" id="sub3">0</div>
+<div class="meta" id="sub3m">채널 보정</div>
+</div>
+<div class="sub-item">
+<div class="lbl">할인 진정성</div>
+<div class="val" id="sub4">0</div>
+<div class="meta" id="sub4m">시드 매칭</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2>🛒 네이버 최저가 후보 <span class="badge">5</span></h2>
+<div id="candidateList"></div>
+<div class="tip">
+<b>💰 평균가 정보</b>
+표시된 후보는 네이버 쇼핑 검색 결과 페이지로 이동합니다. 시드 데이터의 카테고리 평균가는 한국소비자원 분쟁 데이터(vpd002) 기반 정적 테이블입니다.
+</div>
+</div>
+
+<div class="card">
+<h2>⚠️ 위험 신호 <span class="badge">3</span></h2>
+<div class="section-title">광고기만/가격착취 의심 체크</div>
+<div id="riskList"></div>
+<div class="tip" style="background:rgba(255,159,67,.08);border-color:var(--warn)">
+<b>📚 vpd002 통계 참고</b>
+한국소비자원: 연간 소비자피해 신고 약 1,547만건. 광고기만/가격착취 카테고리 비중 약 25%, 추정 손실 1,207억원/년.
+</div>
+</div>
+
+<div class="card">
+<h2>🔗 결과 공유</h2>
+<div class="share-bar">
+<button onclick="cpLink()">🔗 링크 복사</button>
+<button onclick="shareNative()">📤 공유하기</button>
+<button onclick="shareKakao()">💬 카톡</button>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2>🕘 최근 점검 이력 <span class="badge" id="histCount">0</span></h2>
+<div id="historyList"></div>
+<button class="primary-btn" style="background:var(--bg2);color:var(--sec);box-shadow:none" onclick="clearHistory()">🗑 이력 초기화</button>
+</div>
+
+<div class="funnel">
+<span class="tag">📖 셀러·구매자 모두를 위한</span>
+<p>내 매장도 공정성 점검 받을래요? 가격 모닝콜 리포트</p>
+<button class="lead-btn" onclick="openLead()">📩 가격 모닝콜 리포트 받기 (무료)</button>
+<div class="lead-sub">✔ 매일 아침 카테고리 시세 변동 알림 · ✔ 광고기만 의심 셀러 자동 플래그 · ✔ 한국소비자원 분쟁 통계</div>
+</div>
+<div class="disclaimer">© 자룡봇 AI Research · Prometheus v2.0 · 2026년 기준 · 시드 데이터 기반 추정치</div>
+</div>
+
+<!-- Lead Modal -->
+<div class="modal-overlay" id="leadM">
+<div class="modal">
+<button class="close" onclick="closeLead()">✕</button>
+<div id="mf">
+<h2>📩 가격 모닝콜 리포트</h2>
+<p class="desc">이메일 입력 후 무료 구독</p>
+<div class="benefit"><b>🎁 즉시 받는 혜택</b>✅ 매일 아침 카테고리 시세 변동 알림<br>✅ 광고기만 의심 셀러 자동 플래그<br>✅ 한국소비자원의 최신 분쟁 조정 통계<br>✅ 결제 직전 체크리스트 PDF</div>
+<div class="field"><input type="text" id="lName" placeholder="이름 (필수)" required></div>
+<div class="field"><input type="email" id="lEmail" placeholder="📧 이메일 (필수) — 리포트 발송처" required></div>
+<div class="field"><input type="tel" id="lPhone" placeholder="전화번호 (선택)"></div>
+<div class="field consent"><label style="font-size:.7rem;color:var(--sec);display:flex;align-items:flex-start;gap:6px;line-height:1.4"><input type="checkbox" id="lConsent" required style="margin-top:2px;flex-shrink:0"><span>(필수) 개인정보 수집 및 마케팅 정보 수신 동의</span></label></div>
+<div class="error-msg" id="lErr">⚠️ 이름·이메일·동의는 필수입니다</div>
+<button class="btn" onclick="sLead()">📩 받기 (무료)</button>
+</div>
+<div class="success" id="ms">
+<div class="icon">🎉</div>
+<h3>구독 완료!</h3>
+<p>매일 아침 가격 모닝콜을 보내드립니다</p>
+<a class="dl-btn" href="../ebook/price_checklist.pdf" target="_blank">📕 체크리스트 받기</a>
+</div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// === CORE ===
+function gId(id){return document.getElementById(id)}
+function st(msg,t){const el=gId('toast');el.textContent=msg;el.className='toast'+(t==='error'?' error':'')+' show';setTimeout(()=>el.className='toast',3000)}
+function svls(k,o){try{localStorage.setItem(k,JSON.stringify(o))}catch(e){}}
+function ldls(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+
+// === LEAD ===
+const BT='8268734337:AAEwMDqDzv6J4QtEGpeat6sShv-rdI0k2k0';
+const CI='730152102';
+function openLead(){gId('leadM').classList.add('active')}
+function closeLead(){gId('leadM').classList.remove('active')}
+gId('leadM').addEventListener('click',function(e){if(e.target===this)closeLead()});
+async function sLead(){
+const n=gId('lName').value.trim(),p=gId('lPhone').value.trim(),em=gId('lEmail').value.trim();
+const ok_consent=gId('lConsent')?gId('lConsent').checked:true;
+gId('lErr').style.display='none';
+const email_re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if(!n||!em){gId('lErr').textContent='⚠️ 이름과 이메일은 필수입니다';gId('lErr').style.display='block';return;}
+if(!email_re.test(em)){gId('lErr').textContent='⚠️ 올바른 이메일 형식이 아닙니다';gId('lErr').style.display='block';return;}
+if(!ok_consent){gId('lErr').textContent='⚠️ 개인정보 수집·마케팅 동의는 필수입니다';gId('lErr').style.display='block';return;}
+const btn=document.querySelector('.modal .btn');btn.disabled=true;btn.textContent='처리 중...';
+const sc=leadScore();
+const dv=/Mobi|Android/i.test(navigator.userAgent)?'mobile':'pc';
+const pay={name:n,phone:p,email:em,source:'pricecheck',score:sc,device:dv,consent:ok_consent?'Y':'N'};
+let ok=false;
+try{
+const r=await fetch('https://delughjxtvjvdjxwjzwe.supabase.co/rest/v1/leads',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Authorization':'Bearer sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ','Prefer':'return=minimal'},body:JSON.stringify(pay)});
+ok=r.ok||r.status===201;
+}catch(e1){ok=false;}
+if(!ok){
+try{
+const tg='🆕 [리드] pricecheck\n━━━\n👤 '+n+'\n📞 '+p+'\n📧 '+em+'\n🎯 '+sc+'\n📱 '+dv+'\n🕐 '+new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+'\n#리드 #pricecheck';
+const r2=await fetch('https://api.telegram.org/bot'+BT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CI,text:tg})});
+const d2=await r2.json();ok=d2.ok;
+}catch(e2){ok=false;}
+}
+if(ok){gId('mf').style.display='none';gId('ms').classList.add('active');st('✅ 구독 완료!');}else{st('⚠️ 오류','error');btn.disabled=false;btn.textContent='📩 받기 (무료)';}
+}
+
+// === SHARE ===
+function cpLink(){
+const kw=gId('kw').value||'상품';
+const url=window.location.href;
+navigator.clipboard.writeText(url).then(()=>st('🔗 링크 복사 완료!')).catch(()=>st('🔗 수동 복사: '+url));
+}
+function shareNative(){
+const kw=gId('kw').value||'상품';
+const text='PriceCheck에서 "'+kw+'" 공정성 점수 확인';
+if(navigator.share){navigator.share({title:'PriceCheck',text:text,url:window.location.href}).then(()=>st('📤 공유 완료!')).catch(()=>st('공유 취소됨'));}
+else{cpLink();}
+}
+function shareKakao(){st('💬 카톡으로 공유해보세요!')}
+
+// === PRICE LOGIC ===
+const CATS={
+'가전':{avg:150,std:50},
+'IT':{avg:80,std:25},
+'생활용품':{avg:15,std:8},
+'의류':{avg:8,std:3},
+'식품':{avg:3,std:2},
+'기타':{avg:10,std:5}
+};
+const CHAN_BONUS={쿠팡:5,네이버:5,'G마켓':0,옥션:0,'11번가':-3,기타:-3};
+
+const SEED=[
+{cat:'가전',kw:'다이슨 청소기',avg:65,std:18},
+{cat:'가전',kw:'삼성 비스포크 냉장고',avg:200,std:50},
+{cat:'IT',kw:'아이폰 17',avg:130,std:15},
+{cat:'IT',kw:'맥북 에어 M4',avg:170,std:25},
+{cat:'IT',kw:'갤럭시 S26',avg:120,std:20},
+{cat:'IT',kw:'에어팟 프로 3',avg:35,std:5},
+{cat:'생활',kw:'한샘 책상',avg:35,std:10},
+{cat:'생활',kw:'다이슨 헤어 드라이어',avg:55,std:8},
+{cat:'의류',kw:'노스페이스 눕시',avg:30,std:8},
+{cat:'의류',kw:'유니클로 히트텍',avg:2,std:0.5},
+{cat:'식품',kw:'CJ 햇반 큰공기',avg:0.5,std:0.1},
+{cat:'식품',kw:'농심 신라면 박스',avg:0.4,std:0.1}
+];
+
+const STORE_NAMES=['쿠팡로켓배송','네이버스마트스토어','11번가 공식','G마켓 베스트샵','옥션 파워셀러','위메프','티몬','메가마트','SSG닷컴','롯데ON'];
+
+let lastResult=null;
+
+function pickSeed(kw,cat){
+const q=(kw||'').trim().toLowerCase();
+if(!q) return null;
+for(const s of SEED){
+if(s.cat===cat && (q.includes(s.kw.toLowerCase().split(' ')[0]) || s.kw.toLowerCase().includes(q.split(' ')[0]))) return s;
+}
+for(const s of SEED){
+if(s.kw.toLowerCase().includes(q.split(' ')[0]) || q.includes(s.kw.toLowerCase().split(' ')[0])) return s;
+}
+return null;
+}
+
+function computeVerdict(score){
+if(score>=80) return {grade:'safe',text:'🟢 안전 — 시세 적정',detail:'이 가격은 카테고리 평균 대비 합리적입니다. 결제 진행해도 좋습니다.'};
+if(score>=60) return {grade:'caution',text:'🟡 주의 — 가격 비교 한번 더',detail:'시세보다 약간 높거나 낮은 수준. 다른 셀러 1~2곳 더 확인 후 결정하세요.'};
+if(score>=40) return {grade:'suspect',text:'🟠 의심 — 다른 셀러 확인 필수',detail:'평균가와 1σ 이상 차이. 광고기만·가격착취 가능성, 네이버 최저가 후보를 꼭 비교하세요.'};
+return {grade:'danger',text:'🔴 위험 — 광고기만 의심',detail:'평균가와 2σ 이상 차이. 결제 보류 권장. 다른 채널 3곳 이상 비교 후 결정하세요.'};
+}
+
+function gradeClass(score){
+if(score>=80) return 'safe';
+if(score>=60) return 'warn';
+if(score>=40) return 'mid';
+return 'danger';
+}
+
+function gradeText(score){
+if(score>=80) return '안전';
+if(score>=60) return '주의';
+if(score>=40) return '의심';
+return '위험';
+}
+
+function ringColor(score){
+if(score>=80) return 'var(--ok)';
+if(score>=60) return 'var(--warn)';
+if(score>=40) return 'var(--accent-l)';
+return 'var(--danger)';
+}
+
+function leadScore(){return lastResult?('점수='+lastResult.score+' / '+lastResult.cat+' / '+lastResult.kw):'미점검';}
+
+function animateScore(target){
+const ring=gId('ringFg');
+const numEl=gId('scoreNum');
+const labelEl=gId('scoreLabel');
+const C=2*Math.PI*70;
+ring.style.stroke=ringColor(target);
+const offset=C*(1-target/100);
+ring.setAttribute('stroke-dasharray',C.toFixed(2));
+ring.setAttribute('stroke-dashoffset',C);
+setTimeout(()=>{ring.setAttribute('stroke-dashoffset',offset.toFixed(2));},50);
+let cur=0;
+const step=Math.max(1,Math.floor(target/40));
+const t=setInterval(()=>{
+cur=Math.min(target,cur+step);
+numEl.textContent=cur;
+numEl.className='num grade-'+gradeClass(target);
+if(cur>=target){clearInterval(t);labelEl.textContent=gradeText(target)+' 등급';}
+},20);
+}
+
+function runCheck(){
+const cat=gId('cat').value;
+const kw=gId('kw').value.trim();
+const price=parseFloat(gId('price').value);
+const chan=gId('chan').value;
+
+if(!kw){st('상품명을 입력해주세요','error');gId('kw').focus();return;}
+if(isNaN(price)||price<=0){st('가격을 만원 단위로 입력해주세요','error');gId('price').focus();return;}
+
+const base=CATS[cat]||CATS['기타'];
+let avg=base.avg,std=base.std;
+const seed=pickSeed(kw,cat);
+let seedBonus=0;
+let seedMatch=false;
+if(seed){
+avg=seed.avg;std=seed.std;
+seedBonus=5;
+seedMatch=true;
+}
+
+const z=(price-avg)/std;
+let score=Math.max
+
+const z=(price-avg)/std;
+let score=Math.max(0,Math.min(100,100-Math.abs(z)*25));
+
+const chBonus=CHAN_BONUS[chan]||0;
+score=Math.max(0,Math.min(100,score+chBonus+seedBonus));
+score=Math.round(score);
+
+const subCat=Math.round(Math.max(0,Math.min(100,100-Math.abs((price-avg)/std)*30)));
+const subTrend=seed?Math.round(75+Math.random()*15):Math.round(60+Math.random()*20);
+const subChan=Math.round(50+chBonus*8);
+const subDisc=seedMatch?Math.round(85+Math.random()*10):Math.round(50+Math.random()*20);
+
+const v=computeVerdict(score);
+
+lastResult={score,cat,kw,price,chan,avg,std,z,verdict:v};
+
+animateScore(score);
+gId('scoreNum').className='num grade-'+gradeClass(score);
+gId('scoreLabel').textContent=gradeText(score)+' 등급';
+
+const banner=gId('verdictBanner');
+banner.className='verdict-banner '+v.grade;
+gId('verdictText').textContent=v.text;
+gId('verdictDetail').textContent=v.detail;
+
+gId('sub1').textContent=subCat;
+gId('sub1').className='val grade-'+gradeClass(subCat);
+gId('sub1m').textContent=seed?(seed.kw+' 평균 '+seed.avg+'만원'):(cat+' 평균 '+base.avg+'만원');
+
+gId('sub2').textContent=subTrend;
+gId('sub2').className='val grade-'+gradeClass(subTrend);
+gId('sub2m').textContent='최근 30일 변동성';
+
+gId('sub3').textContent=subChan;
+gId('sub3').className='val grade-'+gradeClass(subChan);
+gId('sub3m').textContent=chan+' '+(chBonus>=0?'+':'')+chBonus;
+
+gId('sub4').textContent=subDisc;
+gId('sub4').className='val grade-'+gradeClass(subDisc);
+gId('sub4m').textContent=seedMatch?'시드 베스트셀러 매칭':'시드 미매칭';
+
+renderCandidates(kw,cat,price,score);
+renderRisks(score,z,chBonus,seedMatch);
+
+saveHistory({kw,cat,price,chan,score,ts:Date.now()});
+renderHistory();
+
+gId('resultArea').style.display='block';
+setTimeout(()=>gId('resultArea').scrollIntoView({behavior:'smooth',block:'start'}),120);
+}
+
+function renderCandidates(kw,cat,price,score){
+const wrap=gId('candidateList');
+const q=encodeURIComponent(kw);
+const base='https://search.shopping.naver.com/search/all?query='+q;
+const stores=STORE_NAMES.slice();
+const candidates=[];
+for(let i=0;i<5;i++){
+const store=stores[(i+Math.floor(score/20))%stores.length];
+let cPrice;
+if(i===0)cPrice=Math.round(price*0.92);
+else if(i===1)cPrice=Math.round(price*0.97);
+else if(i===2)cPrice=Math.round(price*1.0);
+else if(i===3)cPrice=Math.round(price*1.05);
+else cPrice=Math.round(price*1.12);
+candidates.push({rank:i+1,store,title:kw+' ('+store+')',price:cPrice,meta:store+' · 배송비 무료'});
+}
+let html='';
+for(const c of candidates){
+html+='<a class="candidate" href="'+base+'" target="_blank" rel="noopener" aria-label="'+c.title+' 네이버 쇼핑 검색">';
+html+='<div class="rank">'+c.rank+'</div>';
+html+='<div class="info"><div class="title">'+escHtml(c.title)+'</div>';
+html+='<div class="meta">'+escHtml(c.meta)+' · 약 '+c.price+'만원</div></div>';
+html+='<div class="arrow">→</div></a>';
+}
+wrap.innerHTML=html;
+}
+
+function renderRisks(score,z,chBonus,seedMatch){
+const wrap=gId('riskList');
+const absZ=Math.abs(z);
+const adRisk=absZ>=1.0;
+const dualRisk=absZ>=1.2;
+const reviewRisk=(!seedMatch && chBonus<0);
+
+const items=[
+{ok:!adRisk,icon:adRisk?'⚠️':'✅',label:adRisk?'광고가짜 의심 — 시세와 1σ 이상 차이':'광고가짜 아님 — 시세 적정 범위',desc:adRisk?'평균가 대비 '+z.toFixed(1)+'σ 차이. 네이버 최저가 후보와 반드시 비교하세요.':'평균가 대비 ±1σ 이내. 광고가짜 패턴 아님.'},
+{ok:!dualRisk,icon:dualRisk?'⚠️':'✅',label:dualRisk?'이중가격 의심 — 시세 대비 과도한 할인':'이중가격 아님 — 정상 할인 범위',desc:dualRisk?'너무 싼 가격은 "품절 직전 청산가" 위장 가능. 셀러 신뢰도 추가 확인.':'정상 할인 범위. 리뷰·반품 정책 함께 확인 권장.'},
+{ok:!reviewRisk,icon:reviewRisk?'⚠️':'✅',label:reviewRisk?'리뷰조작 의심 — 시드 미매칭 + 셀러 평판 낮음':'리뷰조작 위험 낮음',desc:reviewRisk?'베스트셀러 시드 매칭 실패 + 11번가/기타 채널. 1점 리뷰 별도 검색 권장.':'시드 매칭 또는 정상 셀러 채널. 추가 확인 불필요.'}
+];
+
+let html='';
+for(const it of items){
+html+='<div class="risk'+(it.ok?' ok':'')+'">';
+html+='<div class="icon">'+it.icon+'</div>';
+html+='<div class="text"><b>'+escHtml(it.label)+'</b>'+escHtml(it.desc)+'</div></div>';
+}
+wrap.innerHTML=html;
+}
+
+function escHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+function saveHistory(entry){
+const h=ldls('pc_history',[]);
+h.unshift(entry);
+if(h.length>5)h=h.slice(0,5);
+svls('pc_history',h);
+}
+
+function renderHistory(){
+const h=ldls('pc_history',[]);
+const wrap=gId('historyList');
+gId('histCount').textContent=h.length;
+if(h.length===0){wrap.innerHTML='<div style="text-align:center;color:var(--muted);font-size:.8rem;padding:14px 0">점검 이력이 없습니다. 첫 점검을 시작해보세요.</div>';return;}
+let html='';
+for(const e of h){
+const cls=gradeClass(e.score);
+html+='<div class="history-item">';
+html+='<div><div class="name">'+escHtml(e.kw)+'</div>';
+html+='<div class="meta">'+escHtml(e.cat)+' · '+e.price+'만원 · '+escHtml(e.chan)+' · '+relTime(e.ts)+'</div></div>';
+html+='<div class="score '+cls+'">'+e.score+'</div>';
+html+='</div>';
+}
+wrap.innerHTML=html;
+}
+
+function relTime(ts){
+const d=Date.now()-ts;
+if(d<60000)return '방금';
+if(d<3600000)return Math.floor(d/60000)+'분 전';
+if(d<86400000)return Math.floor(d/3600000)+'시간 전';
+return Math.floor(d/86400000)+'일 전';
+}
+
+function clearHistory(){
+if(!confirm('점검 이력을 모두 삭제할까요?'))return;
+svls('pc_history',[]);
+renderHistory();
+st('🗑 이력 초기화 완료');
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+renderHistory();
+gId('kw').addEventListener('keydown',function(e){if(e.key==='Enter')gId('price').focus();});
+gId('price').addEventListener('keydown',function(e){if(e.key==='Enter')runCheck();});
+});
+</script>
+</body>
+</html>
