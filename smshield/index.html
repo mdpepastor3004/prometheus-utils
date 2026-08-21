@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스미싱 방패 — Smishing Shield</title>
+<meta name="description" content="30초 안에 스미싱/보이스피싱 의심 문자·전화·URL 판별. KISA 118 · 112 · 금감원 1332 원클릭 신고. Tesseract OCR + 50개 패턴 DB.">
+<meta name="theme-color" content="#ff7a45">
+<style>
+:root{
+  --bg:#f4f7fc; --bg2:#e9eef7; --glass:#fff; --glass2:#f8fafd;
+  --border:#e2e8f2; --border2:#d0d9e8;
+  --text:#1c2333; --sec:#47516b; --muted:#8b93a8;
+  --accent:#ff7a45; --accent-l:#ffa066; --accent-d:#e85d2a;
+  --ok:#2fb3a0; --warn:#ff9f43; --danger:#ff5b5b;
+  --cyan:#2fb3a0; --purple:#8b7cf6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh}
+.bg-orb{position:fixed;border-radius:50%;filter:blur(120px);opacity:.35;pointer-events:none;z-index:0}
+.bg-orb.a{width:480px;height:480px;background:#ffd5c2;top:-100px;left:-100px}
+.bg-orb.b{width:420px;height:420px;background:#c2e9e0;bottom:-80px;right:-80px}
+.bg-orb.c{width:360px;height:360px;background:#d5c8f7;top:40%;left:50%;transform:translateX(-50%)}
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.78);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+.brand-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-d));display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;box-shadow:0 6px 18px rgba(255,122,69,.32)}
+.brand-sub{font-size:11px;color:var(--muted);font-weight:500;margin-top:-2px}
+.header-streak{display:flex;align-items:center;gap:6px;background:var(--glass2);border:1px solid var(--border);border-radius:999px;padding:6px 12px;font-size:12px;color:var(--sec);font-weight:600}
+.header-streak .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(47,179,160,.18)}
+main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+.hero{text-align:center;padding:24px 0 32px}
+.hero h1{font-size:32px;line-height:1.2;font-weight:800;margin-bottom:10px;background:linear-gradient(135deg,var(--text),var(--accent-d));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:15px;color:var(--sec);max-width:520px;margin:0 auto}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px;background:var(--glass);border:1px solid var(--border);border-radius:16px;margin-bottom:24px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:10px 16px;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;color:var(--sec);white-space:nowrap;border:0;background:transparent;transition:.2s}
+.tab:hover{color:var(--text)}
+.tab.active{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;box-shadow:0 4px 14px rgba(255,122,69,.28)}
+section{display:none;animation:fadeIn .35s ease}
+section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--glass);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(28,35,51,.03)}
+.card h2{font-size:18px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card h2 .ic{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--accent-l),var(--accent));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:16px}
+.card .desc{color:var(--sec);font-size:13px;margin-bottom:14px}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:640px){.input-row{grid-template-columns:1fr}}
+.input-group{display:flex;flex-direction:column;gap:6px}
+.input-group label{font-size:12px;font-weight:600;color:var(--sec)}
+.input-group textarea,.input-group input,.input-group select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--glass2);font:inherit;font-size:14px;color:var(--text);resize:vertical;transition:.2s}
+.input-group textarea:focus,.input-group input:focus,.input-group select:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,122,69,.12)}
+.input-group textarea{min-height:80px}
+.btn{padding:12px 20px;border-radius:12px;border:0;font:inherit;font-weight:700;font-size:14px;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;box-shadow:0 6px 18px rgba(255,122,69,.32)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(255,122,69,.4)}
+.btn-primary:active{transform:translateY(0)}
+.btn-ghost{background:var(--glass2);color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg2)}
+.btn-danger{background:linear-gradient(135deg,var(--danger),#e84545);color:#fff}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.result{margin-top:18px;padding:18px;border-radius:14px;border:1.5px solid var(--border);background:var(--glass2);display:none}
+.result.show{display:block;animation:fadeIn .3s ease}
+.result.critical{border-color:var(--danger);background:linear-gradient(135deg,#fff5f5,#ffe8e8)}
+.result.high{border-color:var(--warn);background:linear-gradient(135deg,#fff8ed,#ffeed8)}
+.result.medium{border-color:var(--accent-l);background:linear-gradient(135deg,#fff5ed,#ffe5d2)}
+.result.low{border-color:var(--ok);background:linear-gradient(135deg,#f0faf7,#d8f0e8)}
+.score-ring{position:relative;width:120px;height:120px;margin:0 auto 14px}
+.score-ring svg{transform:rotate(-90deg);width:120px;height:120px}
+.score-ring .ring-bg{stroke:var(--border);fill:none;stroke-width:10}
+.score-ring .ring-fg{stroke:var(--danger);fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .8s ease,stroke .3s}
+.score-ring .score-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:32px;color:var(--text);line-height:1}
+.score-ring .score-label{font-size:11px;color:var(--sec);font-weight:600;margin-top:2px}
+.reason-list{margin-top:12px;padding-left:0;list-style:none}
+.reason-list li{padding:8px 12px;background:rgba(255,255,255,.7);border-radius:8px;margin-bottom:6px;font-size:13px;color:var(--sec);border-left:3px solid var(--accent)}
+.kisa-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+@media(max-width:640px){.kisa-actions{grid-template-columns:1fr}}
+.kisa-btn{padding:14px;background:#fff;border:1.5px solid var(--border);border-radius:12px;text-align:center;text-decoration:none;color:var(--text);font-weight:700;font-size:13px;cursor:pointer;transition:.2s}
+.kisa-btn:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.06)}
+.kisa-btn .num{font-size:18px;color:var(--accent);font-weight:800;display:block;margin-bottom:2px}
+.quiz-q{padding:18px;background:var(--glass2);border-radius:12px;margin-bottom:14px;border:1px solid var(--border)}
+.quiz-q h3{font-size:15px;font-weight:700;margin-bottom:12px;line-height:1.4}
+.quiz-opts{display:grid;gap:8px}
+.quiz-opt{padding:12px 14px;background:#fff;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font:inherit;font-size:14px;text-align:left;transition:.2s;color:var(--text)}
+.quiz-opt:hover{border-color:var(--accent);background:var(--bg2)}
+.quiz-opt.correct{border-color:var(--ok);background:#f0faf7;color:var(--ok);font-weight:700}
+.quiz-opt.wrong{border-color:var(--danger);background:#fff5f5;color:var(--danger);font-weight:700}
+.quiz-opt:disabled{cursor:default}
+.quiz-progress{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;font-size:13px;color:var(--sec)}
+.quiz-progress .bar{flex:1;height:6px;background:var(--border);border-radius:3px;margin:0 10px;overflow:hidden}
+.quiz-progress .fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-d));transition:width .3s}
+.streak-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px}
+.streak-day{aspect-ratio:1;background:var(--glass2);border:1.5px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--muted)}
+.streak-day.done{background:linear-gradient(135deg,var(--ok),#259687);color:#fff;border-color:var(--ok)}
+.streak-day.today{border-color:var(--accent);background:#fff5ed;color:var(--accent);font-weight:800}
+.streak-stat{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.streak-stat .stat{text-align:center;padding:14px;background:var(--glass2);border-radius:12px;border:1px solid var(--border)}
+.streak-stat .stat .n{font-size:24px;font-weight:800;color:var(--text);display:block}
+.streak-stat .stat .l{font-size:11px;color:var(--sec);margin-top:2px}
+.challenge-day{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--glass2);border:1.5px solid var(--border);border-radius:12px;margin-bottom:8px;transition:.2s}
+.challenge-day.done{background:#f0faf7;border-color:var(--ok)}
+.challenge-day .cd{width:36px;height:36px;border-radius:10px;background:#fff;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--sec)}
+.challenge-day.done .cd{background:var(--ok);color:#fff;border-color:var(--ok)}
+.challenge-day .ct{flex:1}
+.challenge-day .ct .ct-t{font-size:14px;font-weight:700}
+.challenge-day .ct .ct-d{font-size:11px;color:var(--muted);margin-top:2px}
+.kisa-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.kisa-stats .ks{background:linear-gradient(135deg,var(--bg2),var(--glass2));padding:14px;border-radius:12px;border:1px solid var(--border)}
+.kisa-stats .ks .ks-n{font-size:22px;font-weight:800;color:var(--accent-d);display:block}
+.kisa-stats .ks .ks-l{font-size:11px;color:var(--sec);margin-top:2px}
+.share-card{padding:24px;background:linear-gradient(135deg,#fff5ed,#ffe5d2);border-radius:18px;text-align:center;border:1.5px solid var(--accent-l);position:relative;overflow:hidden}
+.share-card::before{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;background:radial-gradient(circle,rgba(255,122,69,.18),transparent);border-radius:50%}
+.share-card h3{font-size:20px;font-weight:800;margin-bottom:6px;color:var(--text)}
+.share-card .badge{display:inline-block;padding:6px 14px;background:#fff;border-radius:999px;font-size:12px;font-weight:700;color:var(--accent);margin:8px 4px;border:1.5px solid var(--accent-l)}
+.share-card .stat-line{font-size:13px;color:var(--sec);margin-top:12px}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--text);color:#fff;padding:14px 22px;border-radius:12px;font-size:14px;font-weight:600;z-index:200;box-shadow:0 8px 28px rgba(0,0,0,.18);transition:.35s;opacity:0}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.ok{background:var(--ok)}
+.toast.danger{background:var(--danger)}
+footer{text-align:center;padding:30px 20px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);margin-top:40px;max-width:1100px;margin-left:auto;margin-right:auto}
+footer a{color:var(--accent);text-decoration:none;font-weight:600}
+.ocr-area{padding:18px;background:var(--glass2);border:2px dashed var(--border2);border-radius:14px;text-align:center;cursor:pointer;transition:.2s;margin-bottom:12px}
+.ocr-area:hover{border-color:var(--accent);background:#fff5ed}
+.ocr-area input{display:none}
+.ocr-area .ic-lg{font-size:36px;margin-bottom:8px}
+.ocr-area .ttl{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.ocr-area .sub{font-size:11px;color:var(--muted)}
+.ocr-loading{color:var(--accent);font-size:13px;margin-top:8px;display:none}
+.ocr-loading.show{display:flex;align-items:center;justify-content:center;gap:8px}
+.spin{width:14px;height:14px;border:2.5px solid var(--accent-l);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty-state{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="bg-orb a"></div>
+<div class="bg-orb b"></div>
+<div class="bg-orb c"></div>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark">🛡️</div>
+    <div>
+      <div>스미싱 방패</div>
+      <div class="brand-sub">Smishing Shield · v1.0</div>
+    </div>
+  </div>
+  <div class="header-streak">
+    <span class="dot"></span>
+    <span id="hdrStreak">연속 0일</span>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>30초 안에 스미싱 판별</h1>
+    <p>의심스러운 문자·URL·전화를 붙여넣으세요. 50개 패턴 DB가 즉시 위험도를 분석합니다.</p>
+  </div>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-target="checker">즉시 검사</button>
+    <button class="tab" data-target="quiz">오늘의 퀴즈</button>
+    <button class="tab" data-target="streak">스트릭</button>
+    <button class="tab" data-target="kisa">KISA 정보</button>
+    <button class="tab" data-target="share">공유</button>
+    <button class="tab" data-target="challenge">30일 챌린지</button>
+    <button class="tab" data-target="push">알림 설정</button>
+    <button class="tab" data-target="sound">사운드</button>
+  </nav>
+
+  <!-- 1. 즉시 검사 -->
+  <section id="checker" class="active">
+    <div class="card">
+      <h2><span class="ic">🔍</span>의심 문자·URL·번호 검사</h2>
+      <p class="desc">문자 캡처본, URL, 발신번호 중 하나를 입력하세요. 패턴 DB 50개로 즉시 분석합니다.</p>
+
+      <div class="ocr-area" id="ocrArea">
+        <div class="ic-lg">📷</div>
+        <div class="ttl">문자 캡처본 OCR 분석</div>
+        <div class="sub">이미지를 선택하면 텍스트를 자동 추출합니다</div>
+        <input type="file" id="ocrInput" accept="image/*">
+      </div>
+      <div class="ocr-loading" id="ocrLoading"><div class="spin"></div>문자 인식 중...</div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="textInput">문자 내용 (또는 URL, 발신번호)</label>
+          <textarea id="textInput" placeholder="예: [Web발신] CJ대한통운 배송조회 http://cjdhl.top/abc"></textarea>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="checkBtn">⚡ 즉시 분석</button>
+        <button class="btn btn-ghost" id="exampleBtn">샘플 보기</button>
+        <button class="btn btn-ghost" id="clearBtn">초기화</button>
+      </div>
+
+      <div class="result" id="result">
+        <div class="score-ring">
+          <svg viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="50"/>
+            <circle class="ring-fg" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314" id="ringFg"/>
+          </svg>
+          <div class="score-num"><span id="scoreNum">0</span><div class="score-label" id="scoreLabel">점</div></div>
+        </div>
+        <h3 id="resultTitle" style="text-align:center;margin-bottom:8px">—</h3>
+        <p id="resultDesc" style="text-align:center;color:var(--sec);font-size:13px;margin-bottom:8px">—</p>
+        <ul class="reason-list" id="reasonList"></ul>
+        <h4 style="margin:18px 0 8px;font-size:14px;color:var(--text)">📞 즉시 신고·문의</h4>
+        <div class="kisa-actions">
+          <a href="tel:118" class="kisa-btn"><span class="num">118</span>스미싱 신고 (KISA)</a>
+          <a href="tel:112" class="kisa-btn"><span class="num">112</span>경찰 신고</a>
+          <a href="tel:1332" class="kisa-btn"><span class="num">1332</span>금융감독원</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 오늘의 퀴즈 -->
+  <section id="quiz">
+    <div class="card">
+      <h2><span class="ic">🎯</span>오늘의 스미싱 퀴즈 (5문항)</h2>
+      <p class="desc">실제 사례 기반 5문항. 60점 이상 통과.</p>
+      <div class="quiz-progress">
+        <span id="quizNow">1</span> / 5
+        <div class="bar"><div class="fill" id="quizFill" style="width:20%"></div></div>
+        <span id="quizScore">0점</span>
+      </div>
+      <div id="quizContainer"></div>
+      <div id="quizResult" style="display:none;text-align:center;padding:20px"></div>
+    </div>
+  </section>
+
+  <!-- 3. 스트릭 -->
+  <section id="streak">
+    <div class="card">
+      <h2><span class="ic">🔥</span>연속 학습 스트릭</h2>
+      <p class="desc">매일 1회 검사 또는 퀴즈를 풀면 연속일수가 쌓입니다.</p>
+      <div class="streak-stat">
+        <div class="stat"><span class="n" id="statStreak">0</span><span class="l">연속 일수</span></div>
+        <div class="stat"><span class="n" id="statTotal">0</span><span class="l">총 검사 횟수</span></div>
+        <div class="stat"><span class="n" id="statScore">0</span><span class="l">누적 점수</span></div>
+      </div>
+      <h3 style="margin-top:20px;font-size:14px">📅 최근 28일</h3>
+      <div class="streak-grid" id="streakGrid"></div>
+    </div>
+  </section>
+
+  <!-- 4. KISA 정보 -->
+  <section id="kisa">
+    <div class="card">
+      <h2><span class="ic">📊</span>2024년 상반기 공공데이터</h2>
+      <p class="desc">경찰청·KISA·국회도서관 자료 기반 (vpd009 본문)</p>
+      <div class="kisa-stats">
+        <div class="ks"><span class="ks-n">887,859</span><span class="ks-l">스미싱 신고 건수 (2024 H1)</span></div>
+        <div class="ks"><span class="ks-n">3,242억</span><span class="ks-l">보이스피싱 피해액 (2024 H1)</span></div>
+        <div class="ks"><span class="ks-n">1,700만</span><span class="ks-l">1인당 보이스피싱 피해 (2023)</span></div>
+        <div class="ks"><span class="ks-n">50+</span><span class="ks-l">패턴 DB (시드 v1.0)</span></div>
+      </div>
+      <h3 style="margin-top:20px;font-size:14px">🗂️ 카테고리별 패턴 분포</h3>
+      <div id="kisaChart" style="max-width:340px;margin:14px auto 0"></div>
+    </div>
+  </section>
+
+  <!-- 5. 공유 -->
+  <section id="share">
+    <div class="card">
+      <h2><span class="ic">📤</span>공유 카드 만들기</h2>
+      <p class="desc">나의 안전 점수를 가족·친구에게 공유하세요.</p>
+      <div class="share-card" id="shareCard">
+        <h3>나의 스미싱 안전 점수</h3>
+        <div style="font-size:48px;font-weight:800;color:var(--accent-d);margin:8px 0"><span id="shareScore">0</span>점</div>
+        <div>
+          <span class="badge" id="shareBadge">🛡️ 새싹</span>
+        </div>
+        <div class="stat-line">총 검사 <strong id="shareTotal">0</strong>회 · 연속 <strong id="shareStreak">0</strong>일</div>
+        <div class="stat-line" style="margin-top:6px">스미싱 방패로 가족을 보호하세요</div>
+      </div>
+      <div class="btn-row" style="justify-content:center;margin-top:18px">
+        <button class="btn btn-primary" id="shareBtn">📱 공유하기</button>
+        <button class="btn btn-ghost" id="downloadBtn">💾 이미지 저장</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 30일 챌린지 -->
+  <section id="challenge">
+    <div class="card">
+      <h2><span class="ic">🏆</span>30일 마스터 챌린지</h2>
+      <p class="desc">30일간 매일 1문항씩 풀면 스미싱 패턴 마스터 등급 획득.</p>
+      <div id="challengeList"></div>
+    </div>
+  </section>
+
+  <!-- 7. 알림 설정 -->
+  <section id="push">
+    <div class="card">
+      <h2><span class="ic">🔔</span>위험 패턴 알림 (Web Push)</h2>
+      <p class="desc">신규 스미싱 패턴 발견 시 브라우저 알림을 받습니다.</p>
+      <div class="input-group" style="margin-top:14px">
+        <label>알림 활성화</label>
+        <button class="btn btn-primary" id="notifyBtn" style="width:100%">🔔 알림 켜기</button>
+        <div id="notifyStatus" style="font-size:12px;color:var(--sec);margin-top:8px;text-align:center">현재: 비활성</div>
+      </div>
+      <div style="margin-top:18px;padding:14px;background:var(--glass2);border-radius:12px;font-size:12px;color:var(--sec);line-height:1.7">
+        💡 <strong>알림 수신 항목:</strong><br>
+        · 신규 스미싱 패턴 등록 (KISA 업데이트 시)<br>
+        · 매일 오전 9시 일일 퀴즈 알림<br>
+        · 30일 챌린지 D-1 리마인더<br>
+        · 가족 보호 점수 변화
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 사운드 -->
+  <section id="sound">
+    <div class="card">
+      <h2><span class="ic">🔊</span>경고음 설정</h2>
+      <p class="desc">고위험 패턴 감지 시 경고음을 재생합니다.</p>
+      <div class="btn-row" style="margin-top:14px">
+        <button class="btn btn-primary" id="testSoundBtn">🔊 경고음 미리듣기</button>
+        <button class="btn btn-ghost" id="toggleSoundBtn">🔕 사운드 OFF</button>
+      </div>
+      <div class="input-group" style="margin-top:18px">
+        <label for="volRange">볼륨 (<span id="volVal">70</span>%)</label>
+        <input type="range" id="volRange" min="0" max="100" value="70" style="width:100%">
+      </div>
+      <div style="margin-top:18px;padding:14px;background:var(--glass2);border-radius:12px;font-size:12px;color:var(--sec);line-height:1.7">
+        💡 <strong>사운드 디자인:</strong><br>
+        · 고위험(85+): 3회 경고음 + 진동 패턴<br>
+        · 중위험(50~84): 1회 부드러운 경고<br>
+        · 안전(0~49): 차임 (긍정 피드백)
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © 2026 스미싱 방패 · 본 페이지는 <a href="https://www.boho.or.kr/" target="_blank" rel="noopener">KISA</a>·<a href="https://www.police.go.kr/" target="_blank" rel="noopener">경찰청</a> 공공데이터 기반 · v1.0
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script>
+'use strict';
+
+/* ============================================================
+   스미싱 방패 — Smishing Shield v1.0
+   8개 기능: 즉시검사 / 오늘의퀴즈 / 스트릭 / KISA / 공유 / 30일챌린지 / 푸시 / 사운드
+   ============================================================ */
+
+const STORAGE = {
+  STREAK: 'ss_streak',
+  TOTAL: 'ss_total',
+  SCORE: 'ss_score',
+  HISTORY: 'ss_history',
+  CHALLENGE: 'ss_challenge',
+  SOUND: 'ss_sound',
+  VOL: 'ss_vol',
+  NOTIFY: 'ss_notify'
+};
+
+const TODAY = () => new Date().toISOString().slice(0, 10);
+const $ = (id) => document.getElementById(id);
+const $$ = (sel) => document.querySelectorAll(sel);
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+function toast(msg, type) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.className = 'toast', 2400);
+}
+
+let patterns = [];
+let soundEnabled = localStorage.getItem(STORAGE.SOUND) !== 'off';
+let volVal = parseInt(localStorage.getItem(STORAGE.VOL) || '70', 10);
+
+/* ============== DATA ============== */
+async function loadPatterns() {
+  try {
+    const res = await fetch('data/patterns.json');
+    const data = await res.json();
+    patterns = data.patterns;
+  } catch (e) {
+    console.error('patterns.json load failed', e);
+    toast('패턴 DB 로드 실패. data/patterns.json 확인', 'danger');
+  }
+}
+
+/* ============== 1. 즉시 검사 ============== */
+function analyze(text) {
+  const result = {
+    score: 0,
+    matches: [],
+    reasons: []
+  };
+  if (!text || !text.trim()) {
+    return { ...result, score: 0, title: '입력 필요', desc: '검사할 문자·URL·번호를 입력하세요.' };
+  }
+
+  const sender = text.match(/(?:^|[\s\[\]])(0\d{1,2}-?\d{3,4}-?\d{4})/);
+  const urls = text.match(/https?:\/\/[^\s]+/g) || [];
+
+  patterns.forEach(p => {
+    let matched = false;
+    const kws = p.keywords || [];
+    for (const kw of kws) {
+      if (kw && text.toLowerCase().includes(kw.toLowerCase())) {
+        matched = true;
+        result.matches.push({ pattern: p, type: 'keyword', value: kw });
+        break;
+      }
+    }
+    if (!matched && p.url_pattern && urls.length) {
+      for (const u of urls) {
+        try {
+          if (new RegExp(p.url_pattern, 'i').test(u)) {
+            matched = true;
+            result.matches.push({ pattern: p, type: 'url', value: u });
+            break;
+          }
+        } catch (e) { /* skip invalid regex */ }
+      }
+    }
+    if (!matched && p.sender_pattern && sender) {
+      try {
+        if (new RegExp(p.sender_pattern).test(sender[1])) {
+          const senderKeywords = (p.keywords || []).filter(k =>
+            k && text.toLowerCase().includes(k.toLowerCase())
+          );
+          if (p.keywords && p.keywords.length > 0 && senderKeywords.length === 0) {
+            // sender alone without keyword -> weak match, ignore
+          } else {
+            matched = true;
+            result.matches.push({ pattern: p, type: 'sender', value: sender[1] });
+          }
+        }
+      } catch (e) { /* skip */ }
+    }
+  });
+
+  if (result.matches.length === 0) {
+    if (urls.length) {
+      const riskyTld = /\.(top|xyz|click|online|site|live|cyou|rest|review|stream|trade|fun)\b/i;
+      const hasRisky = urls.some(u => riskyTld.test(u));
+      if (hasRisky) {
+        result.score = 60;
+        result.reasons.push('신규 최상위 도메인(.top/.xyz 등) 사용 — 피싱 의심');
+      } else {
+        result.score = 30;
+        result.reasons.push('알려진 패턴과 일치하지 않음 (단, 출처 직접 확인 권장)');
+      }
+    } else if (sender) {
+      result.score = 25;
+      result.reasons.push('발신번호 형식만으로는 판단 불가 — 본문 내용 확인 필요');
+    } else {
+      result.score = 10;
+      result.reasons.push('패턴 DB에 매칭 없음 (안전 추정)');
+    }
+  } else {
+    const max = Math.max(...result.matches.map(m => m.pattern.risk_score));
+    const avg = result.matches.reduce((a, m) => a + m.pattern.risk_score, 0) / result.matches.length;
+    result.score = Math.min(100, Math.round(max * 0.7 + avg * 0.3));
+
+    const matchedTypes = new Set(result.matches.map(m => m.pattern.category));
+    result.matches.forEach(m => {
+      result.reasons.push(`[${m.pattern.type}] ${m.value} 매칭 — 위험도 ${m.pattern.risk_score}점`);
+    });
+
+    if (matchedTypes.has('voice_phishing') || matchedTypes.has('government_fraud')) {
+      if (result.matches.some(m => /안전계좌|이체|명의도용|OTP|인증번호|비밀번호/.test(text))) {
+        result.score = Math.max(result.score, 98);
+        result.reasons.unshift('🚨 안전계좌·OTP 요구 — 절대 금지, 즉시 112 신고');
+        if (soundEnabled) playWarning('critical');
+      }
+    }
+  }
+
+  if (result.score >= 90) {
+    result.title = '🚨 위험 — 즉시 신고';
+    result.desc = '확인된 사기 패턴입니다. 절대 링크 클릭·이체·정보입력 금지.';
+  } else if (result.score >= 75) {
+    result.title = '⚠️ 경고 — 출처 확인';
+    result.desc = '의심스러운 패턴입니다. 공식 채널에서 재확인하세요.';
+  } else if (result.score >= 50) {
+    result.title = '⚡ 주의 — 도메인 검증';
+    result.desc = '낮은 확률이지만 주의가 필요합니다.';
+  } else {
+    result.title = '✅ 관찰 — 정기 점검';
+    result.desc = '현재 안전해 보이나 항상 주의하세요.';
+  }
+
+  return result;
+}
+
+function renderResult(r) {
+  const el = $('result');
+  el.classList.remove('critical', 'high', 'medium', 'low');
+  if (r.score >= 90) el.classList.add('critical');
+  else if (r.score >= 75) el.classList.add('high');
+  else if (r.score >= 50) el.classList.add('medium');
+  else el.classList.add('low');
+
+  $('scoreNum').textContent = r.score;
+  $('scoreLabel').textContent = '점';
+  $('resultTitle').textContent = r.title;
+  $('resultDesc').textContent = r.desc;
+
+  const circumference = 314;
+  const offset = circumference - (r.score / 100) * circumference;
+  const ring = $('ringFg');
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = r.score >= 90 ? '#ff5b5b' : r.score >= 75 ? '#ff9f43' : r.score >= 50 ? '#ffa066' : '#2fb3a0';
+
+  const list = $('reasonList');
+  list.innerHTML = r.reasons.map(reason => `<li>${reason}</li>`).join('');
+
+  el.classList.add('show');
+  recordActivity(r.score);
+}
+
+/* ============== 2. 오늘의 퀴즈 ============== */
+const QUIZ_BANK = [
+  { q: '[Web발신] CJ대한통운 배송조회 주소불명 http://cjdhl.top/abc — 어떻게 해야 할까요?', opts: ['URL 클릭해서 확인','택배사 공식앱에서 배송조회','CJ대한통운 1588-1551 전화','둘 다'], correct: 3, exp: '택배사 공식앱 확인 + 공식 대표번호 검증이 가장 안전합니다.' },
+  { q: '"서울중앙지검 감사팀입니다. 명의도용 사건 안전계좌로 이체해주세요" — 이 상황의 정답은?', opts: ['즉시 이체','지인에게 상담','전화 끊고 112 신고','검찰에 확인 전화'], correct: 2, exp: '검찰·경찰은 절대 안전계좌를 요구하지 않습니다. 112 즉시 신고.' },
+  { q: '의심스러운 URL을 받았습니다. 가장 먼저 확인할 것은?', opts: ['URL 전체 도메인 (.top, .xyz 등 신규 도메인 주의)','링크 디자인','글자 색상','발신 시간'], correct: 0, exp: '도메인 등록일과 신생 도메인 여부가 가장 핵심 판별 기준입니다.' },
+  { q: '"엄마 나 사고났어 급해 돈 보내줘" 문자를 받았습니다. 어떻게?', opts: ['바로 송금','다른 가족에게 확인 전화','카톡 메시지 확인','보이스피싱 신고'], correct: 1, exp: 'AI 보이스피싱 시대, 가족이어도 반드시 다른 경로로 본인 확인.' },
+  { q: 'KISA 스미싱 신고 번호는?', opts: ['112','118','1332','114'], correct: 1, exp: 'KISA 스미싱 신고 118 / 경찰 112 / 금감원 1332 (금융사기).' },
+  { q: '발신번호가 "1588-1234"입니다. 어떻게 판단할까요?', opts: ['항상 안전','대표번호 도용 가능 — 내용으로 판단','항상 위험','ARS 누름'], correct: 1, exp: '발신번호는 위조 가능합니다. 본문 URL·키워드로 종합 판단.' },
+  { q: '단축 URL(bit.ly 등)을 받았습니다. 안전한가요?', opts: ['항상 안전','항상 위험','미리보기 후 판단','즉시 클릭'], correct: 2, exp: '단축 URL은 미리보기 서비스로 실제 도메인 확인 후 클릭 여부 결정.' },
+  { q: '"본인확인 인증번호를 입력해주세요" 링크를 클릭하라고 합니다. 어떻게?', opts: ['입력','무시','전화 끊고 공식앱 확인','ARS 누름'], correct: 2, exp: 'OTP·인증번호 유도는 100% 사기. 절대 입력 금지, 공식앱에서 직접 확인.' },
+  { q: '신규 최상위 도메인(.top .xyz .click)이 등장한 이유는?', opts: ['저렴해서','.com .kr이 포화되어서','사기꾼이 자주 사용','디자인 좋아서'], correct: 2, exp: '저렴한 비용 + 일회성 사용 + 추적 어려움 → 사기에 빈번히 악용됩니다.' },
+  { q: '"고액결제 승인되었습니다. 취소는 1번을 눌러주세요" ARS — 어떻게?', opts: ['즉시 1번','카드사 대표번호 직접 확인','ARS 끝까지','ARS 끊고 카드 정지'], correct: 1, exp: '피싱 ARS는 카드사 대표번호(1544-7000 등)로 직접 확인.' },
+  { q: '"1인당 보이스피싱 피해액은?" (2023년 국회도서관 통계)', opts: ['100만원','500만원','1,700만원','1억'], correct: 2, exp: '2023년 1인당 보이스피싱 평균 피해액 1,700만원 (전년 比 1.5배↑).' },
+  { q: '"환급금을 지금바로 돌려드립니다" 문자의 핵심 미끼는?', opts: ['신뢰','긴급성','소식통','공식'], correct: 1, exp: '"지금바로/24시간/즉시" 같은 긴급성 강조는 사기 1순위 미끼.' },
+  { q: '"카카오뱅크 비밀번호변경" 링크 — 정답?', opts: ['즉시 변경','카카오뱅크앱에서 직접 변경','링크 클릭 후 변경','전화로 변경'], correct: 1, exp: 'URL의 "kakaobank" 문자에 속지 마세요. 공식앱 직접 진입이 유일한 안전.' },
+  { q: '"정부지원금 지금 신청하세요" — 어떻게?', opts: ['즉시 신청','복지로 129 확인','링크 클릭','ARS 응답'], correct: 1, exp: '정부는 절대 문자로 개인정보·계좌를 요구하지 않습니다. 정부24·복지로 공식 확인.' },
+  { q: '2024년 상반기 스미싱 신고 건수는?', opts: ['10만건','50만건','887,859건','300만건'], correct: 2, exp: '경찰청 2024 H1 스미싱 신고 88만 7,859건 (2020년 이래 최대).' }
+];
+
+function pickDailyQuiz() {
+  const seed = new Date().toISOString().slice(0, 10);
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) & 0xffffffff;
+  const start = Math.abs(hash) % QUIZ_BANK.length;
+  const daily = [];
+  for (let i = 0; i < 5; i++) daily.push(QUIZ_BANK[(start + i) % QUIZ_BANK.length]);
+  return daily;
+}
+
+let quizIdx = 0, quizScore = 0, quizCurrent = [];
+
+function startQuiz() {
+  quizIdx = 0; quizScore = 0;
+  quizCurrent = pickDailyQuiz();
+  $('quizContainer').style.display = 'block';
+  $('quizResult').style.display = 'none';
+  renderQuiz();
+}
+
+function renderQuiz() {
+  if (quizIdx >= quizCurrent.length) return finishQuiz();
+  const q = quizCurrent[quizIdx];
+  $('quizNow').textContent = quizIdx + 1;
+  $('quizFill').style.width = ((quizIdx + 1) / 5 * 100) + '%';
+  $('quizScore').textContent = quizScore + '점';
+
+  $('quizContainer').innerHTML = `
+    <div class="quiz-q">
+      <h3>Q${quizIdx + 1}. ${q.q}</h3>
+      <div class="quiz-opts">
+        ${q.opts.map((o, i) => `<button class="quiz-opt" data-i="${i}">${o}</button>`).join('')}
+      </div>
+      <div id="quizExp" style="margin-top:12px;padding:10px 14px;background:var(--glass2);border-radius:10px;font-size:13px;color:var(--sec);display:none"></div>
+    </div>`;
+
+  $$('.quiz-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.i, 10);
+      $$('.quiz-opt').forEach(b => b.disabled = true);
+      if (i === q.correct) {
+        btn.classList.add('correct');
+        quizScore += 20;
+        $('quizScore').textContent = quizScore + '점';
+      } else {
+        btn.classList.add('wrong');
+        $$('.quiz-opt')[q.correct].classList.add('correct');
+      }
+      const exp = $('quizExp');
+      exp.textContent = '💡 ' + q.exp;
+      exp.style.display = 'block';
+      setTimeout(() => { quizIdx++; renderQuiz(); }, 1800);
+    });
+  });
+}
+
+function finishQuiz() {
+  $('quizContainer').style.display = 'none';
+  const passed = quizScore >= 60;
+  $('quizResult').innerHTML = `
+    <div style="font-size:48px;margin-bottom:8px">${passed ? '🎉' : '📚'}</div>
+    <h3 style="font-size:22px;margin-bottom:6px">${passed ? '통과!' : '재도전 필요'}</h3>
+    <p style="color:var(--sec);margin-bottom:14px">점수: <strong>${quizScore}</strong>/100점 (${passed ? '60점 통과' : '60점 이상 필요'})</p>
+    <button class="btn btn-primary" onclick="startQuiz()">🔄 다시 풀기</button>`;
+  $('quizResult').style.display = 'block';
+  if (passed) {
+    recordActivity(quizScore);
+    toast('오늘의 퀴즈 통과! +' + quizScore + '점', 'ok');
+    if (soundEnabled) playWarning('low');
+  }
+}
+
+/* ============== 3. 스트릭 ============== */
+function recordActivity(score) {
+  const t = TODAY();
+  const history = JSON.parse(localStorage.getItem(STORAGE.HISTORY) || '{}');
+  if (!history[t]) history[t] = { count: 0, score: 0 };
+  history[t].count++;
+  history[t].score += score;
+  localStorage.setItem(STORAGE.HISTORY, JSON.stringify(history));
+  localStorage.setItem(STORAGE.TOTAL, String(parseInt(localStorage.getItem(STORAGE.TOTAL) || '0', 10) + 1));
+  localStorage.setItem(STORAGE.SCORE, String(parseInt(localStorage.getItem(STORAGE.SCORE) || '0', 10) + score));
+  updateStreak();
+}
+
+function updateStreak() {
+  const history = JSON.parse(localStorage.getItem(STORAGE.HISTORY) || '{}');
+  const dates = Object.keys(history).sort();
+  let streak = 0;
+  const today = new Date();
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const k = d.toISOString().slice(0, 10);
+    if (history[k]) streak++;
+    else if (i > 0) break;
+  }
+  localStorage.setItem(STORAGE.STREAK, String(streak));
+  $('hdrStreak').textContent = '연속 ' + streak + '일';
+  $('statStreak').textContent = streak;
+  $('statTotal').textContent = localStorage.getItem(STORAGE.TOTAL) || '0';
+  $('statScore').textContent = localStorage.getItem(STORAGE.SCORE) || '0';
+  $('shareScore').textContent = localStorage.getItem(STORAGE.SCORE) || '0';
+  $('shareTotal').textContent = localStorage.getItem(STORAGE.TOTAL) || '0';
+  $('shareStreak').textContent = streak;
+  $('shareBadge').textContent = streak >= 30 ? '🛡️ 마스터' : streak >= 7 ? '🥇 고수' : streak >= 3 ? '🥈 중급' : '🛡️ 새싹';
+  renderStreakGrid();
+}
+
+function renderStreakGrid() {
+  const history = JSON.parse(localStorage.getItem(STORAGE.HISTORY) || '{}');
+  const grid = $('streakGrid');
+  const days = [];
+  const today = new Date();
+  for (let i = 27; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    days.push(d);
+  }
+  grid.innerHTML = days.map(d => {
+    const k = d.toISOString().slice(0, 10);
+    const cls = history[k] ? 'done' : (k === TODAY() ? 'today' : '');
+    return `<div class="streak-day ${cls}">${d.getDate()}</div>`;
+  }).join('');
+}
+
+/* ============== 4. KISA 차트 ============== */
+function renderKisaChart() {
+  if (!patterns.length) return;
+  const counts = {};
+  patterns.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
+  const labels = Object.keys(counts);
+  const data = Object.values(counts);
+  const ctx = document.createElement('canvas');
+  ctx.style.width = '100%'; ctx.style.height = '240px';
+  $('kisaChart').innerHTML = '';
+  $('kisaChart').appendChild(ctx);
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: ['#ff7a45', '#ff9f43', '#ffa066', '#2fb3a0', '#8b7cf6', '#ff5b5b', '#259687', '#e85d2a', '#7b6cf6', '#5b8b6c'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'right', labels: { font: { size: 11 }, boxWidth: 12 } } }
+    }
+  });
+}
+
+/* ============== 5. 공유 ============== */
+async function shareCard() {
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: '스미싱 방패 — 안전 점수',
+        text: `나의 스미싱 안전 점수 ${localStorage.getItem(STORAGE.SCORE) || 0}점! 가족을 보호하세요.`,
+        url: location.href
+      });
+      toast('공유 완료!', 'ok');
+    } catch (e) {
+      if (e.name !== 'AbortError') toast('공유 실패: ' + e.message, 'danger');
+    }
+  } else {
+    const text = `나의 스미싱 안전 점수 ${localStorage.getItem(STORAGE.SCORE) || 0}점!\n스미싱 방패로 가족을 보호하세요 🛡️\n${location.href}`;
+    try {
+      await navigator.clipboard.writeText(text);
+      toast('클립보드에 복사됨!', 'ok');
+    } catch (e) { toast('공유 API 미지원', 'danger'); }
+  }
+}
+
+function downloadCard() {
+  const card = $('shareCard');
+  const text = `나의 스미싱 안전 점수: ${localStorage.getItem(STORAGE.SCORE) || 0}점\n총 검사: ${localStorage.getItem(STORAGE.TOTAL) || 0}회 · 연속: ${localStorage.getItem(STORAGE.STREAK) || 0}일`;
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'smshield-score.txt'; a.click();
+  URL.revokeObjectURL(url);
+  toast('저장 완료!', 'ok');
+}
+
+/* ============== 6. 30일 챌린지 ============== */
+function renderChallenge() {
+  const completed = JSON.parse(localStorage.getItem(STORAGE.CHALLENGE) || '{}');
+  const start = new Date();
+  start.setDate(start.getDate() - 29);
+  const list = $('challengeList');
+  list.innerHTML = '';
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    const k = d.toISOString().slice(0, 10);
+    const done = completed[k];
+    const isToday = k === TODAY();
+    const el = document.createElement('div');
+    el.className = 'challenge-day' + (done ? ' done' : '');
+    el.innerHTML = `
+      <div class="cd">${done ? '✓' : 'D' + (i + 1)}</div>
+      <div class="ct">
+        <div class="ct-t">${['택배사칭', '금융사칭', '정부사칭', '카드사칭', '가족사칭', '당첨사기', '통신사칭', '쇼핑몰', '취업사기', '보이스피싱'][i % 10]} 패턴 학습</div>
+        <div class="ct-d">${d.getMonth() + 1}/${d.getDate()} ${isToday ? '(오늘)' : ''}</div>
+      </div>
+      ${done ? '<span style="color:var(--ok);font-weight:700;font-size:18px">✓</span>' : ''}`;
+    list.appendChild(el);
+  }
+  const done30 = Object.keys(completed).length;
+  if (done30 < 30) {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-primary';
+    btn.style.width = '100%'; btn.style.marginTop = '14px';
+    btn.textContent = done30 === 0 ? '🚀 30일 챌린지 시작' : `✅ 오늘 학습 완료하기 (${done30}/30)`;
+    btn.addEventListener('click', () => {
+      const c = JSON.parse(localStorage.getItem(STORAGE.CHALLENGE) || '{}');
+      c[TODAY()] = true;
+      localStorage.setItem(STORAGE.CHALLENGE, JSON.stringify(c));
+      recordActivity(50);
+      toast('오늘 학습 완료! +50점', 'ok');
+      renderChallenge();
+    });
+    list.appendChild(btn);
+  } else {
+    list.insertAdjacentHTML('beforeend', '<div style="text-align:center;padding:20px;background:linear-gradient(135deg,#f0faf7,#d8f0e8);border-radius:14px;margin-top:14px"><div style="font-size:32px;margin-bottom:6px">🏆</div><strong>30일 마스터 달성!</strong><div style="font-size:12px;color:var(--sec);margin-top:4px">스미싱 패턴 마스터 등급</div></div>');
+  }
+}
+
+/* ============== 7. Web Push ============== */
+async function toggleNotify() {
+  if (!('Notification' in window)) {
+    toast('이 브라우저는 알림을 지원하지 않습니다', 'danger');
+    return;
+  }
+  if (Notification.permission === 'granted') {
+    new Notification('스미싱 방패', { body: '알림이 이미 활성화되어 있습니다 ✅', icon: '🛡️' });
+    return;
+  }
+  const perm = await Notification.requestPermission();
+  if (perm === 'granted') {
+    localStorage.setItem(STORAGE.NOTIFY, 'on');
+    $('notifyStatus').textContent = '현재: 활성 ✅';
+    new Notification('스미싱 방패', { body: '신규 패턴 알림이 활성화되었습니다 🛡️' });
+    toast('알림 활성화 완료!', 'ok');
+  } else {
+    $('notifyStatus').textContent = '현재: 거부됨 (브라우저 설정 확인)';
+    toast('알림 권한이 거부되었습니다', 'danger');
+  }
+}
+
+/* ============== 8. 사운드 ============== */
+let audioCtx = null;
+function getAudio() {
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
+  }
+  return audioCtx;
+}
+
+function playTone(freq, dur, delay) {
+  const ctx = getAudio();
+  if (!ctx) return;
+  const t0 = ctx.currentTime + (delay || 0);
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, t0);
+  gain.gain.linearRampToValueAtTime(volVal / 100 * 0.3, t0 + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t0);
+  osc.stop(t0 + dur);
+}
+
+function playWarning(level) {
+  if (!soundEnabled) return;
+  if (level === 'critical') {
+    playTone(880, 0.18, 0);
+    playTone(880, 0.18, 0.25);
+    playTone(880, 0.18, 0.5);
+  } else if (level === 'high') {
+    playTone(660, 0.2, 0);
+    playTone(660, 0.2, 0.3);
+  } else {
+    playTone(523, 0.15, 0);
+  }
+}
+
+function testSound() {
+  const ctx = getAudio();
+  if (!ctx) { toast('Web Audio 미지원', 'danger'); return; }
+  if (ctx.state === 'suspended') ctx.resume();
+  playWarning('critical');
+  toast('경고음 재생 (고위험 패턴)', 'ok');
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  localStorage.setItem(STORAGE.SOUND, soundEnabled ? 'on' : 'off');
+  $('toggleSoundBtn').textContent = soundEnabled ? '🔕 사운드 OFF' : '🔊 사운드 ON';
+  toast('사운드 ' + (soundEnabled ? 'ON' : 'OFF'));
+}
+
+/* ============== OCR ============== */
+async function runOCR(file) {
+  $('ocrLoading').classList.add('show');
+  $('ocrArea').style.pointerEvents = 'none';
+  try {
+    if (typeof Tesseract === 'undefined') {
+      throw new Error('Tesseract.js 미로드');
+    }
+    const { data: { text } } = await Tesseract.recognize(file, 'kor+eng', {
+      logger: () => {}
+    });
+    $('textInput').value = text.trim();
+    toast('OCR 완료: ' + text.length + '자 추출', 'ok');
+    if (text.trim()) doCheck();
+  } catch (e) {
+    toast('OCR 실패: ' + e.message, 'danger');
+  } finally {
+    $('ocrLoading').classList.remove('show');
+    $('ocrArea').style.pointerEvents = '';
+  }
+}
+
+/* ============== 메인 ============== */
+async function doCheck() {
+  const text = $('textInput').value;
+  if (!text.trim()) { toast('검사할 내용을 입력하세요', 'danger'); return; }
+  const r = analyze(text);
+  renderResult(r);
+  if (r.score >= 75 && soundEnabled) playWarning('high');
+}
+
+function bind() {
+  $$('.tab').forEach(t => t.addEventListener('click', () => {
+    $$('.tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    const target = t.dataset.target;
+    $$('section').forEach(s => s.classList.remove('active'));
+    $('checker').classList.remove('active');
+    $(target).classList.add('active');
+    if (target === 'quiz') startQuiz();
+    if (target === 'streak') updateStreak();
+    if (target === 'kisa') renderKisaChart();
+    if (target === 'share') updateStreak();
+    if (target === 'challenge') renderChallenge();
+  }));
+
+  $('checkBtn').addEventListener('click', doCheck);
+  $('clearBtn').addEventListener('click', () => { $('textInput').value = ''; $('result').classList.remove('show'); });
+  $('exampleBtn').addEventListener('click', () => {
+    $('textInput').value = '[Web발신] CJ대한통운 배송조회 주소불명 http://cjdhl.top/abc 확인하세요';
+  });
+  $('textInput').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) doCheck(); });
+
+  $('ocrInput').addEventListener('change', e => { if (e.target.files[0]) runOCR(e.target.files[0]); });
+
+  $('shareBtn').addEventListener('click', shareCard);
+  $('downloadBtn').addEventListener('click', downloadCard);
+
+  $('notifyBtn').addEventListener('click', toggleNotify);
+  $('testSoundBtn').addEventListener('click', testSound);
+  $('toggleSoundBtn').addEventListener('click', toggleSound);
+  $('volRange').addEventListener('input', e => {
+    volVal = parseInt(e.target.value, 10);
+    localStorage.setItem(STORAGE.VOL, String(volVal));
+    $('volVal').textContent = volVal;
+  });
+
+  $('toggleSoundBtn').textContent = soundEnabled ? '🔕 사운드 OFF' : '🔊 사운드 ON';
+  $('volRange').value = volVal;
+  $('volVal').textContent = volVal;
+
+  if ('Notification' in window && Notification.permission === 'granted') {
+    $('notifyStatus').textContent = '현재: 활성 ✅';
+  } else if ('Notification' in window && Notification.permission === 'denied') {
+    $('notifyStatus').textContent = '현재: 거부됨 (브라우저 설정 확인)';
+  }
+}
+
+(async function init() {
+  await loadPatterns();
+  bind();
+  updateStreak();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+{
+  "UTIL_007": {
+    "vpd_id": "vpd006",
+    "service_name": "delivery_scam_guard",
+    "description": "30초 안에 배달앱 허위광고/불량 음식점 정보 + 대안 3개 비교",
+    "pain_score": 78.5,
+    "target_users": "배달앱 이용자",
+    "key_features": [
+      "배달앱 허위/과장 광고 자동 탐지",
+      "불량 업소 정보 제공 및 피해 예방",
+      "배달비 비교 및 대안 매장 추천",
+      "사용자 제보 기반 블랙리스트 운영"
+    ],
+    "tech_stack": ["Chart.js", "네이버 지도 API", "Supabase", "OCR", "AI 이미지 분석"],
+    "blackbox": true
+  },
+  "UTIL_008": {
+    "vpd_id": "vpd008",
+    "service_name": "parcel_damage_protector",
+    "description": "30초 안에 택배 파손/분실 보상 가능성 예측 + 대안 3개 비교",
+    "pain_score": 65.3,
+    "target_users": "온라인 쇼핑 이용자, 택배 발송자",
+    "key_features": [
+      "택배사별 사고율 데이터 기반 예측",
+      "고가품 포장 가이드 제공",
+      "보상 청구 절차 간소화 및 자동화",
+      "배송 추적 및 이상 상황 알림"
+    ],
+    "tech_stack": ["Chart.js", "네이버 지도 API", "Supabase", "OCR", "AI 이미지 분석"],
+    "blackbox": true
+  },
+  "UTIL_009": {
+    "vpd_id": "vpd009",
+    "service_name": "scam_protector",
+    "description": "30초 안에 스미싱/보이스피싱 의심 문자/전화 판별 + 대안 3개 제시",
+    "pain_score": 92.0,
+    "target_users": "일반인, 특히 고령층 및 그 가족",
+    "key_features": [
+      "의심 문자/URL 실시간 탐지",
+      "AI 기반 보이스피싱 음성 분석",
+      "피해 발생 시 즉시 행동 가이드",
+      "환급 신청 절차 지원"
+    ],
+    "tech_stack": ["Chart.js", "네이버 지도 API", "Supabase", "AI 음성 분석", "URL 패턴 분석"],
+    "blackbox": true
+  },
+  "UTIL_010": {
+    "vpd_id": "vpd011",
+    "service_name": "sidebiz_navigator",
+    "description": "30초 안에 N잡 부업 성공률 진단 + 대안 3개 제시",
+    "pain_score": 100.0,
+    "target_users": "온라인 부업 희망자, 신규 셀러",
+    "key_features": [
+      "N잡 부업 성공 가능성 진단",
+      "상표권/저작권 사전 검증",
+      "실마진 계산기 (관세, 부가세, 수수료 반영)",
+      "플랫폼별 정책 분석 및 추천"
+    ],
+    "tech_stack": ["Chart.js", "네이버 지도 API", "Supabase", "AI 데이터 분석", "법률 API"],
+    "blackbox": true
+  },
+  "UTIL_011": {
+    "vpd_id": "vpd012",
+    "service_name": "rent_scam_checker",
+    "description": "30초 안에 전세 매물 위험도 분석 + 대안 3개 제시",
+    "pain_score": 100.0,
+    "target_users": "전세 계약 예정자, 임차인",
+    "key_features": [
+      "임대인 신용 정보 조회 지원",
+      "전세 매물 위험도 분석",
+      "보증금반환보증 가입 가능 여부 확인",
+      "피해 발생 시 법적 절차 가이드"
+    ],
+    "tech_stack": ["Chart.js", "네이버 지도 API", "Supabase", "부동산 공공 데이터 API", "법률 API"],
+    "blackbox": true
+  },
+  "UTIL_012": {
+    "vpd_id": "vpd013",
+    "service_name": "medical_insurance_claim_helper",
+    "description": "30초 안에 실비보험 미청구 금액 예측 + 대안 3개 제시",
+    "pain_score": 100.0,
+    "target_users": "실비보험 가입자, 환우 및 가족",
+    "key_features": [
+      "영수증 OCR 자동 입력",
+      "가입 보험 약관 매칭 보장 항목 안내",
+      "청구 기한 만료 전 자동 알림",
+      "미청구액 누적 대시보드 제공"
+    ],
+    "tech_stack": ["Chart.js", "네이버 지도 API", "Supabase", "OCR", "AI 보험 약관 분석"],
+    "blackbox": true
+  }
+}
