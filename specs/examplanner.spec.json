@@ -1,0 +1,32 @@
+{
+  "spec_id": "UTIL_005",
+  "name": "examplanner",
+  "name_ko": "시험 D-day 학습 플래너",
+  "tagline": "D-day에 맞춰 효율적인 학습 계획을 세워보세요.",
+  "problem": "시험 준비 시 막연한 학습 계획으로 인한 비효율과 불안감 해소",
+  "features": [
+    "시험 D-day 설정 및 남은 기간 표시",
+    "총 학습 목표 시간 입력",
+    "일별, 주별 학습 목표 시간 자동 분배",
+    "남은 시간 대비 권장 학습량 제시",
+    "진행률 및 달성률 시각화"
+  ],
+  "ui_spec": {
+    "inputs": [
+      {"id": "exam_date", "type": "date", "label": "시험 날짜"},
+      {"id": "total_study_hours", "type": "number", "label": "총 학습 목표 시간 (시간)"}
+    ],
+    "outputs": [
+      {"id": "d_day", "label": "D-day"},
+      {"id": "daily_study", "label": "일일 권장 학습 시간 (시간)"},
+      {"id": "weekly_study", "label": "주간 권장 학습 시간 (시간)"},
+      {"id": "progress_chart", "label": "학습 진행률"}
+    ]
+  },
+  "seo": {
+    "title": "시험 D-day 학습 플래너 - 효율적인 공부 계획",
+    "description": "시험 날짜에 맞춰 최적의 학습 시간을 분배하고 효율적인 공부 계획을 세울 수 있도록 돕는 D-day 플래너입니다."
+  },
+  "estimated_dev_time": "16h",
+  "target_funnel": "합격 비법 전자책"
+}
