@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+<title>N잡 부업 마진 진단기 - 30초 4축 체크 | Prometheus</title>
+<meta name="description" content="부업 상품의 실마진·상표권·검색량·리뷰 평점을 30초 안에 4축으로 진단하는 무료 계산기">
+<meta name="keywords" content="N잡, 부업, 쿠팡윙, 스마트스토어, 마진계산기, 상표권검색, 셀러">
+<meta property="og:title" content="N잡 부업 마진 진단기 - 30초 4축 체크">
+<meta property="og:description" content="30초 안에 마진·상표·검색량·리뷰 4축 진단으로 내 부업의 진짜 수익성을 점검하세요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tools.hogang-vaccine.kr/pickr/">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<style>
+/* === PROMETHEUS CORE STYLES (light/whitemode) === */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f4f7fc;--bg2:#e9eef7;--glass:#ffffff;--glass2:#f8fafd;--border:#e2e8f2;
+  --text:#1c2333;--sec:#47516b;--muted:#8b93a8;
+  --accent:#ff7a45;--accent-l:#ffa066;--accent-d:#e85d2a;
+  --danger:#ff5b5b;--warn:#ff9f43;--ok:#2fb3a0;
+  --vhigh:#8b7cf6;--high:#2fb3a0;--mid:#ff9f43;--low:#ff5b5b;
+  --cyan:#2fb3a0;--purple:#8b7cf6;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.6;min-height:100vh;padding:0}
+.container{max-width:580px;margin:0 auto;padding:20px 16px 60px}
+
+/* Header */
+.header{text-align:center;padding:20px 0 16px;position:relative}
+.header h1{font-size:1.4rem;color:var(--accent-l)}
+.header .sub{color:var(--muted);font-size:.8rem;margin-top:4px}
+.header .back-link{position:absolute;left:0;top:50%;transform:translateY(-50%);color:var(--muted);text-decoration:none;font-size:.85rem}
+.header .back-link:hover{color:var(--accent-l)}
+
+/* Cards */
+.card{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px}
+.card h2{font-size:1rem;color:var(--sec);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card h2 .badge{background:var(--accent);color:#ffffff;font-size:.65rem;padding:2px 6px;border-radius:4px;font-weight:700;margin-left:auto}
+
+/* Form */
+.form-row{margin-bottom:12px}
+.form-row label{display:block;font-size:.8rem;color:var(--sec);margin-bottom:4px;font-weight:600}
+.form-row input, .form-row select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;outline:none;font-family:inherit}
+.form-row input:focus, .form-row select:focus{border-color:var(--accent);background:var(--glass)}
+.form-row .hint{font-size:.65rem;color:var(--muted);margin-top:2px}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* Score Ring */
+.score-ring{width:160px;height:160px;margin:0 auto 12px;position:relative}
+.score-ring svg{transform:rotate(-90deg);width:160px;height:160px}
+.score-ring .bg-circle{fill:none;stroke:var(--bg2);stroke-width:10}
+.score-ring .fg-circle{fill:none;stroke:var(--accent-l);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .4s ease,stroke .3s}
+.score-ring .center-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.score-ring .center-text .num{font-size:2.4rem;font-weight:800;color:var(--accent-l);line-height:1}
+.score-ring .center-text .denom{font-size:.7rem;color:var(--muted)}
+.score-ring .center-text .grade{font-size:1rem;font-weight:700;margin-top:4px}
+.grade-S{color:var(--vhigh)}.grade-A{color:var(--high)}.grade-B{color:var(--cyan)}.grade-C{color:var(--mid)}.grade-D{color:var(--low)}
+
+/* Axes */
+.axes{margin-top:14px}
+.axis-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.axis-row:last-child{border-bottom:none}
+.axis-row .a-name{font-size:.8rem;color:var(--sec);width:60px;flex-shrink:0;font-weight:600}
+.axis-row .a-bar{flex:1;height:8px;background:var(--bg2);border-radius:4px;position:relative;overflow:hidden}
+.axis-row .a-fill{position:absolute;left:0;top:0;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent-d),var(--accent-l));transition:width .3s ease}
+.axis-row .a-score{font-size:.85rem;font-weight:700;color:var(--accent-l);width:36px;text-align:right;flex-shrink:0}
+
+/* Result rows */
+.kv{display:flex;justify-content:space-between;padding:6px 0;font-size:.85rem;border-bottom:1px solid var(--border)}
+.kv:last-child{border-bottom:none}
+.kv .k{color:var(--muted)}
+.kv .v{color:var(--text);font-weight:700}
+.kv .v.good{color:var(--high)}
+.kv .v.warn{color:var(--mid)}
+.kv .v.bad{color:var(--low)}
+
+/* Verdict */
+.verdict-banner{padding:14px;border-radius:12px;margin-top:14px;text-align:center;font-size:.9rem;font-weight:700}
+.verdict-banner.S{background:rgba(139,124,246,.12);border:1px solid var(--vhigh);color:var(--vhigh)}
+.verdict-banner.A{background:rgba(47,179,160,.12);border:1px solid var(--high);color:var(--high)}
+.verdict-banner.B{background:rgba(47,179,160,.08);border:1px solid var(--cyan);color:var(--cyan)}
+.verdict-banner.C{background:rgba(255,159,67,.12);border:1px solid var(--mid);color:var(--mid)}
+.verdict-banner.D{background:rgba(255,91,91,.08);border:1px solid var(--low);color:var(--low)}
+.verdict-banner .detail{font-weight:400;font-size:.75rem;margin-top:4px;color:var(--sec)}
+
+/* Funnel */
+.funnel{margin-top:20px;background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.funnel .tag{display:inline-block;background:rgba(255,122,69,.12);color:var(--accent-l);font-size:.7rem;padding:2px 10px;border-radius:4px;margin-bottom:10px}
+.funnel p{font-size:.85rem;color:var(--sec);margin-bottom:14px}
+.funnel .lead-btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#ffffff;border:none;border-radius:8px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(255,122,69,.25);text-decoration:none;display:inline-block}
+.funnel .lead-btn:hover{transform:translateY(-1px)}
+.funnel .lead-sub{font-size:.7rem;color:var(--muted);margin-top:8px}
+
+/* Share */
+.share-bar{display:flex;gap:8px;margin-top:14px}
+.share-bar button{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--sec);cursor:pointer;font-size:.75rem;text-align:center;transition:all .1s}
+.share-bar button:hover{border-color:var(--accent);color:var(--accent-l)}
+
+.disclaimer{font-size:.65rem;color:var(--muted);text-align:center;margin-top:16px}
+.footer{text-align:center;font-size:.7rem;color:var(--muted);padding:20px 0;margin-top:20px;border-top:1px solid var(--border)}
+
+/* Notice */
+.notice{background:rgba(255,159,67,.08);border:1px solid var(--warn);border-radius:10px;padding:12px;margin-top:12px;font-size:.78rem;color:var(--sec)}
+.notice strong{color:var(--mid)}
+
+/* Tips */
+.tip-list{margin-top:8px;font-size:.8rem;color:var(--sec);padding-left:18px}
+.tip-list li{margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <a class="back-link" href="https://tools.hogang-vaccine.kr/">← 홈</a>
+    <h1>🎯 N잡 부업 마진 진단기</h1>
+    <div class="sub">30초 안에 마진·상표·검색량·리뷰 4축 진단</div>
+  </div>
+
+  <!-- 입력 카드 -->
+  <div class="card">
+    <h2>📦 상품 정보 <span class="badge">STEP 1</span></h2>
+    <div class="form-row">
+      <label>상품명 (상표 의심 단어 포함)</label>
+      <input type="text" id="productName" placeholder="예: 구찌 마몬스 토트백" oninput="calc()">
+      <div class="hint">브랜드명·캐릭터명·연예인 이름이 들어가면 상표 위험 ↑</div>
+    </div>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>셀링가 (원)</label>
+        <input type="number" id="selling" placeholder="39000" oninput="calc()">
+      </div>
+      <div class="form-row">
+        <label>매입가 (원)</label>
+        <input type="number" id="cost" placeholder="12000" oninput="calc()">
+      </div>
+      <div class="form-row">
+        <label>관세율 (%)</label>
+        <input type="number" id="tariff" placeholder="8" step="0.1" oninput="calc()">
+        <div class="hint">의류 13% / 가전 8% / 식품 8~30%</div>
+      </div>
+      <div class="form-row">
+        <label>수수료 (%)</label>
+        <input type="number" id="fee" placeholder="12" step="0.1" oninput="calc()">
+        <div class="hint">스마트스토어 5.5% / 쿠팡 10.8%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📊 시장성 <span class="badge">STEP 2</span></h2>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>월 검색량 (네이버)</label>
+        <input type="number" id="searchVol" placeholder="2500" oninput="calc()">
+        <div class="hint">1000 이상 권장</div>
+      </div>
+      <div class="form-row">
+        <label>경쟁 상품 리뷰 평점</label>
+        <input type="number" id="reviewScore" placeholder="4.3" step="0.1" min="0" max="5" oninput="calc()">
+        <div class="hint">4.0 이상이면 진입 가능</div>
+      </div>
+      <div class="form-row">
+        <label>월 예상 판매량 (개)</label>
+        <input type="number" id="volume" placeholder="30" oninput="calc()">
+      </div>
+      <div class="form-row">
+        <label>월 광고비 (원)</label>
+        <input type="number" id="adCost" placeholder="50000" oninput="calc()">
+      </div>
+    </div>
+  </div>
+
+  <!-- 결과 카드 -->
+  <div class="card">
+    <h2>🎯 4축 진단 결과 <span class="badge" id="gradeBadge">READY</span></h2>
+    <div class="score-ring">
+      <svg viewBox="0 0 160 160">
+        <circle class="bg-circle" cx="80" cy="80" r="70"></circle>
+        <circle id="ringFg" class="fg-circle" cx="80" cy="80" r="70" stroke-dasharray="439.8" stroke-dashoffset="439.8"></circle>
+      </svg>
+      <div class="center-text">
+        <div class="num" id="totalScore">0</div>
+        <div class="denom">/ 100점</div>
+        <div class="grade" id="gradeText">—</div>
+      </div>
+    </div>
+
+    <div class="axes">
+      <div class="axis-row">
+        <div class="a-name">💰 마진</div>
+        <div class="a-bar"><div id="bar1" class="a-fill" style="width:0%"></div></div>
+        <div class="a-score" id="s1">0</div>
+      </div>
+      <div class="axis-row">
+        <div class="a-name">®️ 상표</div>
+        <div class="a-bar"><div id="bar2" class="a-fill" style="width:0%"></div></div>
+        <div class="a-score" id="s2">0</div>
+      </div>
+      <div class="axis-row">
+        <div class="a-name">🔍 검색량</div>
+        <div class="a-bar"><div id="bar3" class="a-fill" style="width:0%"></div></div>
+        <div class="a-score" id="s3">0</div>
+      </div>
+      <div class="axis-row">
+        <div class="a-name">⭐ 리뷰</div>
+        <div class="a-bar"><div id="bar4" class="a-fill" style="width:0%"></div></div>
+        <div class="a-score" id="s4">0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 마진 상세 -->
+  <div class="card">
+    <h2>💵 마진 디테일</h2>
+    <div class="kv"><span class="k">셀링가</span><span class="v" id="kvSell">—</span></div>
+    <div class="kv"><span class="k">- 매입가</span><span class="v" id="kvCost">—</span></div>
+    <div class="kv"><span class="k">- 관세</span><span class="v" id="kvTariff">—</span></div>
+    <div class="kv"><span class="k">- 플랫폼 수수료</span><span class="v" id="kvFee">—</span></div>
+    <div class="kv"><span class="k">- 광고비 (개당)</span><span class="v" id="kvAd">—</span></div>
+    <div class="kv"><span class="k">= 개당 실마진</span><span class="v" id="kvUnitMargin">—</span></div>
+    <div class="kv"><span class="k">월 총 마진</span><span class="v" id="kvMonthMargin">—</span></div>
+    <div class="kv"><span class="k">마진율</span><span class="v" id="kvMarginRate">—</span></div>
+    <div class="kv"><span class="k">손익분기 판매량</span><span class="v" id="kvBEP">—</span></div>
+    <div class="kv"><span class="k">월 ROI</span><span class="v" id="kvROI">—</span></div>
+  </div>
+
+  <!-- 상표 진단 -->
+  <div class="card">
+    <h2>®️ 상표권 위험 진단</h2>
+    <div class="kv"><span class="k">위험 등급</span><span class="v" id="trademarkGrade">—</span></div>
+    <div class="kv"><span class="k">감지 키워드</span><span class="v" id="trademarkHits" style="font-size:.75rem">—</span></div>
+    <div class="notice" id="trademarkNote" style="display:none">
+      <strong>⚠️ 주의:</strong> <span id="trademarkNoteText"></span>
+    </div>
+    <ul class="tip-list">
+      <li>브랜드 약자(예: 구찌→GG)도 출처 표기 시 적발 가능</li>
+      <li>캐릭터명·연예인 이름은 매물 등록 자체가 차단될 수 있음</li>
+      <li>안전 확인: <a href="https://www.kipris.or.kr" target="_blank" style="color:var(--accent-l)">KIPRIS</a>에서 1차 검색 권장</li>
+    </ul>
+  </div>
+
+  <!-- Verdict -->
+  <div class="verdict-banner" id="verdictBanner">
+    <div id="verdictTitle">정보를 입력해주세요</div>
+    <div class="detail" id="verdictDetail">모든 칸을 채우면 4축 점수와 종합 등급이 나옵니다</div>
+  </div>
+
+  <div class="share-bar">
+    <button onclick="copyResult()">📋 결과 복사</button>
+    <button onclick="window.print()">🖼️ 이미지 저장</button>
+    <button onclick="shareLink()">🔗 공유</button>
+  </div>
+
+  <!-- Funnel -->
+  <div class="funnel">
+    <div class="tag">📘 추천 전자책</div>
+    <p>월 300만 원 부업 셀러의 4축 필터 전략서<br><strong>상표 회피 표현 100선 + 마진 시뮬레이터</strong> 제공</p>
+    <a class="lead-btn" href="https://hogang-vaccine.kr/pickr-ebook" target="_blank" rel="noopener">전자책 자세히 보기 →</a>
+    <div class="lead-sub">© 자룡봇 AI Research · Prometheus v2.0</div>
+  </div>
+
+  <div class="disclaimer">
+    ※ 본 진단은 참고용입니다. 실제 상표권 침해 여부는 KIPRIS/변리사 확인을 권장합니다.<br>
+    마진 계산은 관세·부가세·반품비를 단순화한 추정치입니다.
+  </div>
+  <div class="footer">© 자룡봇 AI Research · Prometheus v2.0</div>
+</div>
+
+<script>
+/* ===== 상표 위험 키워드 (단순화된 화이트리스트/블랙리스트) ===== */
+const BRAND_KEYWORDS = [
+  '구찌','까르띠에','샤넬','디올','루이비통','에르메스','프라다','발렌시아가',
+  '나이키','아디다스','뉴발란스','컨버스','반스','뉴에라',
+  '삼성','애플','LG','소니','샤오미','다이슨',
+  '마블','디즈니','포켓몬','짱구','뽀로로','아기상어',
+  '방탄소년단','BTS','블랙핑크','뉴진스','아이브','르세라핌',
+  'MLB','노스페이스','스투시','스투시','캐피탈','스투시','챔피온','필라',
+  '스타벅스','던킨','베스킨라빈스','롯데','CU','GS25',
+  'GG','NB','CK','POLO'
+];
+const SAFE_SUFFIX = ['호환','대용','수제','리퍼','중고','리세일','빈티지','OEM'];
+
+function n(v){ v=parseFloat(v); return isNaN(v)?0:v; }
+
+function calc(){
+  const name = (document.getElementById('productName').value||'').trim().toLowerCase();
+  const sell = n('selling');
+  const cost = n('cost');
+  const tariff = n('tariff');
+  const fee = n('fee');
+  const vol = n('volume');
+  const ad = n('adCost');
+  const search = n('searchVol');
+  const review = n('reviewScore');
+
+  if(!sell || !cost){
+    reset();
+    return;
+  }
+
+  /* ====== 1. 마진 점수 (25점 만점) ====== */
+  const tariffAmt = cost * (tariff/100);
+  const feeAmt = sell * (fee/100);
+  const adPerUnit = vol>0 ? ad/vol : 0;
+  const unitMargin = sell - cost - tariffAmt - feeAmt - adPerUnit;
+  const monthMargin = unitMargin * vol;
+  const marginRate = sell>0 ? (unitMargin/sell*100) : 0;
+
+  // 마진율 점수: 30%+ → 25, 20~30 → 20, 10~20 → 15, 0~10 → 8, 0 미만 → 0
+  let mScore = 0;
+  if(marginRate >= 30) mScore = 25;
+  else if(marginRate >= 20) mScore = 20;
+  else if(marginRate >= 10) mScore = 15;
+  else if(marginRate >= 0) mScore = 8;
+  else mScore = 0;
+
+  // 손익분기 판매량 (광고비 포함 총 비용 / 단위 마진)
+  const totalCost = (cost + tariffAmt + feeAmt) * vol + ad;
+  const bep = unitMargin > 0 ? Math.ceil(totalCost / unitMargin) : 9999;
+  // BEP 점수 보정 (월 판매량이 BEP보다 크면 가산)
+  if(vol >= bep*1.5) mScore = Math.min(25, mScore+3);
+  else if(vol < bep) mScore = Math.max(0, mScore-3);
+
+  /* ====== 2. 상표 점수 (25점 만점) ====== */
+  const hits = BRAND_KEYWORDS.filter(k => name.includes(k.toLowerCase()));
+  const hasSafeSuffix = SAFE_SUFFIX.some(s => name.includes(s));
+  let tScore = 25, tGrade = '안전', tColor = 'good';
+  if(hits.length > 0 && !hasSafeSuffix){
+    if(hits.length >= 2){ tScore = 0; tGrade = '위험'; tColor = 'bad'; }
+    else { tScore = 8; tGrade = '주의'; tColor = 'warn'; }
+  } else if(hits.length > 0 && hasSafeSuffix){
+    tScore = 18; tGrade = '주의(완화)'; tColor = 'warn';
+  }
+
+  /* ====== 3. 검색량 점수 (25점 만점) ====== */
+  let sScore = 0;
+  if(search >= 10000) sScore = 25;
+  else if(search >= 3000) sScore = 20;
+  else if(search >= 1000) sScore = 15;
+  else if(search >= 300) sScore = 8;
+  else sScore = 3;
+
+  /* ====== 4. 리뷰 점수 (25점 만점) ====== */
+  let rScore = 0;
+  if(review >= 4.5) rScore = 25;
+  else if(review >= 4.2) rScore = 20;
+  else if(review >= 4.0) rScore = 15;
+  else if(review >= 3.5) rScore = 8;
+  else rScore = 3;
+
+  const total = mScore + tScore + sScore + rScore;
+
+  /* ====== 등급 ====== */
+  let grade = 'D', gradeClass = 'D';
+  if(total >= 85){ grade = 'S'; gradeClass = 'S'; }
+  else if(total >= 70){ grade = 'A'; gradeClass = 'A'; }
+  else if(total >= 55){ grade = 'B'; gradeClass = 'B'; }
+  else if(total >= 40){ grade = 'C'; gradeClass = 'C'; }
+  else { grade = 'D'; gradeClass = 'D'; }
+
+  /* ====== UI 반영 ====== */
+  // 점수 링
+  const c = 2*Math.PI*70; // 439.8
+  const offset = c - (total/100)*c;
+  document.getElementById('ringFg').setAttribute('stroke-dashoffset', offset);
+  document.getElementById('ringFg').style.stroke = grade==='S' ? '#8b7cf6' :
+                                                    grade==='A' ? '#2fb3a0' :
+                                                    grade==='B' ? '#2fb3a0' :
+                                                    grade==='C' ? '#ff9f43' : '#ff5b5b';
+
+  document.getElementById('totalScore').textContent = total;
+  const gt = document.getElementById('gradeText');
+  gt.textContent = `${grade} 등급`;
+  gt.className = `grade grade-${gradeClass}`;
+
+  document.getElementById('gradeBadge').textContent = `${grade} 등급`;
+  document.getElementById('gradeBadge').style.background =
+    grade==='S' ? '#8b7cf6' :
+    grade==='A' ? '#2fb3a0' :
+    grade==='B' ? '#2fb3a0' :
+    grade==='C' ? '#ff9f43' : '#ff5b5b';
+
+  // 4축 바
+  document.getElementById('bar1').style.width = (mScore/25*100)+'%';
+  document.getElementById('bar2').style.width = (tScore/25*100)+'%';
+  document.getElementById('bar3').style.width = (sScore/25*100)+'%';
+  document.getElementById('bar4').style.width = (rScore/25*100)+'%';
+  document.getElementById('s1').textContent = mScore+'/25';
+  document.getElementById('s2').textContent = tScore+'/25';
+  document.getElementById('s3').textContent = sScore+'/25';
+  document.getElementById('s4').textContent = rScore+'/25';
+
+  // 마진 디테일
+  const fmt = v => v.toLocaleString('ko-KR')+'원';
+  document.getElementById('kvSell').textContent = fmt(sell);
+  document.getElementById('kvCost').textContent = '- '+fmt(cost);
+  document.getElementById('kvTariff').textContent = '- '+fmt(Math.round(tariffAmt));
+  document.getElementById('kvFee').textContent = '- '+fmt(Math.round(feeAmt));
+  document.getElementById('kvAd').textContent = vol>0 ? '- '+fmt(Math.round(adPerUnit)) : '-';
+  document.getElementById('kvUnitMargin').textContent = fmt(Math.round(unitMargin));
+  document.getElementById('kvMonthMargin').textContent = fmt(Math.round(monthMargin));
+  const mrEl = document.getElementById('kvMarginRate');
+  mrEl.textContent = marginRate.toFixed(1)+'%';
+  mrEl.className = 'v '+(marginRate>=20?'good':marginRate>=10?'warn':'bad');
+  document.getElementById('kvBEP').textContent = bep>=9999 ? '∞' : bep+'개';
+  const roi = ad>0 ? (monthMargin/ad*100) : 0;
+  const roiEl = document.getElementById('kvROI');
+  roiEl.textContent = roi.toFixed(0)+'%';
+  roiEl.className = 'v '+(roi>=200?'good':roi>=100?'warn':'bad');
+
+  // 상표
+  const tEl = document.getElementById('trademarkGrade');
+  tEl.textContent = tGrade;
+  tEl.className = 'v '+tColor;
+  document.getElementById('trademarkHits').textContent = hits.length>0 ? hits.join(', ') : '감지 안 됨';
+  if(hits.length>0 && !hasSafeSuffix){
+    document.getElementById('trademarkNote').style.display = 'block';
+    document.getElementById('trademarkNoteText').textContent = `"${hits[0]}" 등 브랜드 키워드가 상품명에 포함되어 있습니다. 정식 허가 없이 사용 시 KIPRIS에 의해 매물 차단·과태료·소송 리스크가 있어요.`;
+  } else {
+    document.getElementById('trademarkNote').style.display = 'none';
+  }
+
+  // 종합 verdict
+  const vb = document.getElementById('verdictBanner');
+  vb.className = 'verdict-banner '+gradeClass;
+  let title='', detail='';
+  if(grade==='S'){ title='🚀 즉시 진입 추천'; detail='마진·상표·시장 모두 양호합니다. 오늘이라도 셀러 등록하세요.'; }
+  else if(grade==='A'){ title='✅ 진입 가능'; detail='우수한 조건. 상표 키워드만 한번 더 확인하면 바로 시작 가능.'; }
+  else if(grade==='B'){ title='⚖️ 조건부 추천'; detail='마진 또는 검색량 중 한 축이 약합니다. 원가 협상이나 키워드 확장으로 보완하세요.'; }
+  else if(grade==='C'){ title='⚠️ 신중 검토'; detail='2~3개 축이 약합니다. 셀러 후기·원가 재조사 필요.'; }
+  else { title='🛑 진입 보류'; detail='마진이 음수이거나 상표 위험이 높습니다. 상품 라인업 변경 권장.'; }
+  document.getElementById('verdictTitle').textContent = title;
+  document.getElementById('verdictDetail').textContent = detail;
+}
+
+function reset(){
+  document.getElementById('totalScore').textContent = '0';
+  document.getElementById('gradeText').textContent = '—';
+  document.getElementById('gradeBadge').textContent = 'READY';
+  ['s1','s2','s3','s4'].forEach(id=>document.getElementById(id).textContent='0');
+  ['bar1','bar2','bar3','bar4'].forEach(id=>document.getElementById(id).style.width='0%');
+  document.getElementById('ringFg').setAttribute('stroke-dashoffset','439.8');
+  ['kvSell','kvCost','kvTariff','kvFee','kvAd','kvUnitMargin','kvMonthMargin','kvMarginRate','kvBEP','kvROI'].forEach(id=>document.getElementById(id).textContent='—');
+  document.getElementById('trademarkGrade').textContent='—';
+  document.getElementById('trademarkHits').textContent='—';
+  document.getElementById('verdictBanner').className='verdict-banner';
+  document.getElementById('verdictTitle').textContent='정보를 입력해주세요';
+  document.getElementById('verdictDetail').textContent='모든 칸을 채우면 4축 점수와 종합 등급이 나옵니다';
+}
+
+function copyResult(){
+  const total = document.getElementById('totalScore').textContent;
+  const grade = document.getElementById('gradeText').textContent;
+  const text = `🎯 N잡 부업 마진 진단\n4축 점수: ${total}/100 (${grade})\n${location.href}`;
+  navigator.clipboard?.writeText(text);
+  alert('결과가 복사되었습니다');
+}
+
+function shareLink(){
+  if(navigator.share){
+    navigator.share({title:'N잡 부업 마진 진단',url:location.href});
+  } else {
+    copyResult();
+  }
+}
+</script>
+</body>
+</html>
