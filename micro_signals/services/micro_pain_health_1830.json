@@ -2,13 +2,13 @@
   "slug": "micro_pain_health_1830",
   "title": "🏥 실비보험 청구 가능 여부 — 30초 체크",
   "category": "pain_health",
-  "score": 100,
+  "score": 78.0,
   "platform": "당금",
   "keywords": [
     "병원비",
     "수술비",
     "실비보험"
   ],
-  "created": "2026-08-21T18:30:13.960140+09:00",
+  "created": "2026-08-23T18:30:13.216002+09:00",
   "url": "https://mdpepastor3004.github.io/prometheus-utils/micro_signals/services/micro_pain_health_1830.html"
 }
