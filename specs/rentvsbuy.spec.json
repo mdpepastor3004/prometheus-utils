@@ -1,33 +1,35 @@
 {
   "spec_id": "UTIL_005",
   "name": "rentvsbuy",
-  "name_ko": "월세 vs 전세 비교기",
-  "tagline": "당신에게 더 유리한 주거 형태는?",
-  "problem": "월세와 전세 중 어떤 선택이 더 합리적인지 판단하기 어려움",
+  "name_ko": "월세 vs 전세 비교",
+  "tagline": "월세와 전세, 당신에게 더 유리한 선택은?",
+  "problem": "주거 형태 선택에 대한 복잡한 재정적 고민",
   "features": [
-    "월세 보증금, 월세액, 관리비 입력",
-    "전세 보증금, 전세 대출 금리 입력",
-    "월별 주거비용 및 총 지출 비교",
-    "예상 투자 수익률(선택 사항) 반영하여 기회비용 분석"
+    "보증금, 월세, 전세금 입력",
+    "대출 이자율 입력 (전세 대출, 월세 보증금 대출)",
+    "기회비용 계산 (전세금/보증금 투자 시 예상 수익)",
+    "총 주거비용 비교 (월세 + 이자 vs 전세 이자 + 기회비용)",
+    "개인별 최적 주거 형태 추천"
   ],
   "ui_spec": {
     "inputs": [
-      {"id": "rent_deposit", "label": "월세 보증금 (원)", "type": "number", "default": 10000000},
-      {"id": "monthly_rent", "label": "월세액 (원)", "type": "number", "default": 500000},
-      {"id": "rent_maintenance", "label": "월세 관리비 (원)", "type": "number", "default": 100000},
-      {"id": "jeonse_deposit", "label": "전세 보증금 (원)", "type": "number", "default": 100000000},
-      {"id": "jeonse_loan_rate", "label": "전세 대출 금리 (%)", "type": "number", "default": 3.5}
+      {"id": "deposit", "label": "월세 보증금", "type": "number", "unit": "원"},
+      {"id": "rent", "label": "월세", "type": "number", "unit": "원"},
+      {"id": "loan_interest_rent", "label": "월세 보증금 대출 이자율", "type": "number", "unit": "%"},
+      {"id": "jeonse", "label": "전세금", "type": "number", "unit": "원"},
+      {"id": "loan_interest_jeonse", "label": "전세 대출 이자율", "type": "number", "unit": "%"},
+      {"id": "opportunity_cost_rate", "label": "전세금/보증금 투자 시 예상 수익률", "type": "number", "unit": "%"}
     ],
     "outputs": [
-      {"id": "rent_total_monthly", "label": "월세 총 월 지출", "type": "text"},
-      {"id": "jeonse_total_monthly", "label": "전세 총 월 지출", "type": "text"},
+      {"id": "total_cost_rent", "label": "총 월세 주거비용", "type": "number", "unit": "원"},
+      {"id": "total_cost_jeonse", "label": "총 전세 주거비용", "type": "number", "unit": "원"},
       {"id": "recommendation", "label": "추천", "type": "text"}
     ]
   },
   "seo": {
-    "title": "월세 vs 전세 비교기 - 당신에게 더 유리한 주거 형태는?",
-    "description": "월세 보증금, 월세액, 전세 보증금, 대출 금리를 입력하여 월별 주거 비용을 비교하고 합리적인 주거 선택을 도와주는 유틸리티입니다."
+    "title": "월세 vs 전세 비교 계산기 | 나에게 유리한 주거 방식은?",
+    "description": "월세와 전세 중 어떤 주거 방식이 재정적으로 유리한지 계산하고 추천해 드립니다. 보증금, 월세, 전세금, 대출 이자율, 투자 수익률을 비교해 보세요."
   },
-  "estimated_dev_time": "6h",
-  "target_funnel": "합리적인 주거 선택 가이드 전자책"
+  "estimated_dev_time": "12h",
+  "target_funnel": "주거 독립 가이드 전자책"
 }
