@@ -25,5 +25,5 @@
 <button type="button" class="btn" onclick="calc()">🎯 진단하기</button></form>
 <div id="res" class="result"><div class="score" id="score">0</div><div class="advice" id="advice"></div></div>
 <script>function calc(){var v=[].slice.call(document.querySelectorAll("input:checked")).map(function(i){return +i.value});if(v.length<3){alert("모든 질문에 답해주세요");return}var s=Math.min(100,Math.round((v[0]*10+v[1]*12+v[2]*8+100.0*0.3)*1.1));document.getElementById("score").textContent=s;var a=s>=80?"🔴 즉시 행동 필요.":s>=50?"🟡 이번 주 내 정리.":"🟢 여유 있음.";document.getElementById("advice").textContent=a;document.getElementById("res").classList.add("show")}</script>
-<footer>© Prometheus Utils · HEPHAESTUS v2.1 · 2026-08-23 1230</footer>
+<footer>© Prometheus Utils · HEPHAESTUS v2.1 · 2026-08-25 1230</footer>
 </body></html>
