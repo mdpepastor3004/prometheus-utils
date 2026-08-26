@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+<title>번아웃 자가진단 (30초) | 직장인·취준생 무료 테스트 | Prometheus</title>
+<meta name="description" content="MBI 기반 12문항으로 번아웃 3축(감정고갈·냉소·자기비하) 점수와 회복 가이드를 즉시 받으세요. 직장인·장수생·N잡러 30초 무료 자가진단.">
+<meta name="keywords" content="번아웃, 자가진단, 직장인, 취준생, 번아웃테스트, MBI, 번아웃지수, 번아웃회복, 감정고갈">
+<meta property="og:title" content="번아웃 자가진단 | 30초 3축 진단">
+<meta property="og:description" content="당신의 번아웃 지수와 맞춤 회복 가이드를 30초 안에 확인하세요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tools.hogang-vaccine.kr/stresscheck/">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f4f7fc;--bg2:#e9eef7;--glass:#ffffff;--glass2:#f8fafd;--border:#e2e8f2;
+  --text:#1c2333;--sec:#47516b;--muted:#8b93a8;
+  --accent:#ff7a45;--accent-l:#ffa066;--accent-d:#e85d2a;
+  --danger:#ff5b5b;--warn:#ff9f43;--ok:#2fb3a0;
+  --vhigh:#8b7cf6;--high:#2fb3a0;--mid:#ff9f43;--low:#ff5b5b;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.6;min-height:100vh;padding:0}
+.container{max-width:580px;margin:0 auto;padding:20px 16px 60px}
+.header{text-align:center;padding:20px 0 16px}
+.header h1{font-size:1.4rem;color:var(--accent-l);margin-bottom:4px}
+.header .sub{color:var(--muted);font-size:.8rem}
+.header .badge{display:inline-block;background:rgba(255,122,69,.12);color:var(--accent-l);font-size:.7rem;padding:3px 10px;border-radius:10px;margin-top:6px;font-weight:600}
+.card{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(28,35,51,.03)}
+.card h2{font-size:1rem;color:var(--sec);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card h2 .pill{background:var(--accent);color:#fff;font-size:.65rem;padding:2px 8px;border-radius:4px;font-weight:700;margin-left:auto}
+.intro{font-size:.85rem;color:var(--sec);margin-bottom:12px}
+.intro b{color:var(--accent-l)}
+.q-item{padding:14px 0;border-bottom:1px solid var(--border)}
+.q-item:last-child{border-bottom:none}
+.q-item .q-num{color:var(--muted);font-size:.7rem;font-weight:700;margin-bottom:4px}
+.q-item .q-text{font-size:.88rem;color:var(--text);margin-bottom:10px;line-height:1.45}
+.scale-row{display:flex;gap:4px}
+.scale-row label{flex:1;cursor:pointer}
+.scale-row label input{display:none}
+.scale-row label .opt{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 4px;font-size:.7rem;color:var(--sec);text-align:center;transition:all .12s;display:block;line-height:1.2}
+.scale-row label input:checked + .opt{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
+.scale-row label .opt:hover{background:rgba(255,122,69,.1);border-color:var(--accent)}
+.scale-legend{display:flex;justify-content:space-between;font-size:.6rem;color:var(--muted);margin-top:6px;padding:0 2px}
+.calc-btn{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;border:none;border-radius:10px;padding:14px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:14px;box-shadow:0 4px 12px rgba(255,122,69,.25)}
+.calc-btn:hover{transform:translateY(-1px)}
+.calc-btn:disabled{background:var(--bg2);color:var(--muted);cursor:not-allowed;transform:none;box-shadow:none}
+.progress{height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;margin:10px 0 16px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-d),var(--accent-l));width:0%;transition:width .3s ease}
+.result-card{display:none;animation:fadeUp .4s ease}
+.result-card.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.score-ring{width:160px;height:160px;margin:8px auto 14px;position:relative}
+.score-ring svg{transform:rotate(-90deg);width:160px;height:160px}
+.score-ring .bg-circle{fill:none;stroke:var(--bg2);stroke-width:10}
+.score-ring .fg-circle{fill:none;stroke:var(--accent-l);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .8s ease,stroke .4s}
+.score-ring .center-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;width:100%}
+.score-ring .center-text .num{font-size:2.4rem;font-weight:800;color:var(--accent-l);line-height:1}
+.score-ring .center-text .unit{font-size:.7rem;color:var(--muted);margin-top:2px}
+.score-ring .center-text .grade{font-size:.95rem;font-weight:700;margin-top:6px;padding:3px 10px;border-radius:6px;display:inline-block}
+.grade-normal{background:rgba(72,184,160,.12);color:var(--high)}
+.grade-caution{background:rgba(255,159,67,.15);color:var(--mid)}
+.grade-danger{background:rgba(255,91,91,.12);color:var(--low)}
+.grade-severe{background:rgba(139,124,246,.12);color:var(--vhigh)}
+.axis-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+.axis-item{background:var(--bg2);border-radius:10px;padding:12px 6px;text-align:center;border:1px solid var(--border)}
+.axis-item .lbl{font-size:.65rem;color:var(--muted);margin-bottom:4px}
+.axis-item .val{font-size:1.3rem;font-weight:700;color:var(--accent-l)}
+.axis-item .max{font-size:.6rem;color:var(--muted)}
+.bar-chart{margin-top:14px}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.bar-row .bar-lbl{font-size:.7rem;color:var(--sec);width:80px;flex-shrink:0}
+.bar-row .bar-track{flex:1;height:14px;background:var(--bg2);border-radius:7px;overflow:hidden;position:relative}
+.bar-row .bar-fill{height:100%;border-radius:7px;background:linear-gradient(90deg,var(--accent-d),var(--accent-l));transition:width .6s ease;width:0}
+.bar-row .bar-val{font-size:.7rem;color:var(--sec);width:36px;flex-shrink:0;text-align:right;font-weight:600}
+.tip-list{margin-top:12px}
+.tip-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed var(--border);align-items:flex-start}
+.tip-item:last-child{border-bottom:none}
+.tip-item .tip-ico{width:30px;height:30px;background:rgba(255,122,69,.12);color:var(--accent-l);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.tip-item .tip-body{flex:1;font-size:.82rem;color:var(--sec);line-height:1.5}
+.tip-item .tip-body b{color:var(--text);display:block;margin-bottom:2px;font-size:.85rem}
+.cta-block{background:linear-gradient(135deg,rgba(255,122,69,.1),rgba(255,122,69,.04));border:1px solid var(--accent);border-radius:12px;padding:16px;margin-top:14px;text-align:center}
+.cta-block .cta-title{font-size:.95rem;font-weight:700;color:var(--accent-l);margin-bottom:6px}
+.cta-block .cta-desc{font-size:.78rem;color:var(--sec);margin-bottom:10px}
+.cta-block .cta-btn{display:inline-block;background:var(--accent);color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700;font-size:.85rem}
+.share-bar{display:flex;gap:6px;margin-top:12px}
+.share-bar button{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:9px;color:var(--sec);cursor:pointer;font-size:.72rem;text-align:center;transition:all .1s}
+.share-bar button:hover{border-color:var(--accent);color:var(--accent-l)}
+.funnel{margin-top:20px;background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.funnel .tag{display:inline-block;background:rgba(255,122,69,.12);color:var(--accent-l);font-size:.7rem;padding:2px 10px;border-radius:4px;margin-bottom:10px}
+.funnel p{font-size:.85rem;color:var(--sec);margin-bottom:14px}
+.funnel .lead-btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;border:none;border-radius:8px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(255,122,69,.25)}
+.funnel .lead-btn:hover{transform:translateY(-1px)}
+.funnel .lead-sub{font-size:.7rem;color:var(--muted);margin-top:8px}
+.disclaimer{font-size:.65rem;color:var(--muted);text-align:center;margin-top:16px;line-height:1.5}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;justify-content:center;align-items:center}
+.modal-overlay.active{display:flex}
+.modal{background:var(--glass);border:1px solid var(--accent);border-radius:16px;padding:28px;max-width:400px;width:90%;position:relative}
+.modal .close{position:absolute;top:12px;right:16px;color:var(--muted);cursor:pointer;font-size:1.2rem;background:none;border:none}
+.modal h2{color:var(--accent-l);font-size:1.15rem;text-align:center;margin-bottom:6px}
+.modal .desc{color:var(--sec);font-size:.8rem;text-align:center;margin-bottom:16px}
+.modal .benefit{background:rgba(72,184,160,.08);border:1px solid var(--high);border-radius:10px;padding:14px;margin-bottom:16px;font-size:.8rem;color:var(--high)}
+.modal .benefit b{display:block;font-size:.85rem;margin-bottom:6px}
+.modal .field{margin-bottom:12px}
+.modal input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;outline:none}
+.modal input:focus{border-color:var(--accent)}
+.modal .error-msg{color:var(--danger);font-size:.8rem;display:none;text-align:center;margin-bottom:8px}
+.modal .btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;border:none;border-radius:8px;padding:12px;font-size:.95rem;font-weight:700;cursor:pointer;width:100%}
+.modal .success{display:none;text-align:center}
+.modal .success.active{display:block}
+.modal .success .icon{font-size:2.5rem;margin-bottom:6px}
+.modal .success h3{color:var(--high);font-size:1.05rem;margin-bottom:6px}
+.modal .success p{color:var(--sec);font-size:.8rem;margin-bottom:14px}
+.modal .success .dl-btn{display:inline-block;background:var(--accent);color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--high);color:#fff;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:2000;display:none;box-shadow:0 4px 12px rgba(28,35,51,.1)}
+.toast.error{background:var(--danger)}
+.toast.show{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.footnote{background:var(--glass2);border:1px dashed var(--border);border-radius:10px;padding:12px;font-size:.7rem;color:var(--muted);margin-top:14px;line-height:1.5}
+.footnote b{color:var(--sec)}
+@media(max-width:380px){
+  .scale-row label .opt{font-size:.62rem;padding:8px 2px}
+  .axis-grid{grid-template-columns:1fr}
+  .card{padding:16px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>🔥 번아웃 자가진단</h1>
+<p class="sub">MBI 기반 12문항 · 30초 측정</p>
+<span class="badge">직장인 · 취준생 · N잡러</span>
+</div>
+
+<div class="card" id="qCard">
+<h2>📝 문항 응답 <span class="pill" id="progressLabel">0 / 12</span></h2>
+<div class="intro">최근 <b>1개월</b> 동안의 상태를 기준으로 솔직하게 응답해 주세요. 우측으로 갈수록 빈도가 높습니다.</div>
+<div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+<div id="qList"></div>
+<button class="calc-btn" id="calcBtn" disabled onclick="calc()">🔥 결과 보기</button>
+</div>
+
+<div class="result-card card" id="resultCard">
+<h2>📊 진단 결과 <span class="pill" id="resBadge">나의 등급</span></h2>
+
+<div class="score-ring">
+<svg viewBox="0 0 160 160">
+<circle class="bg-circle" cx="80" cy="80" r="70"/>
+<circle class="fg-circle" id="ringCircle" cx="80" cy="80" r="70" stroke-dasharray="439.82" stroke-dashoffset="439.82"/>
+</svg>
+<div class="center-text">
+<div class="num" id="scoreNum">0</div>
+<div class="unit">번아웃 지수 / 100</div>
+<div class="grade" id="gradeLabel">-</div>
+</div>
+</div>
+
+<div class="axis-grid">
+<div class="axis-item"><div class="lbl">감정고갈</div><div class="val" id="ax1">0</div><div class="max">/ 16</div></div>
+<div class="axis-item"><div class="lbl">냉소·좌절</div><div class="val" id="ax2">0</div><div class="max">/ 16</div></div>
+<div class="axis-item"><div class="lbl">자기비하</div><div class="val" id="ax3">0</div><div class="max">/ 16</div></div>
+</div>
+
+<div class="bar-chart" id="barChart"></div>
+
+<div class="cta-block">
+<div class="cta-title">🎯 맞춤 회복 가이드 5종</div>
+<div class="cta-desc">3축 점수에 따라 오늘부터 실천할 수 있는 회복 루틴을 추천해 드려요.</div>
+<a class="cta-btn" href="javascript:void(0)" onclick="openLead()">📖 가이드 무료 받기</a>
+</div>
+
+<h2 style="margin-top:18px">💡 오늘의 회복 팁</h2>
+<div class="tip-list" id="tipList"></div>
+
+<div class="share-bar">
+<button onclick="cpLink()">🔗 링크 복사</button>
+<button onclick="screenShot()">📸 캡처</button>
+<button onclick="shareKakao()">💬 공유</button>
+</div>
+</div>
+
+<div class="footnote">
+<b>📌 진단 안내:</b> 본 자가진단은 Maslach Burnout Inventory(MBI) 일반용을 12문항으로 축약한 스크리닝 도구입니다. 임상 진단이 아니며, 심한 증상이 2주 이상 지속되면 정신건강의학과 상담을 권장합니다. 응급(자해·자살 충동) 시 <b>자살예방상담전화 1393</b> 또는 <b>정신건강위기상담전화 1577-0199</b>로 연락하세요.
+</div>
+
+<div class="funnel">
+<span class="tag">📖 번아웃 회복 전자책</span>
+<p>장수생·N잡러·직장인을 위한<br>30일 회복 플레이북 (PDF 무료)</p>
+<button class="lead-btn" onclick="openLead()">📩 무료 다운로드</button>
+<div class="lead-sub">이메일 입력 즉시 전송 · 1,200명 다운로드 중</div>
+</div>
+<div class="disclaimer">© 자룡봇 AI Research · Prometheus v2.0 · 2026년 기준<br>본 도구는 자가 점검용이며 의료 진단을 대체하지 않습니다.</div>
+</div>
+
+<div class="modal-overlay" id="leadM">
+<div class="modal">
+<button class="close" onclick="closeLead()">✕</button>
+<div id="mf">
+<h2>📩 회복 가이드 받기</h2>
+<p class="desc">이메일 입력 후 즉시 전송됩니다</p>
+<div class="benefit"><b>🎁 동봉 혜택</b>① 30일 회복 플레이북 ② MBI 점수별 루틴표 ③ 스트레스 해제 오디오 가이드 (총 18,000원 상당)</div>
+<div class="field"><input type="text" id="lName" placeholder="이름 (필수)" required></div>
+<div class="field"><input type="email" id="lEmail" placeholder="📧 이메일 (필수)" required></div>
+<div class="field"><input type="tel" id="lPhone" placeholder="전화번호 (선택)"></div>
+<div class="field"><label style="font-size:.7rem;color:var(--sec);display:flex;align-items:flex-start;gap:6px;line-height:1.4"><input type="checkbox" id="lConsent" required style="margin-top:2px;flex-shrink:0"><span>(필수) 개인정보 수집 및 마케팅 정보 수신 동의</span></label></div>
+<div class="error-msg" id="lErr">⚠️ 이름·이메일·동의는 필수입니다</div>
+<button class="btn" onclick="sLead()">📩 받기 (무료)</button>
+</div>
+<div class="success" id="ms">
+<div class="icon">🎉</div>
+<h3>신청 완료!</h3>
+<p>회복 가이드를 보내드렸습니다. 메일함을 확인해 주세요.</p>
+<a class="dl-btn" href="../ebook/stress_recovery_guide.pdf" target="_blank">📕 바로 다운로드</a>
+</div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// === MBI 12문항 (3축 × 4문항) ===
+// 축1: 감정고갈 (Emotional Exhaustion) — 1,2,3,4
+// 축2: 냉소/좌절 (Cynicism) — 5,6,7,8
+// 축3: 자기비하/효능감 저하 (Inefficacy) — 9,10,11,12
+const QUESTIONS = [
+  // 축1
+  {axis:1, q:"업무(또는 공부)이 끝나면身心이 다 소진된 느낌이다"},
+  {axis:1, q:"아침에 눈 떠도 출근/공부를 떠올리면 짜증부터 난다"},
+  {axis:1, q:"하루 끝나고 진이 다 빠져 회복되는 데 시간이 오래 걸린다"},
+  {axis:1, q:"주말에도 충분히 쉬었다는 느낌을 받지 못한다"},
+  // 축2
+  {axis:2, q:"내 일(또는 목표)에 대한 흥미와 열의가 줄어들었다"},
+  {axis:2, q:"동료·가족·주변 사람들에게 짜증·무관심이 늘었다"},
+  {axis:2, q:"이 일이 무의미하다는 생각이 자주 든다"},
+  {axis:2, q:"예전엔 신경 쓰이던 일에 이제 '그래도 그만, 안 해도 그만'이라고 느낀다"},
+  // 축3
+  {axis:3, q:"내 성과가 부족하다는 자책이 늘었다"},
+  {axis:3, q:"남들은 잘하는데 나만 뒤처진다는 생각이 든다"},
+  {axis:3, q:"과거엔 잘 해냈는데 지금은 자신감이 줄었다"},
+  {axis:3, q:"내 능력에 회의감이 든다"}
+];
+
+const AXIS_NAMES = {1:"감정고갈", 2:"냉소·좌절", 3:"자기비하"};
+const SCALE = ["전혀\n아니다","별로\n아니다","보통\n이다","자주\n그렇다","매우\n그렇다"];
+const TIPS = {
+  high: [
+    {ico:"😴",title:"수면 우선 회복",body:"오늘부터 7시간 수면 확보. 수면 부족은 번아웃의 1차 증폭기입니다. 취침 1시간 전 스크린 끄기."},
+    {ico:"🏃",title:"저강도 운동",body:"주 3회, 30분 가벼운 걷기. 강도 높은 운동은 오히려 회복 지연시킵니다."},
+    {ico:"🗣️",title:"도움 요청 훈련",body:"\"나 힘든데\" 한 마디라도 꺼내기. 가까운 동료·가족·친구 1명에게."},
+    {ico:"⛔",title:"업무 경계선",body:"퇴근 후 업무 메신저 알림 끄기. 주말 메일 체크 금지 규칙 만들기."},
+    {ico:"📞",title:"전문가 상담",body:"2주 이상 지속 시 정신건강의학과 상담. 1577-0199 / 1393 (24시간)"}
+  ],
+  mid: [
+    {ico:"🌅",title:"아침 루틴 재설계",body:"기상 후 30분 햇빛 + 스트레칭. 코르티솔 리듬 재정비."},
+    {ico:"📓",title:"감정 일기",body:"잠들기 전 3줄: 좋았던 일 1개, 힘들었던 일 1개, 내일 하나."},
+    {ico:"🎯",title:"작은 성취 3개",body:"매일 30분 이내 끝낼 수 있는 작은 과제 3개 완료. 성취감 리부트."},
+    {ico:"🍱",title:"식사 규칙성",body:"3끼 정해진 시간. 특히 아침 단백질. 혈당 스파이크 줄이기."},
+    {ico:"🤝",title:"관계 리필",body:"주 1회 30분, 의미 있는 사람과 식사·통화. 고립은 번아웃의 연료."}
+  ],
+  low: [
+    {ico:"✨",title:"현재 상태 유지",body:"지금 패턴 잘 유지 중. 단, 무리하지 말고 '충분히 잘하고 있다' 인정하기."},
+    {ico:"📚",title:"가벼운 학습",body:"흥미로운 책·강의 1개. 지적 자극이 자기효능감 부스터."},
+    {ico:"🌳",title:"주말 자연 노출",body:"주 1회 2시간 이상 자연 속 산책. 도파민 리셋."},
+    {ico:"🎨",title:"창작 활동",body:"그리기·글쓰기·요리 등 비효율적 몰입이 가능한 활동 주 1회."},
+    {ico:"💌",title:"감사 표현",body:"오늘 감사한 사람 1명에게 메시지. 관계 만족도 상승 → 회복 탄력성 ↑."}
+  ]
+};
+
+let answered = new Array(12).fill(null);
+
+// 문항 렌더링
+function renderQuestions(){
+  const list = gId("qList");
+  list.innerHTML = "";
+  QUESTIONS.forEach((item, i)=>{
+    const wrap = document.createElement("div");
+    wrap.className = "q-item";
+    wrap.innerHTML = `
+      <div class="q-num">Q${i+1} · ${AXIS_NAMES[item.axis]}</div>
+      <div class="q-text">${item.q}</div>
+      <div class="scale-row" data-q="${i}">
+        ${[0,1,2,3,4].map(v=>`<label><input type="radio" name="q${i}" value="${v}"><span class="opt">${SCALE[v]}</span></label>`).join("")}
+      </div>
+    `;
+    list.appendChild(wrap);
+  });
+  document.querySelectorAll('.scale-row input[type=radio]').forEach(inp=>{
+    inp.addEventListener("change", e=>{
+      const qi = parseInt(e.target.name.replace("q",""));
+      answered[qi] = parseInt(e.target.value);
+      updateProgress();
+    });
+  });
+}
+
+function updateProgress(){
+  const done = answered.filter(v=>v!==null).length;
+  gId("progressLabel").textContent = `${done} / 12`;
+  gId("progressFill").style.width = `${(done/12)*100}%`;
+  gId("calcBtn").disabled = done < 12;
+}
+
+function calc(){
+  // 3축 합산
+  const axisSum = {1:0, 2:0, 3:0};
+  QUESTIONS.forEach((item, i)=>{
+    axisSum[item.axis] += answered[i] || 0;
+  });
+  // 종합 점수 (0~48) → 100 환산
+  const totalRaw = axisSum[1] + axisSum[2] + axisSum[3];
+  const total = Math.round((totalRaw / 48) * 100);
+  
+  // 4단계 판정
+  let grade, gradeCls, badgeText, desc;
+  if(total < 30){ grade = "정상"; gradeCls = "grade-normal"; badgeText = "Healthy"; desc = "전반적으로 에너지가 건강한 상태입니다."; }
+  else if(total < 55){ grade = "주의"; gradeCls = "grade-caution"; badgeText = "Caution"; desc = "번아웃 초기 신호. 지금 잡으면 2주 안에 회복 가능합니다."; }
+  else if(total < 80){ grade = "위험"; gradeCls = "grade-danger"; badgeText = "Danger"; desc = "번아웃 진행 중. 즉시 생활 패턴 점검 + 지원 요청 권장."; }
+  else { grade = "심각"; gradeCls = "grade-severe"; badgeText = "Severe"; desc = "심각한 번아웃 상태. 전문가 상담이 필요합니다."; }
+  
+  // 결과 표시
+  gId("ax1").textContent = axisSum[1];
+  gId("ax2").textContent = axisSum[2];
+  gId("ax3").textContent = axisSum[3];
+  gId("scoreNum").textContent = total;
+  gId("gradeLabel").textContent = `${grade} · ${desc}`;
+  gId("gradeLabel").className = `grade ${gradeCls}`;
+  gId("resBadge").textContent = badgeText;
+  
+  // 링 애니메이션
+  const C = 2 * Math.PI * 70; // ≈ 439.82
+  const offset = C - (total/100) * C;
+  const ring = gId("ringCircle");
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = total < 30 ? "var(--high)" : total < 55 ? "var(--mid)" : total < 80 ? "var(--low)" : "var(--vhigh)";
+  
+  // 3축 바차트
+  const barChart = gId("barChart");
+  barChart.innerHTML = [1,2,3].map(a=>{
+    const pct = Math.round((axisSum[a]/16)*100);
+    return `<div class="bar-row">
+      <div class="bar-lbl">${AXIS_NAMES[a]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="bar-val">${axisSum[a]}/16</div>
+    </div>`;
+  }).join("");
+  
+  // 팁 선택
+  let tipSet = TIPS.low;
+  if(total >= 80) tipSet = TIPS.high;
+  else if(total >= 30) tipSet = TIPS.mid;
+  
+  const tipList = gId("tipList");
+  tipList.innerHTML = tipSet.map(t=>`
+    <div class="tip-item">
+      <div class="tip-ico">${t.ico}</div>
+      <div class="tip-body"><b>${t.title}</b>${t.body}</div>
+    </div>
+  `).join("");
+  
+  // 결과 카드 표시
+  gId("resultCard").classList.add("show");
+  gId("resultCard").scrollIntoView({behavior:"smooth", block:"start"});
+  
+  // 바차트 애니메이션 트리거
+  setTimeout(()=>{
+    document.querySelectorAll('.bar-fill').forEach(b=>{
+      const w = b.style.width;
+      b.style.width = '0%';
+      requestAnimationFrame(()=>{ b.style.width = w; });
+    });
+  }, 100);
+  
+  // 로컬 저장
+  svls("stresscheck_last", {total, axis:axisSum, grade, ts:Date.now()});
+}
+
+// === LEAD CAPTURE ===
+const BT='8268734337:AAEwMDqDzv6J4QtEGpeat6sShv-rdI0k2k0';
+const CI='730152102';
+function openLead(){gId("leadM").classList.add("active")}
+function closeLead(){gId("leadM").classList.remove("active")}
+gId("leadM").addEventListener("click",function(e){if(e.target===this)closeLead()});
+async function sLead(){
+  const n=gId("lName").value.trim(),p=gId("lPhone").value.trim(),em=gId("lEmail").value.trim();
+  const ok_consent=gId("lConsent")?gId("lConsent").checked:true;
+  gId("lErr").style.display="none";
+  const email_re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!n||!em){gId("lErr").textContent="⚠️ 이름과 이메일은 필수입니다";gId("lErr").style.display="block";return;}
+  if(!email_re.test(em)){gId("lErr").textContent="⚠️ 올바른 이메일 형식이 아닙니다";gId("lErr").style.display="block";return;}
+  if(!ok_consent){gId("lErr").textContent="⚠️ 개인정보 수집·마케팅 동의는 필수입니다";gId("lErr").style.display="block";return;}
+  const btn=document.querySelector(".modal .btn");btn.disabled=true;btn.textContent="처리 중...";
+  const sc=gId("scoreNum")?gId("scoreNum").textContent:"미응답";
+  const grade=gId("gradeLabel")?gId("gradeLabel").textContent.split(" · ")[0]:"-";
+  const dv=/Mobi|Android/i.test(navigator.userAgent)?"mobile":"pc";
+  const pay={name:n,phone:p,email:em,source:"stresscheck",score:sc,grade:grade,device:dv,consent:ok_consent?"Y":"N"};
+  let ok=false;
+  try{
+    const r=await fetch("https://delughjxtvjvdjxwjzwe.supabase.co/rest/v1/leads",{method:"POST",headers:{"Content-Type":"application/json","apikey":"sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ","Authorization":"Bearer sb_publishable_8ATDlEYM2u1Xa3pAYkwNCQ_w2SYmcoQ","Prefer":"return=minimal"},body:JSON.stringify(pay)});
+    ok=r.ok||r.status===201;
+  }catch(e1){ok=false;}
+  if(!ok){
+    try{
+      const tg=`🆕 [리드] stresscheck\n━━━\n👤 ${n}\n📞 ${p}\n📧 ${em}\n🎯 번아웃 지수: ${sc} (${grade})\n📱 ${dv}\n🕐 ${new Date().toLocaleString("ko-KR",{timeZone:"Asia/Seoul"})}`;
+      const r2=await fetch("https://api.telegram.org/bot"+BT+"/sendMessage",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({chat_id:CI,text:tg})});
+      const d2=await r2.json();ok=d2.ok;
+    }catch(e2){ok=false;}
+  }
+  if(ok){gId("mf").style.display="none";gId("ms").classList.add("active");st("✅ 신청 완료!");}
+  else{st("⚠️ 오류","error");btn.disabled=false;btn.textContent="📩 받기 (무료)";}
+}
+
+// === UTILS ===
+function gId(id){return document.getElementById(id)}
+function st(msg,t){const el=gId("toast");el.textContent=msg;el.className="toast"+(t==="error"?" error":"")+" show";setTimeout(()=>el.className="toast",3000)}
+function cpLink(){navigator.clipboard.writeText(window.location.href).then(()=>st("🔗 복사 완료!")).catch(()=>st("🔗 "+window.location.href))}
+function screenShot(){st("📸 화면을 캡처해 친구에게 공유하세요!")}
+function shareKakao(){st("💬 카카오톡으로 공유해보세요!")}
+function svls(key,obj){try{localStorage.setItem(key,JSON.stringify(obj))}catch(e){}}
+function ldls(key,def){try{const d=localStorage.getItem(key);return d?JSON.parse(d):def}catch(e){return def}}
+
+// === INIT ===
+renderQuestions();
+updateProgress();
+// 저장된 결과 있으면 불러오기 (재방문 시)
+const cached = ldls("stresscheck_last", null);
+if(cached && cached.grade){
+  setTimeout(()=>{
+    gId("ax1").textContent = cached.axis[1];
+    gId("ax2").textContent = cached.axis[2];
+    gId("ax3").textContent = cached.axis[3];
+    gId("scoreNum").textContent = cached.total;
+    const map = {정상:"grade-normal", 주의:"grade-caution", 위험:"grade-danger", 심각:"grade-severe"};
+    const labelMap = {정상:"Healthy", 주의:"Caution", 위험:"Danger", 심각:"Severe"};
+    gId("gradeLabel").textContent = cached.grade;
+    gId("gradeLabel").className = "grade " + (map[cached.grade]||"grade-normal");
+    gId("resBadge").textContent = labelMap[cached.grade]||cached.grade;
+    const C = 2 * Math.PI * 70;
+    const offset = C - (cached.total/100) * C;
+    const ring = gId("ringCircle");
+    ring.style.strokeDashoffset = offset;
+    ring.style.stroke = cached.total<30?"var(--high)":cached.total<55?"var(--mid)":cached.total<80?"var(--low)":"var(--vhigh)";
+    const barChart = gId("barChart");
+    barChart.innerHTML = [1,2,3].map(a=>{
+      const pct = Math.round((cached.axis[a]/16)*100);
+      return `<div class="bar-row"><div class="bar-lbl">${AXIS_NAMES[a]}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div><div class="bar-val">${cached.axis[a]}/16</div></div>`;
+    }).join("");
+    let tipSet = TIPS.low;
+    if(cached.total >= 80) tipSet = TIPS.high;
+    else if(cached.total >= 30) tipSet = TIPS.mid;
+    gId("tipList").innerHTML = tipSet.map(t=>`<div class="tip-item"><div class="tip-ico">${t.ico}</div><div class="tip-body"><b>${t.title}</b>${t.body}</div></div>`).join("");
+  }, 100);
+}
+</script>
+</body>
+</html>

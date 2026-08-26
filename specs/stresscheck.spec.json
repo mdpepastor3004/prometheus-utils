@@ -1,0 +1,49 @@
+{
+  "spec_id": "UTIL_009",
+  "friction_id": "MIND_001",
+  "name": "stresscheck",
+  "name_ko": "번아웃 자가진단",
+  "tagline": "당신의 번아웃 지수 30초 측정",
+  "problem": "직장인/취준생이 본인 번아웃 정도를 객관적으로 파악하지 못해 회복 시기를 놓친다",
+  "target_audience": "번아웃 의심 직장인, 장수생, N잡러, 사회초년생",
+  "tech_stack": ["단일 HTML", "CSS", "Vanilla JavaScript"],
+  "dependencies": 0,
+  "features": [
+    "MBI 핵심 12문항 (감정고갈/좌절/자기비하 축)",
+    "5점 리커트 척도 실시간 입력",
+    "3축 점수 + 종합 번아웃 지수(0~100)",
+    "단계 표시 (정상/주의/위험/심각)",
+    "맞춤 회복 가이드 5종 (수면/운동/동기/관계/도움요청)",
+    "결과 카드 스크린샷/공유"
+  ],
+  "ui_spec": {
+    "layout": "모바일 퍼스트 싱글 페이지",
+    "inputs": [
+      "12문항 5점 척도 라디오 (0~4)",
+      "각 문항 oninput 즉시 반영"
+    ],
+    "outputs": [
+      "감정고갈 점수 (0~16)",
+      "좌절/냉소 점수 (0~16)",
+      "자기비하/효능감 저하 점수 (0~16)",
+      "종합 번아웃 지수 (0~100)",
+      "4단계 판정 (정상/주의/위험/심각)",
+      "맞춤 회복 가이드 5개"
+    ],
+    "max_width": "580px",
+    "theme": "glass-light"
+  },
+  "seo": {
+    "title": "번아웃 자가진단 (30초) | 직장인·취준생 무료 테스트",
+    "description": "MBI 기반 12문항으로 번아웃 3축(감정고갈·냉소·자기비하) 점수와 회복 가이드를 즉시 받으세요.",
+    "keywords": ["번아웃", "자가진단", "직장인", "취준생", "번아웃테스트", "MBI", "번아웃지수"]
+  },
+  "funnel": {
+    "free_utility": "https://tools.hogang-vaccine.kr/stresscheck/",
+    "upsell": "스트레스 제로 가이드 전자책"
+  },
+  "estimated_dev_time": "4h",
+  "estimated_size": "16KB",
+  "pain_index": 86.4,
+  "source_vpd": "theqoo/FMKorea 취업·시험 스트레스 패턴"
+}
