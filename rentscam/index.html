@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+<title>전세사기 위험도 진단기 — 30초 자가진단 | 자룡봇</title>
+<meta name="description" content="전세 계약 전 임대인·매물·보증보험 위험도를 30초에 체크. 깡통전세·선순위 대출·보증보험 미가입 등 전세사기 적신호 자가진단.">
+<meta name="keywords" content="전세사기,깡통전세,전세계약,보증보험,전세피해,자가진단">
+<meta property="og:title" content="전세사기 위험도 진단기 — 30초 자가진단">
+<meta property="og:description" content="전세 계약 전 30초 위험도 체크. 적신호 5개 + 행동 가이드까지.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jaryongbot.com/rentscam/">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f4f7fc;--bg2:#e9eef7;--glass:#ffffff;--glass2:#f8fafd;--border:#e2e8f2;
+  --text:#1c2333;--sec:#47516b;--muted:#8b93a8;
+  --accent:#ff7a45;--accent-l:#ffa066;--accent-d:#e85d2a;
+  --danger:#ff5b5b;--warn:#ff9f43;--ok:#2fb3a0;
+  --cyan:#2fb3a0;--purple:#8b7cf6;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;line-height:1.6;min-height:100vh;padding:0}
+.container{max-width:580px;margin:0 auto;padding:20px 16px 60px}
+.header{text-align:center;padding:20px 0 16px}
+.header h1{font-size:1.4rem;color:var(--accent-l)}
+.header .sub{color:var(--muted);font-size:.8rem;margin-top:4px}
+.card{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px}
+.card h2{font-size:1rem;color:var(--sec);margin-bottom:16px}
+.intro{font-size:.85rem;color:var(--sec);margin-bottom:14px;line-height:1.7}
+.intro strong{color:var(--accent-d)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.8rem;color:var(--sec);margin-bottom:6px;font-weight:600}
+.field input[type=number],.field input[type=text],.field select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.9rem;outline:none}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.hint{font-size:.7rem;color:var(--muted);margin-top:3px}
+.checklist{display:grid;gap:8px}
+.check{display:flex;align-items:flex-start;gap:10px;background:var(--bg2);padding:10px 12px;border-radius:8px;cursor:pointer;transition:background .15s}
+.check:hover{background:var(--glass2)}
+.check input{margin-top:2px;accent-color:var(--accent);width:18px;height:18px;flex-shrink:0}
+.check .lbl{font-size:.82rem;color:var(--text);line-height:1.5}
+.check .lbl small{display:block;color:var(--muted);font-size:.7rem;margin-top:2px}
+.check.has input:checked + .lbl{color:var(--accent-d);font-weight:600}
+.btn{display:block;width:100%;background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;border:none;border-radius:10px;padding:14px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,122,69,.3)}
+.result{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:14px;text-align:center;display:none}
+.result.show{display:block}
+.score-circle{width:160px;height:160px;margin:0 auto 14px;position:relative}
+.score-circle svg{transform:rotate(-90deg);width:160px;height:160px}
+.score-circle .bg{fill:none;stroke:var(--bg2);stroke-width:10}
+.score-circle .fg{fill:none;stroke:var(--accent);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .5s}
+.score-circle .center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.score-circle .num{font-size:2.6rem;font-weight:800;color:var(--accent-d);line-height:1}
+.score-circle .den{font-size:.7rem;color:var(--muted);margin-top:4px}
+.verdict{font-size:1.05rem;font-weight:700;margin:8px 0 4px}
+.verdict.safe{color:var(--ok)}
+.verdict.warn{color:var(--warn)}
+.verdict.danger{color:var(--danger)}
+.summary{font-size:.82rem;color:var(--sec);margin-bottom:16px}
+.flags{text-align:left;margin-top:14px}
+.flag{display:flex;gap:10px;padding:10px;background:var(--bg2);border-radius:8px;margin-bottom:6px;font-size:.8rem;border-left:3px solid var(--accent)}
+.flag.safe{border-left-color:var(--ok)}
+.actions{text-align:left;margin-top:14px}
+.actions h3{font-size:.85rem;color:var(--sec);margin-bottom:8px}
+.actions li{font-size:.8rem;color:var(--sec);margin-bottom:6px;list-style:none;padding-left:18px;position:relative}
+.actions li::before{content:"→";position:absolute;left:0;color:var(--accent);font-weight:700}
+.contacts{margin-top:14px;padding:12px;background:var(--glass2);border-radius:8px;font-size:.78rem;color:var(--sec)}
+.contacts strong{color:var(--accent-d);display:block;margin-bottom:4px}
+.funnel{margin-top:20px;background:linear-gradient(135deg,var(--accent),var(--accent-d));border-radius:14px;padding:24px 20px;text-align:center;color:#fff}
+.funnel h3{font-size:1.1rem;margin-bottom:8px}
+.funnel p{font-size:.85rem;opacity:.95;margin-bottom:14px}
+.funnel a{display:inline-block;background:#fff;color:var(--accent-d);padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem}
+.funnel a:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.footer{text-align:center;padding:20px 0;color:var(--muted);font-size:.7rem}
+.grade{font-size:.75rem;font-weight:600;margin-top:2px}
+.grade.danger{color:var(--danger)}.grade.warn{color:var(--warn)}.grade.safe{color:var(--ok)}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🏠 전세사기 위험도 진단기</h1>
+    <div class="sub">전세 계약 전 30초 자가진단 · 자룡봇</div>
+  </div>
+
+  <div class="card">
+    <h2>📋 매물 정보 입력</h2>
+    <p class="intro">아래 정보를 입력하면 <strong>전세사기 위험도(0~100)</strong>와 적신호를 알려드려요.</p>
+    
+    <div class="field">
+      <label>보증금 총액 (만원)</label>
+      <input type="number" id="deposit" min="100" max="100000" placeholder="예: 30000" value="30000">
+      <div class="hint">시세 대비 70% 이상이면 적신호</div>
+    </div>
+
+    <div class="field">
+      <label>매물 시세 대비 보증금 (%)</label>
+      <input type="number" id="ratio" min="30" max="120" placeholder="예: 80" value="80">
+      <div class="hint">100%↑ = 시세 초과 (깡통 위험)</div>
+    </div>
+
+    <div class="field">
+      <label>임대차 기간 (년)</label>
+      <select id="term">
+        <option value="2">2년 (표준)</option>
+        <option value="1">1년</option>
+        <option value="3">3년 이상</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>매물 주소 (시/구)</label>
+      <input type="text" id="location" placeholder="예: 서울 강서구">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🚨 확인 가능 서류 체크</h2>
+    <p class="intro">확인 가능한 서류에 체크해 주세요 (모두 가능 = 안전, 적을수록 위험).</p>
+    <div class="checklist">
+      <label class="check">
+        <input type="checkbox" id="d1" checked>
+        <span class="lbl">등기부등본 <small>소유자·근저당·압류·가압류 확인</small></span>
+      </label>
+      <label class="check">
+        <input type="checkbox" id="d2" checked>
+        <span class="lbl">건축물대장 <small>위반건축물 여부 확인</small></span>
+      </label>
+      <label class="check">
+        <input type="checkbox" id="d3">
+        <span class="lbl">확정일자 가능 여부 <small>전입신고 + 확정일자 = 우선변제권</small></span>
+      </label>
+      <label class="check">
+        <input type="checkbox" id="d4">
+        <span class="lbl">HUG/국토부 보증보험 가입 가능 <small>미가입 = 보증금 못 받을 수 있음</small></span>
+      </label>
+      <label class="check">
+        <input type="checkbox" id="d5" checked>
+        <span class="lbl">임대인 신분증 진위 확인 <small>위임 시: 위임장 + 인감증명서</small></span>
+      </label>
+      <label class="check">
+        <input type="checkbox" id="d6">
+        <span class="lbl">세금완납증명 / 체납증명 <small>체납 시 보증금 환급 지연</small></span>
+      </label>
+      <label class="check">
+        <input type="checkbox" id="d7">
+        <span class="lbl">주택가격 확인 <small>공시가격 vs 시세 괴리 확인</small></span>
+      </label>
+    </div>
+
+    <button class="btn" onclick="calc()">🔍 30초 위험도 진단</button>
+  </div>
+
+  <div class="result" id="result">
+    <div class="score-circle">
+      <svg viewBox="0 0 160 160">
+        <circle class="bg" cx="80" cy="80" r="70"/>
+        <circle class="fg" id="fgCircle" cx="80" cy="80" r="70" stroke-dasharray="439.8" stroke-dashoffset="439.8"/>
+      </svg>
+      <div class="center">
+        <div class="num" id="scoreNum">0</div>
+        <div class="den">/ 100</div>
+        <div class="grade" id="gradeTxt">-</div>
+      </div>
+    </div>
+    <div class="verdict" id="verdict">-</div>
+    <div class="summary" id="summary">-</div>
+    
+    <div class="flags" id="flags"></div>
+    <div class="actions">
+      <h3>📌 권장 행동 3가지</h3>
+      <ol id="actionList"></ol>
+    </div>
+    <div class="contacts">
+      <strong>🆘 피해 의심 시 즉시 연락</strong>
+      • 경찰청 전세사기 신고: 182 (전세사기 통합신고)<br>
+      • HUG 주택도시보증공사: 1566-9009<br>
+      • 법률구조공단: 132<br>
+      • LH 전세피해지원센터: 1600-1004
+    </div>
+  </div>
+
+  <div class="funnel">
+    <h3>📘 전세사기 피해 예방 완전 가이드</h3>
+    <p>계약 전 체크리스트 + 피해 발생 시 7단계 행동 매뉴얼을 49페이지 PDF로 정리했습니다.</p>
+    <a href="https://jaryongbot.com/ebook/" target="_blank">전자책 무료로 받기 →</a>
+  </div>
+
+  <div class="footer">
+    © 자룡봇 AI Research · Prometheus v2.0 · 본 도구는 자가진단용이며 법적 책임지지 않습니다
+  </div>
+</div>
+
+<script>
+function calc(){
+  const deposit = +document.getElementById('deposit').value || 0;
+  const ratio = +document.getElementById('ratio').value || 80;
+  const term = +document.getElementById('term').value;
+  const d1 = document.getElementById('d1').checked;
+  const d2 = document.getElementById('d2').checked;
+  const d3 = document.getElementById('d3').checked;
+  const d4 = document.getElementById('d4').checked;
+  const d5 = document.getElementById('d5').checked;
+  const d6 = document.getElementById('d6').checked;
+  const d7 = document.getElementById('d7').checked;
+
+  // 위험도 산출 (0=안전, 100=최고위험)
+  let risk = 0;
+  const flags = [];
+
+  // 1. 보증금 vs 시세 비율 (최대 30점)
+  if(ratio >= 100){ risk += 30; flags.push({safe:false, txt:'🔴 보증금이 시세 이상 — 깡통전즈 의심'}); }
+  else if(ratio >= 90){ risk += 20; flags.push({safe:false, txt:'🟠 보증금이 시세의 90% 이상 — 시세 확인 필요'}); }
+  else if(ratio >= 80){ risk += 10; }
+  else { flags.push({safe:true, txt:'🟢 보증금이 시세의 80% 이하 — 적정 수준'}); }
+
+  // 2. 보증금 절대액 (최대 15점) - 클수록 표적
+  if(deposit >= 50000){ risk += 15; flags.push({safe:false, txt:'🔴 보증금 5억 이상 — 고액 표적형 사기 주의'}); }
+  else if(deposit >= 30000){ risk += 8; }
+
+  // 3. 임대차 기간 (최대 5점)
+  if(term >= 3){ risk += 5; flags.push({safe:false, txt:'🟠 장기 3년 계약 — 갱신 시 임대인 부재 가능성'}); }
+
+  // 4. 서류 미확인 항목
+  const docs = [d1,d2,d3,d4,d5,d6,d7];
+  const missing = docs.filter(x => !x).length;
+  if(missing === 0){ flags.push({safe:true, txt:'🟢 필수 서류 7종 모두 확인 가능'}); }
+  else {
+    risk += missing * 7;
+    if(!d1) flags.push({safe:false, txt:'🔴 등기부등본 미확인 — 근저당·압류 모름'});
+    if(!d4) flags.push({safe:false, txt:'🔴 보증보험 미가입 — 보증금 못 받을 수 있음'});
+    if(!d3) flags.push({safe:false, txt:'🟠 확정일자 불가 — 우선변제권 박탈'});
+    if(!d6) flags.push({safe:false, txt:'🟠 세금체납 미확인 — 환급 지연 우려'});
+  }
+
+  // 캡
+  risk = Math.min(100, Math.max(0, risk));
+
+  // 등급
+  let grade, verdict, summary, klass;
+  if(risk >= 70){ grade='🔴 고위험'; verdict='🚨 계약 보류 강력 권고'; summary='전세사기 피해 가능성이 매우 높습니다. 보증보험 가입 불가 시 절대 계약하지 마세요.'; klass='danger'; }
+  else if(risk >= 40){ grade='🟠 주의'; verdict='⚠️ 추가 확인 후 신중 결정'; summary='몇 가지 적신호가 있습니다. 해당 항목 모두 해결 후 진행하세요.'; klass='warn'; }
+  else { grade='🟢 안전'; verdict='✅ 비교적 안전'; summary='기본적인 안전 요건을 충족합니다. 그래도 계약 당일 등기부등본 최종 확인은 필수.'; klass='safe'; }
+
+  // 게이지
+  const c = 439.8;
+  document.getElementById('fgCircle').style.strokeDashoffset = c * (1 - risk/100);
+  document.getElementById('fgCircle').style.stroke = risk>=70?'var(--danger)':risk>=40?'var(--warn)':'var(--ok)';
+  document.getElementById('scoreNum').textContent = risk;
+  document.getElementById('gradeTxt').textContent = grade;
+  document.getElementById('gradeTxt').className = 'grade ' + klass;
+  document.getElementById('verdict').textContent = verdict;
+  document.getElementById('verdict').className = 'verdict ' + klass;
+  document.getElementById('summary').textContent = summary;
+
+  // 적신호 리스트
+  const fl = document.getElementById('flags');
+  fl.innerHTML = flags.map(f => `<div class="flag ${f.safe?'safe':''}">${f.txt}</div>`).join('');
+
+  // 행동 가이드
+  const acts = [];
+  if(risk >= 70){ 
+    acts.push('보증보험(HUG·SGI서울보증) 가입 가능 여부 최우선 확인');
+    acts.push('등기부등본 재발급 받아 직접 확인 (인터넷등기소 4,000원)');
+    acts.push('계약 전 임대인 본인 출석 + 신분증 진위 확인');
+    acts.push('만약 진행 시: 내용증명 + 확정일자 + 전입신고 동시 처리');
+  } else if(risk >= 40){
+    acts.push('미확인 서류 7종 중 가능한 만큼 추가 확인');
+    acts.push('임대인 신용정보 조회 (크레도랩·코릭스 등)');
+    acts.push('계약 후 14일 내 전입신고 + 확정일자 받기');
+  } else {
+    acts.push('계약 당일 등기부등본 최종 발급본 확인');
+    acts.push('전입신고 + 확정일자 동시 처리 (입주 후 14일 내)');
+    acts.push('특약사항: 미납 관리비·원상복구 면제 등 꼼꼼히 기재');
+  }
+  document.getElementById('actionList').innerHTML = acts.map(a => `<li>${a}</li>`).join('');
+
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
+</body>
+</html>
