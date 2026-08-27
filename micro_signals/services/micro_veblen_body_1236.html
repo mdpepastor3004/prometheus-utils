@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>🏥 실비보험 청구 가능 여부 — 30초 체크 | Prometheus Utils</title>
+<title>💪 다이어트·성형 — ROI 계산기 | Prometheus Utils</title>
 </head>
 <body>
-<h1>🏥 실비보험 청구 가능 여부 — 30초 체크</h1>
-<p>score: 76.5 / 100</p>
-<div class="signal">🔬 신호 디템트 · pain_health · 탐직소: 네이버캐페</div>
-<div class="kwbox"><span class="kw">#병원비</span> <span class="kw">#수술비</span> <span class="kw">#실비보험</span></div>
+<h1>💪 다이어트·성형 — ROI 계산기</h1>
+<p>score: 100.0 / 100</p>
+<div class="signal">🔬 신호 디템트 · veblen_body · 탐직소: 당금</div>
+<div class="kwbox"><span class="kw">#다이어트</span> <span class="kw">#PT</span> <span class="kw">#필라테스</span></div>
 <form id="qForm">
 <div class="q"><label>1. 지금 가장 긴한 상황은?</label>
 <label class="opt"><input type="radio" name="q1" value="3" required> 지금 당장 결정</label>
@@ -24,6 +24,6 @@
 <label class="opt"><input type="radio" name="q3" value="2"> 없음</label></div>
 <button type="button" class="btn" onclick="calc()">🎯 진단하기</button></form>
 <div id="res" class="result"><div class="score" id="score">0</div><div class="advice" id="advice"></div></div>
-<script>function calc(){var v=[].slice.call(document.querySelectorAll("input:checked")).map(function(i){return +i.value});if(v.length<3){alert("모든 질문에 답해주세요");return}var s=Math.min(100,Math.round((v[0]*10+v[1]*12+v[2]*8+76.0*0.3)*1.1));document.getElementById("score").textContent=s;var a=s>=80?"🔴 즉시 행동 필요.":s>=50?"🟡 이번 주 내 정리.":"🟢 여유 있음.";document.getElementById("advice").textContent=a;document.getElementById("res").classList.add("show")}</script>
-<footer>© Prometheus Utils · HEPHAESTUS v2.1 · 2026-08-27 1830</footer>
+<script>function calc(){var v=[].slice.call(document.querySelectorAll("input:checked")).map(function(i){return +i.value});if(v.length<3){alert("모든 질문에 답해주세요");return}var s=Math.min(100,Math.round((v[0]*10+v[1]*12+v[2]*8+100.0*0.3)*1.1));document.getElementById("score").textContent=s;var a=s>=80?"🔴 즉시 행동 필요.":s>=50?"🟡 이번 주 내 정리.":"🟢 여유 있음.";document.getElementById("advice").textContent=a;document.getElementById("res").classList.add("show")}</script>
+<footer>© Prometheus Utils · HEPHAESTUS v2.1 · 2026-08-27 1236</footer>
 </body></html>
